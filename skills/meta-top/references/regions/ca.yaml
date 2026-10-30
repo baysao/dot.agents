@@ -1,0 +1,84 @@
+region_code: ca
+display_name: Canada
+currency: CAD
+currency_symbol: "CAD"
+languages:
+  - English
+  - French (Quebec required)
+regulatory_body:
+  name: Ad Standards Canada and Canadian Radio-television and Telecommunications Commission
+  short: Ad Standards / CRTC
+  url: https://adstandards.ca/code/
+  one_line_summary: "Truthful, non-deceptive advertising; Quebec Bill 101 requires French-language landing pages; CRTC enforces broadcast/online ad content."
+prohibited_categories:
+  - mlm-recruitment
+  - unsubstantiated-health-claims
+  - payday-lending
+  - get-rich-quick-income-claims
+last_reviewed: "2026-09-27"
+format_constraints:
+  fb_primary_text_chars: 125
+  fb_headline_chars: 40
+  ig_reels_aspect: "9:16"
+  ig_reels_seconds_max: 15
+  wa_status_hours: 24
+  last_verified_against_meta_docs: "2026-09-15"
+top_categories:
+  - name: online-courses-and-coaching
+    positioning_note: "Cohort-based and AI-training courses; French-language creatives lift CRTC + Quebec conversion."
+  - name: ecommerce-bundles
+    positioning_note: "Health, beauty, home goods bundle DTC; price ladder CAD $29 / CAD $69 / CAD $149."
+  - name: saas-and-productivity-tools
+    positioning_note: "Annual plans with pro-rated USD parity; positioning on speed-to-value and team-size scaling."
+signal_seeds:
+  longevity:
+    - "site:facebook.com/ads/library {category} Canada active running 90 days"
+    - "{category} Canada Meta ad still running since months longevity"
+  variants:
+    - "{category} Canada Meta ads advertiser variants count scaling"
+    - "{category} Canada Meta ads 20+ variants scaling winning"
+  cross_country:
+    - "{category} Canada US UK Meta ads cross-country rollout"
+    - "{category} Canada Meta ads US scaling into Canada"
+  engagement:
+    - "{category} Canada r/canada Reddit comments buying intent"
+    - "{category} Canada Facebook Group comments link please refund policy"
+  marketplace:
+    - "{category} Canada Etsy Gumroad trending tags 2026"
+    - "{category} Canada Shopify digital product rising"
+  pain_signal:
+    - "{category} Canada r/canada r/PersonalFinanceCanada pain point desperate"
+    - "{category} Canada Quora question repeated demand waiting"
+top_categories_meta: "These are seed categories for live research; live entries with >=2 cited sources replace them in the digest. Note: live research on this region occasionally surfaces thinner ad-cost data than US — see data_quality_note."
+authoritative_sources:
+  - source_name: Ad Standards Canada Code
+    url: https://adstandards.ca/code/
+  - source_name: CRTC Broadcasting and Telecom Regulations
+    url: https://crtc.gc.ca/eng/home.htm
+  - source_name: Quebec Charter of the French Language (Bill 101)
+    url: https://www.quebec.ca/en/government/quebec-charter-french-language
+top_brands:
+  - name: Shopify (CA)
+    url: https://www.shopify.com/ca
+    primary_category: saas-and-productivity-tools
+  - name: Wealthsimple
+    url: https://www.wealthsimple.com
+    primary_category: finance-and-investing-platforms
+  - name: Ritual
+    url: https://ritual.com
+    primary_category: ecommerce-bundles-and-dtc
+  - name: Mejuri
+    url: https://mejuri.com
+    primary_category: ecommerce-bundles-and-dtc
+  - name: Frank And Oak
+    url: https://www.frankandoak.com
+    primary_category: ecommerce-bundles-and-dtc
+  - name: SkipTheDishes
+    url: https://www.skipthedishes.com
+    primary_category: ecommerce-bundles-and-dtc
+  - name: Ad Standards Canada
+    url: https://adstandards.ca/code/
+    primary_category: regulatory
+  - name: CRTC
+    url: https://crtc.gc.ca/eng/home.htm
+    primary_category: regulatory

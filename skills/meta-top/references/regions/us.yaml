@@ -1,0 +1,84 @@
+region_code: us
+display_name: United States
+currency: USD
+currency_symbol: "$"
+languages:
+  - English
+regulatory_body:
+  name: Federal Trade Commission
+  short: FTC
+  url: https://www.ftc.gov/business-guidance/advertising-and-marketing
+  one_line_summary: "Truthful, non-deceptive advertising; substantiated health, finance, and earnings claims; clear disclosures for endorsements (FTC Endorsement Guides)."
+prohibited_categories:
+  - mlm-recruitment
+  - unsubstantiated-health-claims
+  - payday-lending
+  - get-rich-quick-income-claims
+  - crypto-token-presale-mechanics
+last_reviewed: "2026-09-27"
+format_constraints:
+  fb_primary_text_chars: 125
+  fb_headline_chars: 40
+  ig_reels_aspect: "9:16"
+  ig_reels_seconds_max: 15
+  wa_status_hours: 24
+  last_verified_against_meta_docs: "2026-09-15"
+top_categories:
+  - name: online-courses-and-coaching
+    positioning_note: "High-ticket cohort-based courses and AI-training bootcamps dominate; trust via founder-narrative UGC."
+  - name: saas-and-productivity-tools
+    positioning_note: "Free-tier funnels, then annual plans; positioning on speed-to-value and integrations."
+  - name: health-wellness-subscriptions
+    positioning_note: "Telehealth + supplement DTC; before-after + testimonial hooks; subscription anchors with first-month discount."
+signal_seeds:
+  longevity:
+    - "site:facebook.com/ads/library {category} US active running 90 days"
+    - "{category} US Meta ad still running since months longevity"
+  variants:
+    - "{category} US Meta ads advertiser variants count scaling"
+    - "{category} US Meta ads 20+ variants scaling winning"
+  cross_country:
+    - "{category} US UK CA AU Meta ads cross-country rollout"
+    - "{category} US Meta ads global regional scaling proven"
+  engagement:
+    - "{category} US Reddit r/Entrepreneur r/SaaS buying intent comments"
+    - "{category} US Meta ads comments link please refund policy"
+  marketplace:
+    - "{category} US Gumroad Etsy trending tags 2026"
+    - "{category} US Product Hunt G2 rising digital"
+  pain_signal:
+    - "{category} US Reddit r/Entrepreneur r/SaaS desperate tone"
+    - "{category} US Quora question repeated demand waiting"
+top_categories_meta: "These are seed categories for live research; live entries with >=2 cited sources replace them in the digest."
+authoritative_sources:
+  - source_name: FTC Advertising and Marketing
+    url: https://www.ftc.gov/business-guidance/advertising-and-marketing
+  - source_name: FTC Endorsement Guides
+    url: https://www.ftc.gov/sites/default/files/fta_statutes/16-cfr-part-255-endorsement-guides.pdf
+  - source_name: FDA Health Claims in Advertising
+    url: https://www.fda.gov/food/food-labeling-nutrition
+top_brands:
+  - name: Stripe
+    url: https://stripe.com
+    primary_category: saas-and-productivity-tools
+  - name: Shopify
+    url: https://www.shopify.com
+    primary_category: saas-and-productivity-tools
+  - name: Athletic Greens (AG1)
+    url: https://athleticgreens.com
+    primary_category: health-wellness-subscriptions
+  - name: Klaviyo
+    url: https://www.klaviyo.com
+    primary_category: saas-and-productivity-tools
+  - name: Liquid Death
+    url: https://liquiddeath.com
+    primary_category: ecommerce-bundles-and-dtc
+  - name: Bombas
+    url: https://bombas.com
+    primary_category: ecommerce-bundles-and-dtc
+  - name: FTC Endorsement Guides
+    url: https://www.ftc.gov/sites/default/files/fta_statutes/16-cfr-part-255-endorsement-guides.pdf
+    primary_category: regulatory
+  - name: FDA Health Claims in Advertising
+    url: https://www.fda.gov/food/food-labeling-nutrition
+    primary_category: regulatory
