@@ -33,7 +33,7 @@ Core Loop (init, plan, apply, unify, help, progress); Session (pause, resume, pr
 
 ### Other Harnesses
 
-PAUL was written for Claude Code. Command naming: `/paul:<name>` there; in every other harness the same command is the `paul-<name>` skill — `/paul-<name>` slash in OpenCode and Cline, or name the skill in chat in Kilo Code and Codex. Framework files: read `~/.agents/paul-framework/<subpath>` where it exists, else `~/.agents/paul-framework/<subpath>`. Subagent types: Claude Code's `Explore`/`general-purpose` map to `explore`/`general` in OpenCode and Kilo Code, `spawn_agent` in Codex and Cline (CLI/Desktop only); with no subagent tool run them sequentially yourself. Cline discovers skills only under `.cline/skills/` or `~/.cline/skills/` — symlink or copy the paul-* skills there to use them.
+PAUL was written for Claude Code. Command naming: `/paul:<name>` there; in every other harness the same command is the `paul-<name>` skill — `/paul-<name>` slash in OpenCode and Cline, or name the skill in chat in Kilo Code and Codex. Framework files: read `~/.agents/paul-framework/<subpath>`. Subagent types: Claude Code's `Explore`/`general-purpose` map to `explore`/`general` in OpenCode and Kilo Code, `spawn_agent` in Codex and Cline (CLI/Desktop only); with no subagent tool run them sequentially yourself. Cline discovers skills only under `.cline/skills/` or `~/.cline/skills/` — symlink or copy the paul-* skills there to use them.
 
 ## Application
 

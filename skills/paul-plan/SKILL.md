@@ -28,7 +28,7 @@ Example: `Use paul-plan: plan 08-01`
 
 The plan format and phase workflow are defined outside this skill — follow them, don't reinvent:
 
-**Other harnesses.** These paths assume a Claude Code install at `~/.agents/paul-framework/`; any harness can read them there. If that directory is absent, read the same subpaths under `~/.agents/paul-framework/`. If neither exists, tell the user to install the PAUL framework (workflows/, templates/, references/) and stop — don't reinvent the workflow from memory.
+**Other harnesses.** These paths assume a Claude Code install at `~/.agents/paul-framework/`; any harness can read them there. If that directory is absent, tell the user to install the PAUL framework (workflows/, templates/, references/) and stop — don't reinvent the workflow from memory.
 
 - `~/.agents/paul-framework/workflows/plan-phase.md` — phase workflow to follow
 - `~/.agents/paul-framework/templates/PLAN.md` — PLAN file template

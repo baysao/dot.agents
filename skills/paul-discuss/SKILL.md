@@ -23,7 +23,7 @@ Example: `Use paul-discuss: explore phase 3`
 
 ### Framework Source of Truth
 
-**Other harnesses.** These paths assume a Claude Code install at `~/.agents/paul-framework/`; any harness can read them there. If that directory is absent, read the same subpaths under `~/.agents/paul-framework/`. If neither exists, tell the user to install the PAUL framework (workflows/, templates/, references/) and stop — don't reinvent the workflow from memory.
+**Other harnesses.** These paths assume a Claude Code install at `~/.agents/paul-framework/`; any harness can read them there. If that directory is absent, tell the user to install the PAUL framework (workflows/, templates/, references/) and stop — don't reinvent the workflow from memory.
 
 - `~/.agents/paul-framework/workflows/discuss-phase.md` — workflow to follow
 

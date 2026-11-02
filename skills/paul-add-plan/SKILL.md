@@ -26,7 +26,7 @@ Example: `Use paul-add-plan: add a plan to 04-api-layer for rate limiting`
 
 ### Framework Sources of Truth
 
-**Other harnesses.** These paths assume a Claude Code install at `~/.agents/paul-framework/`; any harness can read them there. If that directory is absent, read the same subpaths under `~/.agents/paul-framework/`. If neither exists, tell the user to install the PAUL framework (workflows/, templates/, references/) and stop — don't reinvent the workflow from memory.
+**Other harnesses.** These paths assume a Claude Code install at `~/.agents/paul-framework/`; any harness can read them there. If that directory is absent, tell the user to install the PAUL framework (workflows/, templates/, references/) and stop — don't reinvent the workflow from memory.
 
 - `~/.agents/paul-framework/workflows/add-plan.md` — workflow to follow
 - `~/.agents/paul-framework/templates/PLAN.md` — plan template

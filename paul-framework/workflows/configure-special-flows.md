@@ -256,7 +256,7 @@ Display current configuration:
 </output>
 
 <error_handling>
-**No .claude/commands/ directory:**
+**No .agents/commands/ directory:**
 ```
 No skills directory found at ~/.agents/commands/
 Add skills to your Claude Code configuration first.
