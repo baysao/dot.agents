@@ -12,7 +12,7 @@ Create a new milestone with defined scope and phases.
 </objective>
 
 <execution_context>
-@~/.claude/paul-framework/workflows/create-milestone.md
+@~/.agents/paul-framework/workflows/create-milestone.md
 </execution_context>
 
 <context>
@@ -24,7 +24,7 @@ $ARGUMENTS
 </context>
 
 <process>
-Follow workflow: @~/.claude/paul-framework/workflows/create-milestone.md
+Follow workflow: @~/.agents/paul-framework/workflows/create-milestone.md
 </process>
 
 <success_criteria>

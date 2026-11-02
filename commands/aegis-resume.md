@@ -14,13 +14,13 @@ Produces: continued audit execution from the resume point, updated .aegis/STATE.
 </objective>
 
 <execution_context>
-@~/.claude/aegis/core/workflows/phase-0-context.md
-@~/.claude/aegis/core/workflows/phase-1-reconnaissance.md
-@~/.claude/aegis/core/workflows/phase-2-domain-audits.md
-@~/.claude/aegis/core/workflows/phase-3-cross-domain.md
-@~/.claude/aegis/core/workflows/phase-4-adversarial-review.md
-@~/.claude/aegis/core/workflows/phase-5-report.md
-@~/.claude/aegis/core/workflows/phase-checkpoint.md
+@~/.agents/aegis/core/workflows/phase-0-context.md
+@~/.agents/aegis/core/workflows/phase-1-reconnaissance.md
+@~/.agents/aegis/core/workflows/phase-2-domain-audits.md
+@~/.agents/aegis/core/workflows/phase-3-cross-domain.md
+@~/.agents/aegis/core/workflows/phase-4-adversarial-review.md
+@~/.agents/aegis/core/workflows/phase-5-report.md
+@~/.agents/aegis/core/workflows/phase-checkpoint.md
 </execution_context>
 
 <context>

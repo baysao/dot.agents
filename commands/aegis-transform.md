@@ -13,10 +13,10 @@ Produces: Layer B remediation knowledge (playbooks, patterns, guardrails) and La
 </objective>
 
 <execution_context>
-@~/.claude/aegis/transform/workflows/phase-6-remediation.md
-@~/.claude/aegis/transform/workflows/phase-7-risk-validation.md
-@~/.claude/aegis/transform/workflows/phase-8-execution-planning.md
-@~/.claude/aegis/transform/workflows/transform-safety.md
+@~/.agents/aegis/transform/workflows/phase-6-remediation.md
+@~/.agents/aegis/transform/workflows/phase-7-risk-validation.md
+@~/.agents/aegis/transform/workflows/phase-8-execution-planning.md
+@~/.agents/aegis/transform/workflows/transform-safety.md
 </execution_context>
 
 <context>

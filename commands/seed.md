@@ -34,7 +34,7 @@ Project coach — helps shape raw ideas into structured, buildable plans.
 - Knows the ecosystem — suggests PAUL, AEGIS, Skillsmith, BASE where relevant
 
 ## Expertise
-- Composable via `@~/.claude/commands/seed/data/{type}/` — expertise loads based on selected project type
+- Composable via `@~/.agents/commands/seed/data/{type}/` — expertise loads based on selected project type
 - Core: project scoping, feasibility assessment, ecosystem integration (BASE, CARL, PAUL, AEGIS, Skillsmith)
 - Application architecture, Claude Code workflows, conversion/content strategy (type-specific depth)
 </persona>
@@ -42,11 +42,11 @@ Project coach — helps shape raw ideas into structured, buildable plans.
 <commands>
 | Command | Description | Routes To |
 |---------|-------------|-----------|
-| `/seed` | Default — type-first guided ideation | @~/.claude/commands/seed/tasks/ideate.md |
-| `/seed graduate` | Graduate ideation → `apps/` with git repo | @~/.claude/commands/seed/tasks/graduate.md |
-| `/seed launch` | Graduate + PAUL install/init (headless, no re-asking) | @~/.claude/commands/seed/tasks/launch.md |
-| `/seed status` | Show all `projects/` and their ideation state | @~/.claude/commands/seed/tasks/status.md |
-| `/seed add-type` | Add a custom project type to SEED's data layer | @~/.claude/commands/seed/tasks/add-type.md |
+| `/seed` | Default — type-first guided ideation | @~/.agents/commands/seed/tasks/ideate.md |
+| `/seed graduate` | Graduate ideation → `apps/` with git repo | @~/.agents/commands/seed/tasks/graduate.md |
+| `/seed launch` | Graduate + PAUL install/init (headless, no re-asking) | @~/.agents/commands/seed/tasks/launch.md |
+| `/seed status` | Show all `projects/` and their ideation state | @~/.agents/commands/seed/tasks/status.md |
+| `/seed add-type` | Add a custom project type to SEED's data layer | @~/.agents/commands/seed/tasks/add-type.md |
 </commands>
 
 <routing>
@@ -54,18 +54,18 @@ Project coach — helps shape raw ideas into structured, buildable plans.
 Nothing — SEED is lightweight until a command is invoked.
 
 ## Load on Command
-@~/.claude/commands/seed/tasks/ideate.md (when user runs /seed or /seed ideate)
-@~/.claude/commands/seed/tasks/graduate.md (when user runs /seed graduate)
-@~/.claude/commands/seed/tasks/launch.md (when user runs /seed launch)
-@~/.claude/commands/seed/tasks/status.md (when user runs /seed status)
-@~/.claude/commands/seed/tasks/add-type.md (when user runs /seed add-type)
+@~/.agents/commands/seed/tasks/ideate.md (when user runs /seed or /seed ideate)
+@~/.agents/commands/seed/tasks/graduate.md (when user runs /seed graduate)
+@~/.agents/commands/seed/tasks/launch.md (when user runs /seed launch)
+@~/.agents/commands/seed/tasks/status.md (when user runs /seed status)
+@~/.agents/commands/seed/tasks/add-type.md (when user runs /seed add-type)
 
 ## Load on Demand
-@~/.claude/commands/seed/data/{type}/guide.md (after type selection during ideation — conversation sections)
-@~/.claude/commands/seed/data/{type}/config.md (after type selection — rigor level, demeanor, section requirements)
-@~/.claude/commands/seed/data/{type}/skill-loadout.md (during skill loadout step — ecosystem tool recommendations)
-@~/.claude/commands/seed/templates/planning-{type}.md (during PLANNING.md generation)
-@~/.claude/commands/seed/checklists/planning-quality.md (before graduate/launch — quality gate)
+@~/.agents/commands/seed/data/{type}/guide.md (after type selection during ideation — conversation sections)
+@~/.agents/commands/seed/data/{type}/config.md (after type selection — rigor level, demeanor, section requirements)
+@~/.agents/commands/seed/data/{type}/skill-loadout.md (during skill loadout step — ecosystem tool recommendations)
+@~/.agents/commands/seed/templates/planning-{type}.md (during PLANNING.md generation)
+@~/.agents/commands/seed/checklists/planning-quality.md (before graduate/launch — quality gate)
 </routing>
 
 <greeting>

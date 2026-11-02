@@ -12,7 +12,7 @@ description: >-
 
 # EGM Brainstorm: Interactive Multi-Lens Ideation & Refinement
 
-When running in Codex or ChatGPT Work, first read [Codex integration](../../docs/codex.md).
+When running in Codex or ChatGPT Work, first read [Codex integration](~/.agents/egm/docs/codex.md).
 In Claude Code or Cowork, read `${CLAUDE_PLUGIN_ROOT}/docs/claude.md` first.
 
 ## Overview
@@ -27,12 +27,12 @@ peers.
 ## Delegation
 
 A Goldfish runs in a fresh context with no conversation history. Spawn each
-subagent with your harness's subagent tool (Antigravity: `invoke_subagent`; Claude Code: `Agent`; Codex: `spawn_agent`). Each subagent is defined in `agents/<file>.md`, and its
+subagent with your harness's subagent tool (Antigravity: `invoke_subagent`; Claude Code: `Agent`; Codex: `spawn_agent`). Each subagent is defined in `~/.agents/egm/agents/<file>.md`, and its
 frontmatter `name` (for example `egm-zoom-out`) is the subagent type to request
 where your harness registers named subagents. Otherwise spawn a general-purpose
 subagent and tell it to read that persona file first. Pass the prompt verbatim
 and wait for the report. If your harness cannot nest subagents,
-use direct dispatch instead of the synthesizer. See `docs/harnesses.md`.
+use direct dispatch instead of the synthesizer. See `~/.agents/egm/docs/harnesses.md`.
 If your harness has no subagent tool, stop and tell the user: a review in the same context is not a Goldfish review.
 
 ## Execution Constraints (CRITICAL)
@@ -160,7 +160,7 @@ If your harness has no subagent tool, stop and tell the user: a review in the sa
 1.  **Delegate to Synthesizer Subagent**: Spawn the intermediate
     **`egm-synthesizer`** agent (or parallel Goldfish subagents across the 6
     specialized lenses if your harness cannot nest subagents):
-    *   Subagent: `egm-synthesizer` (`agents/synthesizer.md`)
+    *   Subagent: `egm-synthesizer` (`~/.agents/egm/agents/synthesizer.md`)
     *   `Prompt`: >- Conduct multi-lens brainstorm for feature concept:
         `[AnchoredFeatureHypothesis]`. Mode: `BRAINSTORM`. Reviewers:
         `[egm-design, egm-codebase-details, egm-zoom-out, egm-comprehension,

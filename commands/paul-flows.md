@@ -22,8 +22,8 @@ Configure, amend, or audit specialized skill integrations for a PAUL project.
 </objective>
 
 <execution_context>
-@~/.claude/paul-framework/workflows/configure-special-flows.md
-@~/.claude/paul-framework/references/specialized-workflow-integration.md
+@~/.agents/paul-framework/workflows/configure-special-flows.md
+@~/.agents/paul-framework/references/specialized-workflow-integration.md
 </execution_context>
 
 <context>

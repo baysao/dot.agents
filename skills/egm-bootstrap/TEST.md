@@ -1,6 +1,6 @@
 # Verification and Evaluation Commands for `egm-bootstrap`
 
-Frontmatter and link checks run in `pytest tests/unit` (see [TESTING.md](../../TESTING.md)).
+Frontmatter and link checks run in `pytest tests/unit` (see [TESTING.md](~/.agents/egm/TESTING.md)).
 
 ## Manual Verification Scenarios
 

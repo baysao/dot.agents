@@ -14,10 +14,10 @@ Creates PROJECT.md, STATE.md, and ROADMAP.md populated from conversation - user 
 </objective>
 
 <execution_context>
-@~/.claude/paul-framework/workflows/init-project.md
-@~/.claude/paul-framework/templates/PROJECT.md
-@~/.claude/paul-framework/templates/STATE.md
-@~/.claude/paul-framework/templates/ROADMAP.md
+@~/.agents/paul-framework/workflows/init-project.md
+@~/.agents/paul-framework/templates/PROJECT.md
+@~/.agents/paul-framework/templates/STATE.md
+@~/.agents/paul-framework/templates/ROADMAP.md
 </execution_context>
 
 <context>
@@ -25,7 +25,7 @@ Current directory state (check for existing .paul/)
 </context>
 
 <process>
-**Follow workflow: @~/.claude/paul-framework/workflows/init-project.md**
+**Follow workflow: @~/.agents/paul-framework/workflows/init-project.md**
 
 The workflow implements conversational setup:
 

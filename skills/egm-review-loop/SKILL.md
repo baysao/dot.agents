@@ -13,7 +13,7 @@ description: >-
 
 # Goldfish Review: Loop (Orchestration Driver)
 
-When running in Codex or ChatGPT Work, first read [Codex integration](../../docs/codex.md).
+When running in Codex or ChatGPT Work, first read [Codex integration](~/.agents/egm/docs/codex.md).
 In Claude Code or Cowork, read `${CLAUDE_PLUGIN_ROOT}/docs/claude.md` first.
 
 ## Overview
@@ -34,12 +34,12 @@ with the Elephant context to resolve findings.
 ## Delegation
 
 A Goldfish runs in a fresh context with no conversation history. Spawn each
-subagent with your harness's subagent tool (Antigravity: `invoke_subagent`; Claude Code: `Agent`; Codex: `spawn_agent`). Each subagent is defined in `agents/<file>.md`, and its
+subagent with your harness's subagent tool (Antigravity: `invoke_subagent`; Claude Code: `Agent`; Codex: `spawn_agent`). Each subagent is defined in `~/.agents/egm/agents/<file>.md`, and its
 frontmatter `name` (for example `egm-zoom-out`) is the subagent type to request
 where your harness registers named subagents. Otherwise spawn a general-purpose
 subagent and tell it to read that persona file first. Pass the prompt verbatim
 and wait for the report. If your harness cannot nest subagents,
-use direct dispatch instead of the synthesizer. See `docs/harnesses.md`.
+use direct dispatch instead of the synthesizer. See `~/.agents/egm/docs/harnesses.md`.
 If your harness has no subagent tool, stop and tell the user: a review in the same
 context is not a Goldfish review.
 
@@ -62,12 +62,12 @@ When resolving names in `Reviewers` and `Standards`:
 
 *   **Reviewer Shortnames**: Map reviewer shortname (e.g., `design_critic`,
     `structural`, `style`, `implementation_readiness`,
-    `codebase_details`, `comprehension`, `zoom_out`) to `agents/{name}.md`.
+    `codebase_details`, `comprehension`, `zoom_out`) to `~/.agents/egm/agents/{name}.md`.
     The persona file defines the reviewer's core mandates, audit vectors, and
     output format.
 *   **Standard Shortnames**: Map standard shortname (e.g., `feature-spec-standard`,
     `implementation-readiness-standard`, `zoom-out-standard`, `heilmeier-standard`,
-    `re-implementation-standard`) to `resources/document_standards/{name}.md`.
+    `re-implementation-standard`) to `~/.agents/egm/resources/document_standards/{name}.md`.
 *   **Custom Paths**: If the name contains a slash (`/`), treat it as an
     absolute or workspace-relative path and read it directly.
 
@@ -86,10 +86,10 @@ Evaluate the provided inputs (`TargetFile`, `SemanticTarget`, `Reviewers`,
         **only for the missing inputs**, one at a time via chat messages.
 3.  **Reviewer Recommendations**:
     *   *Feature Specs*: Recommend `design_critic` (mapped to
-        `resources/document_standards/feature-spec-standard.md`) and
-        `structural` (mapped to `resources/document_standards/feature-spec-standard.md`).
+        `~/.agents/egm/resources/document_standards/feature-spec-standard.md`) and
+        `structural` (mapped to `~/.agents/egm/resources/document_standards/feature-spec-standard.md`).
     *   *Implementation Plans*: Recommend `implementation_readiness`
-        (mapped to `resources/document_standards/implementation-readiness-standard.md`)
+        (mapped to `~/.agents/egm/resources/document_standards/implementation-readiness-standard.md`)
         and `codebase_details`.
 4.  **Confirm Configuration**: Display the consolidated plan (Target, Reviewers,
     and mapped Standards) and ask the user to confirm before proceeding.
@@ -111,7 +111,7 @@ file` mode is specified, confirm full-file line bounds).
 1.  **Launch Subagent Swarm**:
     Spawn subagents to execute the review:
     *   **Hierarchical Dispatch (Synthesizer)**: Spawn the intermediate
-        synthesizer subagent (`agents/synthesizer.md` / `egm-synthesizer`).
+        synthesizer subagent (`~/.agents/egm/agents/synthesizer.md` / `egm-synthesizer`).
         The synthesizer spawns the Goldfish review swarm in
         parallel, deduplicates findings, writes the report artifact, and
         returns a single summary message to avoid context pollution in the root
@@ -120,8 +120,8 @@ file` mode is specified, confirm full-file line bounds).
     *   **Direct Dispatch (Flat Swarm)**: Alternatively, spawn each requested
         reviewer subagent in `Reviewers` directly.
         Instruct each subagent to first read its persona definition in
-        `agents/{name}.md`, then audit `TargetFile` at the resolved line range
-        against its designated standard in `resources/document_standards/`,
+        `~/.agents/egm/agents/{name}.md`, then audit `TargetFile` at the resolved line range
+        against its designated standard in `~/.agents/egm/resources/document_standards/`,
         supplying `GoldfishContext`.
     *   Each reviewer produces findings with severity (🔴 Blocker, 🟡 Major, 🟢
         Nit), line numbers, discrepancy descriptions, and rationales.

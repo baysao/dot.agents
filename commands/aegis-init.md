@@ -131,9 +131,9 @@ Create `.aegis/MANIFEST.md` with:
 
 ## Framework
 
-Version: {read from ~/.claude/aegis/ if available, else "unknown"}
-Framework path: ~/.claude/aegis/
-Commands path: ~/.claude/commands/aegis/
+Version: {read from ~/.agents/aegis/ if available, else "unknown"}
+Framework path: ~/.agents/aegis/
+Commands path: ~/.agents/commands/aegis/
 Initialized: {ISO 8601 timestamp}
 
 ## Installed Tools

@@ -24,11 +24,11 @@ This is a read-only command — it never modifies files or installs anything. Sa
 
 Verify the AEGIS framework is installed:
 
-1. Check `~/.claude/aegis/` exists:
+1. Check `~/.agents/aegis/` exists:
    - If YES: count files in key subdirectories (domains/, schemas/, rules/, tools/, core/, transform/)
    - If NO: report "Framework not installed" and suggest `install.sh`
 
-2. Check `~/.claude/commands/aegis/` exists:
+2. Check `~/.agents/commands/aegis/` exists:
    - If YES: list command files, count them
    - If NO: report "Commands not installed" and suggest `install.sh`
 
@@ -134,8 +134,8 @@ AEGIS Validation Report
 ════════════════════════════════════════
 
 Framework:
-  {✓/✗} ~/.claude/aegis/         ({N} files)
-  {✓/✗} ~/.claude/commands/aegis/ ({M} commands)
+  {✓/✗} ~/.agents/aegis/         ({N} files)
+  {✓/✗} ~/.agents/commands/aegis/ ({M} commands)
 
 Tools:
   {✓/✗} semgrep       {version}  {(venv) if applicable}

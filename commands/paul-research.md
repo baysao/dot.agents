@@ -18,8 +18,8 @@ Research a specific topic using subagents and save findings for review.
 </objective>
 
 <execution_context>
-@~/.claude/paul-framework/workflows/research.md
-@~/.claude/paul-framework/references/subagent-criteria.md
+@~/.agents/paul-framework/workflows/research.md
+@~/.agents/paul-framework/references/subagent-criteria.md
 </execution_context>
 
 <context>
@@ -35,7 +35,7 @@ Optional flags:
 </context>
 
 <process>
-Follow workflow: @~/.claude/paul-framework/workflows/research.md
+Follow workflow: @~/.agents/paul-framework/workflows/research.md
 </process>
 
 <success_criteria>

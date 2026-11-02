@@ -14,8 +14,8 @@ Guide the user through manual acceptance testing of recently built features.
 </objective>
 
 <execution_context>
-@~/.claude/paul-framework/workflows/verify-work.md
-@~/.claude/paul-framework/templates/UAT-ISSUES.md
+@~/.agents/paul-framework/workflows/verify-work.md
+@~/.agents/paul-framework/templates/UAT-ISSUES.md
 </execution_context>
 
 <context>
@@ -28,7 +28,7 @@ Scope: $ARGUMENTS (optional)
 </context>
 
 <process>
-**Follow workflow: @~/.claude/paul-framework/workflows/verify-work.md**
+**Follow workflow: @~/.agents/paul-framework/workflows/verify-work.md**
 
 The workflow implements:
 1. Identify test scope (specified or most recent SUMMARY)

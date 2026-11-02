@@ -44,10 +44,10 @@ Senior skill architect — designs skill structures, enforces conventions, and g
 <commands>
 | Command | Description | Routes To |
 |---------|-------------|-----------|
-| `/skillsmith discover` | Guided interview to capture skill design | @~/.claude/commands/skillsmith/tasks/discover.md |
-| `/skillsmith scaffold` | Generate skill directory from spec |  @~/.claude/commands/skillsmith/tasks/scaffold.md |
-| `/skillsmith distill` | Transform raw source material into framework chunks |  @~/.claude/commands/skillsmith/tasks/distill.md |
-| `/skillsmith audit` | Audit skill compliance against syntax specs |  @~/.claude/commands/skillsmith/tasks/audit.md |
+| `/skillsmith discover` | Guided interview to capture skill design | @~/.agents/commands/skillsmith/tasks/discover.md |
+| `/skillsmith scaffold` | Generate skill directory from spec |  @~/.agents/commands/skillsmith/tasks/scaffold.md |
+| `/skillsmith distill` | Transform raw source material into framework chunks |  @~/.agents/commands/skillsmith/tasks/distill.md |
+| `/skillsmith audit` | Audit skill compliance against syntax specs |  @~/.agents/commands/skillsmith/tasks/audit.md |
 </commands>
 
 <routing>
@@ -55,19 +55,19 @@ Senior skill architect — designs skill structures, enforces conventions, and g
 Nothing — Skillsmith is lightweight until a command is invoked.
 
 ## Load on Command
-@~/.claude/commands/skillsmith/tasks/discover.md (when user runs /skillsmith discover or starts discovery)
-@~/.claude/commands/skillsmith/tasks/scaffold.md (when user runs /skillsmith scaffold)
-@~/.claude/commands/skillsmith/tasks/distill.md (when user runs /skillsmith distill or needs to chunk source material)
-@~/.claude/commands/skillsmith/tasks/audit.md (when user runs /skillsmith audit or wants to check skill compliance)
+@~/.agents/commands/skillsmith/tasks/discover.md (when user runs /skillsmith discover or starts discovery)
+@~/.agents/commands/skillsmith/tasks/scaffold.md (when user runs /skillsmith scaffold)
+@~/.agents/commands/skillsmith/tasks/distill.md (when user runs /skillsmith distill or needs to chunk source material)
+@~/.agents/commands/skillsmith/tasks/audit.md (when user runs /skillsmith audit or wants to check skill compliance)
 
 ## Load on Demand
-@~/.claude/skillsmith-specs/entry-point.md (when referencing entry point conventions)
-@~/.claude/skillsmith-specs/tasks.md (when referencing task conventions)
-@~/.claude/skillsmith-specs/templates.md (when referencing template conventions)
-@~/.claude/skillsmith-specs/frameworks.md (when referencing framework conventions)
-@~/.claude/skillsmith-specs/context.md (when referencing context conventions)
-@~/.claude/skillsmith-specs/checklists.md (when referencing checklist conventions)
-@~/.claude/skillsmith-specs/rules.md (when referencing rules conventions)
+@~/.agents/skillsmith-specs/entry-point.md (when referencing entry point conventions)
+@~/.agents/skillsmith-specs/tasks.md (when referencing task conventions)
+@~/.agents/skillsmith-specs/templates.md (when referencing template conventions)
+@~/.agents/skillsmith-specs/frameworks.md (when referencing framework conventions)
+@~/.agents/skillsmith-specs/context.md (when referencing context conventions)
+@~/.agents/skillsmith-specs/checklists.md (when referencing checklist conventions)
+@~/.agents/skillsmith-specs/rules.md (when referencing rules conventions)
 </routing>
 
 <greeting>

@@ -18,8 +18,8 @@ Analyze a phase for unknowns and research them using subagents.
 </objective>
 
 <execution_context>
-@~/.claude/paul-framework/workflows/research.md
-@~/.claude/paul-framework/references/subagent-criteria.md
+@~/.agents/paul-framework/workflows/research.md
+@~/.agents/paul-framework/references/subagent-criteria.md
 </execution_context>
 
 <context>

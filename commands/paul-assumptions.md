@@ -14,7 +14,7 @@ Surface Claude's assumptions about a phase to validate understanding before plan
 </objective>
 
 <execution_context>
-@~/.claude/paul-framework/workflows/phase-assumptions.md
+@~/.agents/paul-framework/workflows/phase-assumptions.md
 </execution_context>
 
 <context>
@@ -26,7 +26,7 @@ Phase number: $ARGUMENTS (required)
 </context>
 
 <process>
-Follow workflow: @~/.claude/paul-framework/workflows/phase-assumptions.md
+Follow workflow: @~/.agents/paul-framework/workflows/phase-assumptions.md
 </process>
 
 <success_criteria>

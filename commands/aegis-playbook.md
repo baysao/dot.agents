@@ -14,8 +14,8 @@ Produces: .aegis/remediation/playbooks/{finding-id}.md and .aegis/remediation/pl
 </objective>
 
 <execution_context>
-@~/.claude/aegis/transform/workflows/phase-6-remediation.md
-@~/.claude/aegis/transform/workflows/transform-safety.md
+@~/.agents/aegis/transform/workflows/phase-6-remediation.md
+@~/.agents/aegis/transform/workflows/transform-safety.md
 </execution_context>
 
 <context>

@@ -14,8 +14,8 @@ Produces: rule files in .aegis/remediation/guardrails/ (claude-md-rules.md, curs
 </objective>
 
 <execution_context>
-@~/.claude/aegis/transform/workflows/phase-7-risk-validation.md
-@~/.claude/aegis/transform/workflows/transform-safety.md
+@~/.agents/aegis/transform/workflows/phase-7-risk-validation.md
+@~/.agents/aegis/transform/workflows/transform-safety.md
 </execution_context>
 
 <context>

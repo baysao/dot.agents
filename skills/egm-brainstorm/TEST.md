@@ -1,6 +1,6 @@
 # Test Plan: EGM Brainstorm Skill
 
-Frontmatter and link checks run in `pytest tests/unit` (see [TESTING.md](../../TESTING.md)).
+Frontmatter and link checks run in `pytest tests/unit` (see [TESTING.md](~/.agents/egm/TESTING.md)).
 
 ## Protocol Verification Checklist
 

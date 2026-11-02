@@ -12,7 +12,7 @@ Generate `.paul/paul.json` for an existing project that has a `.paul/` directory
 </objective>
 
 <execution_context>
-@~/.claude/paul-framework/workflows/register-manifest.md
+@~/.agents/paul-framework/workflows/register-manifest.md
 </execution_context>
 
 <context>
@@ -20,7 +20,7 @@ Current directory (check for .paul/ and existing paul.json)
 </context>
 
 <process>
-Follow workflow: @~/.claude/paul-framework/workflows/register-manifest.md
+Follow workflow: @~/.agents/paul-framework/workflows/register-manifest.md
 </process>
 
 <success_criteria>

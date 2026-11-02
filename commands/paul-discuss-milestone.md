@@ -12,7 +12,7 @@ Facilitate vision discussion for the next milestone and create context handoff.
 </objective>
 
 <execution_context>
-@~/.claude/paul-framework/workflows/discuss-milestone.md
+@~/.agents/paul-framework/workflows/discuss-milestone.md
 </execution_context>
 
 <context>
@@ -23,7 +23,7 @@ Facilitate vision discussion for the next milestone and create context handoff.
 </context>
 
 <process>
-Follow workflow: @~/.claude/paul-framework/workflows/discuss-milestone.md
+Follow workflow: @~/.agents/paul-framework/workflows/discuss-milestone.md
 </process>
 
 <success_criteria>

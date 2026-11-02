@@ -16,9 +16,9 @@ Add a new plan into phase PHASE — an additional PLAN.md appended to an existin
 </objective>
 
 <execution_context>
-@~/.claude/paul-framework/workflows/add-plan.md
-@~/.claude/paul-framework/templates/PLAN.md
-@~/.claude/paul-framework/references/plan-format.md
+@~/.agents/paul-framework/workflows/add-plan.md
+@~/.agents/paul-framework/templates/PLAN.md
+@~/.agents/paul-framework/references/plan-format.md
 </execution_context>
 
 <context>
@@ -30,7 +30,7 @@ Phase: $ARGUMENTS (required — phase number or name, e.g., "4", "04", "04-api-l
 </context>
 
 <process>
-Follow workflow: @~/.claude/paul-framework/workflows/add-plan.md
+Follow workflow: @~/.agents/paul-framework/workflows/add-plan.md
 </process>
 
 <success_criteria>

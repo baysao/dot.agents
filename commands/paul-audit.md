@@ -16,7 +16,7 @@ Produces an AUDIT.md report in the same phase directory.
 </objective>
 
 <execution_context>
-@~/.claude/paul-framework/workflows/audit-plan.md
+@~/.agents/paul-framework/workflows/audit-plan.md
 </execution_context>
 
 <context>
@@ -27,7 +27,7 @@ Plan path: $ARGUMENTS
 </context>
 
 <process>
-**Follow workflow: @~/.claude/paul-framework/workflows/audit-plan.md**
+**Follow workflow: @~/.agents/paul-framework/workflows/audit-plan.md**
 
 The workflow implements:
 1. Validate preconditions (PLAN exists, loop at PLAN complete)

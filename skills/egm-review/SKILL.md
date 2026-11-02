@@ -11,7 +11,7 @@ description: >-
 
 # Review, Validation & Automated Remediation
 
-When running in Codex or ChatGPT Work, first read [Codex integration](../../docs/codex.md).
+When running in Codex or ChatGPT Work, first read [Codex integration](~/.agents/egm/docs/codex.md).
 In Claude Code or Cowork, read `${CLAUDE_PLUGIN_ROOT}/docs/claude.md` first.
 
 Reviews and validates a design document through specialized reviewer personas.
@@ -19,12 +19,12 @@ Reviews and validates a design document through specialized reviewer personas.
 ## Delegation
 
 A Goldfish runs in a fresh context with no conversation history. Spawn each
-subagent with your harness's subagent tool (Antigravity: `invoke_subagent`; Claude Code: `Agent`; Codex: `spawn_agent`). Each subagent is defined in `agents/<file>.md`, and its
+subagent with your harness's subagent tool (Antigravity: `invoke_subagent`; Claude Code: `Agent`; Codex: `spawn_agent`). Each subagent is defined in `~/.agents/egm/agents/<file>.md`, and its
 frontmatter `name` (for example `egm-zoom-out`) is the subagent type to request
 where your harness registers named subagents. Otherwise spawn a general-purpose
 subagent and tell it to read that persona file first. Pass the prompt verbatim
 and wait for the report. If your harness cannot nest subagents,
-use direct dispatch instead of the synthesizer. See `docs/harnesses.md`.
+use direct dispatch instead of the synthesizer. See `~/.agents/egm/docs/harnesses.md`.
 If your harness has no subagent tool, stop and tell the user: a review in the same context is not a Goldfish review.
 
 ## Execution Constraints (CRITICAL)
@@ -295,8 +295,8 @@ plain chat):
 ### Subflow: Zoom Out Review
 
 1.  **Delegate to Synthesizer Subagent**: Spawn `egm-synthesizer` (or the
-    specialized `egm-zoom-out` subagent at `agents/zoom_out.md`) on `full file`
-    applying `resources/document_standards/zoom-out-standard.md`. When running
+    specialized `egm-zoom-out` subagent at `~/.agents/egm/agents/zoom_out.md`) on `full file`
+    applying `~/.agents/egm/resources/document_standards/zoom-out-standard.md`. When running
     as Step 8 (Intermediate Zoom Out), include `zoom_out_report.md` path in
     context and focus on additions/mitigations from Comprehension and Critic
     stages.
@@ -326,7 +326,7 @@ plain chat):
 ### Subflow: Comprehension Test
 
 1.  **Spawn the Reviewer Directly**: Spawn the `egm-comprehension` subagent
-    at `agents/comprehension.md` on `FeatureRange` & `DetailedRange` with no
+    at `~/.agents/egm/agents/comprehension.md` on `FeatureRange` & `DetailedRange` with no
     document standard. Do not use the synthesizer: its report keeps only
     findings, and the author must see the paraphrase. The test is self-containment,
     not detail. Do not apply `re-implementation-standard.md`: it asks for
