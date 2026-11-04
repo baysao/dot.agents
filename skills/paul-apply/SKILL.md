@@ -33,13 +33,40 @@ Example: `Use paul-apply: execute .paul/phases/01-foundation/01-01-PLAN.md`
 
 ### Checkpoint Types
 
-- `checkpoint:decision` — present options, wait for selection, record, continue
+- `checkpoint:decision` - present options, wait for selection, then append the choice as a `D-NN` row in `.paul/DECISIONS.md` and the same row in the `STATE.md` `### Decisions` table, then continue
 - `checkpoint:human-verify` — present build + verification steps, wait for approval or issues, address and re-verify if needed
 - `checkpoint:human-action` — present required manual action, wait for done confirmation
 
 ### Guard
 
 Derive the SUMMARY path by replacing `PLAN.md` with `SUMMARY.md`. If SUMMARY already exists the plan was already executed — offer re-execute or exit.
+
+### Where a Deviation Goes
+
+A task you skip, a shortcut you take, or a nice-to-have you notice mid-plan is a **deferral** the moment it leaves your hands. It has exactly two destinations:
+
+| The thing you noticed | Where it goes |
+|---|---|
+| It has a landing condition (a file to delete, a check to re-run, a decision someone must make) | a `[[debt]]` row in `.paul/DEBT.toml`, with a runnable `check` |
+| It has none — pure nice-to-have, no way to test it | `.paul/ISSUES.md` |
+
+Do not "record it in the SUMMARY and continue": UNIFY reads a plan, not a transcript, and a deferral whose only trace is prose is a deferral nobody will discharge. **Do not create `.paul/ISSUES.md` for anything with a landing condition** — that file has no checks, so nothing can ever discharge it.
+
+```toml
+[[debt]]
+id = "DEBT-0NN"                  # next free id
+title = "What is owed, one line"
+kind = "tech"                    # artifact | reopen | decision | tech | uat
+origin = "01-02 task 3"          # phase-plan and task
+owner = "agent"                  # agent | owner | phase-NN | vendor
+due = "2026-11-05T09:00:00Z"     # omit if event-gated
+trigger = "event:probe-close"    # or phase:NN / plan-count:N — at least one of due/trigger/blocking
+check = { type = "command", command = "...", expect = "..." }
+```
+
+`debt.py` rejects a row that has no `due`, `trigger`, or `blocking` — that is the point. The check must be able to fail; a check that cannot fail reports a deferred item as done.
+
+When a deferral is blocking this plan's own exit, set `blocking = "phase-NN-exit"` so the phase gate will refuse to close until it is discharged or explicitly dropped.
 
 ## Application
 
@@ -55,13 +82,19 @@ Read `.paul/SPECIAL-FLOWS.md`. If it declares required skills (for example the p
 
 If SPECIAL-FLOWS.md also declares CARL required, confirm the `carl-mcp` tools resolve before the first task. On failure, stop and tell the user to enable CARL — same gate shape as the pstack gate.
 
-### Step 1.7: base Task (automatic)
+### Step 1.6: Check for a sibling plan on the same files
 
-When the `base` binary resolves, add one base task under the project, named with the plan id as prefix (e.g. `08-01 implement auth`). One task per plan, never per PAUL task — STATE.md and PLAN.md own the fine grain. UNIFY marks it done by matching the same prefix; no slug needs to survive the session.
+Read every other `PLAN.md` in the same phase and compare `files_modified` with this plan's. If a sibling is APPLYING or held (`loop.hold_until` set in `paul.toml`) and both write the same path, stop before the first task. Either wait for the sibling, or record the overlap in `STATE.md` naming both plans, the shared path, and the reason serializing costs more. An undocumented overlap makes every file in that path unusable as routing evidence — the next session cannot tell which plan wrote what.
+
+### Step 1.7: Task Tracking (no external board)
+
+Task tracking is `.paul/`'s job. One entry per plan, never per PAUL task — `STATE.md` and `PLAN.md` own the fine grain, and UNIFY reads the plan id back from them. Do not create a parallel task per PAUL task in any external tracker.
 
 ### Step 2: Execute
 
 Follow `apply-phase.md`. For each task sequentially: read definition, execute action, run verification, confirm done criteria.
+
+**Run the debt gate once before the first task.** `python ~/.agents/paul-framework/scripts/debt.py --run-checks` — if an `overdue` row blocks this phase (`blocking = "phase-NN-exit"`), either discharge it as part of this plan or tell the user the phase cannot close. Starting a plan on a phase that is already gated shut produces work that cannot be unified.
 
 Two verification rules that catch the failures a task's own verify command misses:
 
@@ -142,7 +175,7 @@ When the plan's `<skills>` section names pstack skills, execute each `auto` task
 
 Apply the checkpoint semantics from Key Concepts when a checkpoint task is reached.
 
-When a `checkpoint:human-verify` or `checkpoint:human-action` pauses the loop, and the `base` binary resolves, register a reminder so the pending action resurfaces at the next session start: `base reminder add --name "PAUL checkpoint: <short task name>" --due "<today, or the date the user gave>"`. Close it with `base reminder archive <slug>` when the checkpoint is confirmed.
+When a `checkpoint:human-verify` or `checkpoint:human-action` pauses the loop, record the pending action as a `[[debt]]` row in `.paul/DEBT.toml` (`kind = "decision"`, `owner = "owner"`, `trigger = "event:..."`) **and** a STATE.md Session-Continuity DUE NOW line naming the checkpoint and the date it is owed — the debt row is what the next session machine-checks, the DUE NOW line is what it reads first. Strike the line when the checkpoint is confirmed; do not delete it, so the record shows it was raised and closed. An immortal DUE NOW bullet that no command can evaluate is exactly the failure the store exists to fix.
 
 ### Step 4: Complete
 
@@ -151,7 +184,8 @@ Report `APPLY complete. Run /paul:unify to close loop.` (Claude Code; in other h
 Verify success criteria:
 - [ ] All tasks executed
 - [ ] All checkpoints handled
-- [ ] Paused human checkpoints registered as base reminders (when base resolves)
+- [ ] Paused human checkpoints written as `[[debt]]` rows **and** STATE.md DUE NOW lines
+- [ ] Every deferral became a debt row with a runnable check, or an ISSUES entry with none possible
 - [ ] User informed of completion
 - [ ] Next action clear (run unify)
 
@@ -173,9 +207,11 @@ Result: unverified work enters the summary. Always resolve checkpoints before co
 
 - **Re-executing without checking SUMMARY.** Consequence: duplicate work or overwritten results. Fix: always derive and check the SUMMARY path first.
 - **Absorbing checkpoint decisions silently.** Consequence: decisions go unrecorded. Fix: present, wait, record, then continue.
+- **Parking a deferral in the SUMMARY.** Consequence: UNIFY reads a plan, not a transcript, so the deferral has no check and never discharges. Fix: write the `[[debt]]` row when the deviation happens.
 
 ## References
 
 - `~/.agents/paul-framework/workflows/apply-phase.md`
 - `~/.agents/paul-framework/references/checkpoints.md`
-- `.paul/STATE.md`
+- `~/.agents/paul-framework/templates/DEBT.toml.md`
+- `.paul/STATE.md`, `.paul/DEBT.toml`

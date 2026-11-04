@@ -27,17 +27,19 @@ $ARGUMENTS
 
 The workflow handles:
 1. Detecting current position
-2. Gathering session context (ask user if needed)
-3. Creating HANDOFF-{date}.md with populated content
-4. Updating STATE.md session continuity
-5. Optional WIP commit
-6. Confirmation display
+2. **Sweeping the debt store: run `python ~/.agents/paul-framework/scripts/debt.py --run-checks`. Anything you would write as a prose "TODO next session" belongs in `.paul/DEBT.toml` as a row with a check. The handoff summarises; the store schedules. An overdue row goes at the top of the handoff.**
+3. Gathering session context (ask user if needed)
+4. Creating HANDOFF-{date}.md with populated content
+5. Updating STATE.md session continuity
+6. Optional WIP commit
+7. Confirmation display
 
 If `[reason]` argument provided, include it in handoff status.
 </process>
 
 <success_criteria>
 - [ ] HANDOFF.md created with complete context (no placeholders)
+- [ ] Debt store swept; new deferrals written as rows, not prose TODOs
 - [ ] STATE.md updated with session continuity
 - [ ] Next action is clear and actionable
 - [ ] Resume instructions provided

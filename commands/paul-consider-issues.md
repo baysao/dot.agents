@@ -1,11 +1,11 @@
 ---
 name: paul:consider-issues
-description: Review deferred issues with codebase context, triage and route
+description: Review debt rows and deferred issues with codebase context, triage and route
 allowed-tools: [Read, Bash, Grep, Glob, Edit, AskUserQuestion]
 ---
 
 <objective>
-Review all open issues from ISSUES.md and phase-scoped UAT files with current codebase context. Identify resolved, urgent, and waiting issues. Prevents issue pile-up.
+Review open debt from `.paul/DEBT.toml` (each row carries a runnable check) plus any legacy ISSUES.md entries and phase-scoped UAT files. Identify resolved, urgent, and waiting items. Prevents debt pile-up.
 
 **When to use:** Periodically or before milestone completion.
 </objective>
@@ -15,7 +15,8 @@ Review all open issues from ISSUES.md and phase-scoped UAT files with current co
 </execution_context>
 
 <context>
-@.paul/ISSUES.md (if exists)
+@.paul/DEBT.toml (if exists)
+@.paul/ISSUES.md (legacy, if exists)
 @.paul/STATE.md
 @.paul/ROADMAP.md
 </context>
@@ -24,15 +25,17 @@ Review all open issues from ISSUES.md and phase-scoped UAT files with current co
 **Follow workflow: @~/.agents/paul-framework/workflows/consider-issues.md**
 
 The workflow implements:
-1. Find all issue files (ISSUES.md, phase-scoped UAT files)
-2. Parse open issues (ISS-NNN, UAT-NNN format)
-3. Analyze each against codebase (resolved? urgent? natural-fit?)
-4. Present categorized report
-5. Offer actions (close resolved, insert urgent, note for planning)
-6. Update files as needed
+1. Run the debt store (`scripts/debt.py --run-checks`); it is the primary source
+2. Find other issue files (legacy ISSUES.md, phase-scoped UAT files)
+3. Parse open rows (DEBT-NNN, ISS-NNN, UAT-NNN format)
+4. Analyze each against codebase (resolved? urgent? natural-fit?)
+5. Present categorized report with computed debt counts
+6. Offer actions (close resolved, insert urgent, note for planning)
+7. Update files as needed — setting `status = "done"` is the discharge
 </process>
 
 <success_criteria>
+- [ ] Debt checks run; rows that pass are discharged by editing `status`
 - [ ] All open issues analyzed against current codebase
 - [ ] Each issue categorized (resolved/urgent/natural-fit/can-wait)
 - [ ] Clear reasoning provided for each categorization

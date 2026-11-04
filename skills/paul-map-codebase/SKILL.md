@@ -32,9 +32,9 @@ Four parallel Explore agents: (1) Stack + Integrations, (2) Architecture + Struc
 
 **Other harnesses.** Claude Code's `Explore` type maps to `explore` in OpenCode and Kilo Code (`task` tool), a read-only agent in Codex, and to `spawn_agent` in Cline (CLI/Desktop only). Drop the type parameter where unsupported, and if the harness has no subagent tool run the four agents yourself one after another.
 
-### base AST (automatic)
+### Structural Questions
 
-base is present when the `base` binary resolves (`base --version`). If present, run `base sync --ast` before spawning agents so the workspace AST map is fresh, and tell each Explore agent to answer structural questions (who calls X, which files import Y, where does type Z live) with `base ast query` (`--calls`, `-f`, `-c`) before reading files. Record the sync time in the generated docs. A stale map is a claim, not a fact. Multi-app workspaces map sibling apps with `base sync --ast --target apps/X` and query them with `base ast query -t apps/X` without changing directory.
+Tell each Explore agent to answer structural questions (who calls X, which files import Y, where does type Z live) by grepping for the exact symbol before reading files, and to record the measured answer with its file:line evidence. A map that was not re-measured is a claim, not a fact. Multi-app workspaces: search sibling apps under `apps/X` directly, without changing directory.
 
 ### pstack Walkthrough (automatic)
 
@@ -45,10 +45,12 @@ pstack is present when `.paul/pstack-models.md` or the global `~/.agents/pstack-
 1. Follow `map-codebase.md`: if `.paul/codebase/` exists offer refresh/update/skip.
 2. Create the directory structure; spawn the 4 parallel Explore agents; collect findings.
 3. Write the 7 codebase documents from templates, verify, commit, and offer next steps.
-4. Verify success criteria:
+4. **Convert the Concerns document into debt rows.** A concern the map finds but nobody schedules is a paragraph in a document nobody re-reads. For each concrete, testable concern, append a `[[debt]]` row (`kind = "tech"`, `owner = "agent"`, `trigger = "phase:NN"`) whose check asserts the concern stays fixed. Run `python ~/.agents/paul-framework/scripts/debt.py` and confirm the store parses.
+5. Verify success criteria:
    - [ ] .paul/codebase/ directory created
    - [ ] All 7 documents populated with findings
    - [ ] Documents include actual file paths (actionable)
+   - [ ] Testable concerns from the map exist as debt rows
    - [ ] Codebase map committed
    - [ ] User informed of next steps
 

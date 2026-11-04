@@ -12,24 +12,35 @@ Review all open issues with current codebase context. Categorize as resolved, ur
 <process>
 
 <step name="find_issues">
-**Locate all issue files:**
+**Locate all issue sources:**
 
-1. Check for global issues:
+1. Check for the debt store — this is the primary source:
+   ```bash
+   python ~/.agents/paul-framework/scripts/debt.py --run-checks
+   ```
+   Every row already carries its own check, so rows that pass are discharged, not
+   re-derived. If the store exists, this run is the review; you are confirming its
+   output with the user, not searching for issues from scratch.
+
+2. Check for global enhancements:
    ```bash
    ls .paul/ISSUES.md 2>/dev/null
    ```
+   (Legacy projects may still use this file. Prefer `.paul/DEBT.toml` for anything
+   with a landing condition; `ISSUES.md` is for untestable nice-to-haves.)
 
-2. Check for phase-scoped UAT files:
+3. Check for phase-scoped UAT files:
    ```bash
    find .paul/phases -name "*-UAT.md" -type f 2>/dev/null
    ```
 
-3. If no issue files found:
+4. If none of the three exist:
    ```
    No issues to review.
 
-   Issue files are created by:
-   - Deferred enhancements during development → .paul/ISSUES.md
+   Issue sources are created by:
+   - Deferrals during APPLY → .paul/DEBT.toml rows
+   - Deferred enhancements without a test → .paul/ISSUES.md
    - UAT testing findings → .paul/phases/XX-name/{plan}-UAT.md
 
    All clear - continue with current work.
@@ -40,7 +51,12 @@ Review all open issues with current codebase context. Categorize as resolved, ur
 <step name="parse_issues">
 **Parse all open issues:**
 
-From ISSUES.md "## Open Issues" section:
+From `.paul/DEBT.toml` (via `debt.py` output):
+- Debt ID, title, computed state (`overdue` / `scheduled` / `waiting` / `open`)
+- Origin, owner, blocking gate, trigger
+- The check, and whether it currently passes
+
+From `ISSUES.md` "## Open Enhancements" section:
 - ISS number (ISS-001, ISS-002, etc.)
 - Brief description
 - Discovered phase/date
@@ -53,7 +69,7 @@ From UAT files:
 - Related AC
 - Description
 
-Build consolidated list with source file reference.
+Build consolidated list with source reference.
 </step>
 
 <step name="analyze_each">
@@ -65,20 +81,23 @@ Build consolidated list with source file reference.
 
 2. **Check if accidentally resolved:**
    - Look for changes that may have addressed this
-   - Check if enhancement was implemented as part of other work
+   - For debt rows, this is already answered: run `--run-checks`. A row that passes is
+     resolved regardless of what the prose around it claims.
 
 3. **Assess current urgency:**
    - Blocking upcoming phases?
    - Pain point in recent work?
    - Affecting actively-touched code?
+   - Is the row `overdue`, or does its `blocking` gate belong to the phase that is closing?
 
 4. **Check natural fit:**
    - Aligns with upcoming phase in roadmap?
    - Would touch same files as current work?
+   - Does its `trigger` name the phase being planned next?
 
 **Categorize:**
-- **Resolved** - Can be closed (code changed, no longer applicable)
-- **Urgent** - Should address before continuing (blocking/problematic)
+- **Resolved** - Can be closed (check passes, code changed, no longer applicable)
+- **Urgent** - Should address before continuing (blocking gate, overdue, problematic)
 - **Natural fit** - Good candidate for upcoming phase X
 - **Can wait** - Keep deferred, no change in status
 </step>
@@ -149,9 +168,11 @@ Use AskUserQuestion with relevant options:
 **Execute selected actions:**
 
 **Closing resolved issues:**
-1. Move from "## Open Issues" to "## Closed Issues"
-2. Add resolution note with date and reason
-3. Update STATE.md deferred issues count
+1. For debt rows: set `status = "done"` in `.paul/DEBT.toml` with the check result as
+   evidence. Do not delete the row — the diff is the record.
+2. For `ISSUES.md`: move from "## Open Enhancements" to "## Closed Enhancements"
+3. For UAT findings: mark resolved with the fixing plan/commit
+4. Update STATE.md deferred line by running `debt.py` again, not by hand-counting
 
 **Inserting urgent phase:**
 - Suggest command: `/paul:plan 10.3 Address urgent issues [list]`
@@ -163,7 +184,8 @@ Use AskUserQuestion with relevant options:
 </process>
 
 <success_criteria>
-- [ ] All issue files discovered
+- [ ] All issue sources discovered (DEBT.toml first, then ISSUES.md and UAT files)
+- [ ] Debt checks executed; rows that pass are discharged by editing `status`
 - [ ] All open issues parsed
 - [ ] Each issue analyzed against codebase
 - [ ] Each issue categorized with reasoning

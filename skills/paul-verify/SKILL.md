@@ -29,9 +29,38 @@ Example: `Use paul-verify: 04-02`
 - `~/.agents/paul-framework/workflows/verify-work.md` — workflow to follow
 - `~/.agents/paul-framework/templates/UAT-ISSUES.md` — issue file template
 
+### Where a UAT Finding Goes
+
+A test that fails is not "logged" until it is schedulable. Every finding you capture gets a destination the same session:
+
+| Finding | Destination |
+|---|---|
+| Blocker or Major | `.paul/DEBT.toml` row, `kind = "uat"`, `blocking = "phase-NN-exit"`, `owner = "agent"` — the phase cannot close with it open |
+| Minor or Cosmetic, fixable soon | `{plan}-UAT.md` entry **and** a `kind = "uat"` row with `trigger = "phase:NN"` |
+| Cosmetic with no testable condition | `{plan}-UAT.md` only; say so explicitly |
+
+The UAT record stays the narrative (repro steps, screenshots, what the user said). The debt row is the part a machine can check. A UAT file whose blockers have no row is a document, not a schedule.
+
+```toml
+[[debt]]
+id = "DEBT-0NN"
+title = "UAT-003: invoice total rounds down on 3-decimal currencies"
+kind = "uat"
+origin = "04-02 UAT-003"
+owner = "agent"
+blocking = "phase-4-exit"
+check = { type = "command", command = "go test ./internal/invoice -run TestRounding", expect = "ok" }
+```
+
+Note the check asserts the *behaviour the test was about*, not `file exists`. A check that only proves the UAT file still has the word "open" in it can never discharge.
+
 ### Anti-Patterns
 
 No automated tests (CI covers that). No assumed results — the USER reports outcomes. Walk every test; log everything reported; fix nothing during testing (capture for later).
+
+### Optional: design-drift check (manual, never a gate)
+
+When `docs/drift/*_DRIFT_REPORT.md` exists, read the newest one before generating the checklist and add any finding that touches this plan's deliverables as an extra test item — a design the code abandoned is a UAT question, not a code review. When no report exists, do not offer to produce one: `egm-drift-report` is user-invoked (`disable-model-invocation: true`) and writes nothing into `.paul/`. Record a drift-derived item's origin as the report path so the verdict can be traced back.
 
 ### pstack Verification Backing (automatic)
 
@@ -42,12 +71,14 @@ pstack is present when `.paul/pstack-models.md` or the global `~/.agents/pstack-
 1. Follow `verify-work.md`: identify scope (given or most recent SUMMARY), extract testable deliverables, generate the checklist from acceptance criteria.
 2. Guide the user through each test via questions; capture pass/fail/partial/skip per test.
 3. Log issues to `.paul/phases/XX-name/{plan}-UAT.md`; present summary with verdict and next steps.
-4. Verify success criteria:
+4. Write the debt rows: every Blocker/Major as a `blocking = "phase-NN-exit"` row, every Minor as a `trigger = "phase:NN"` row. Run `python ~/.agents/paul-framework/scripts/debt.py --run-checks` afterwards and confirm the new rows parse — a row with a typo'd check field is not logged, it is invisible.
+5. Verify success criteria:
    - [ ] Test scope identified from SUMMARY.md
    - [ ] Checklist generated based on deliverables
    - [ ] User guided through each test
    - [ ] All test results captured
    - [ ] Issues logged to `{plan}-UAT.md`
+   - [ ] Each Blocker/Major/Minor mirrored as a `kind = "uat"` debt row with a behavioural check
    - [ ] Summary presented with verdict
    - [ ] User knows next steps
 
@@ -62,9 +93,11 @@ Result: guided checklist run, UAT file with logged issues, verdict + next steps.
 ## Common Pitfalls
 
 - **Fixing during testing.** Consequence: untested scope creep mid-verification. Fix: capture issues, fix via plan-fix later.
+- **Logging a finding only in the UAT file.** Consequence: nothing can test it, so it never discharges and the phase gate cannot see it. Fix: write the `kind = "uat"` debt row in the same session.
 
 ## References
 
 - `~/.agents/paul-framework/workflows/verify-work.md`
 - `~/.agents/paul-framework/templates/UAT-ISSUES.md`
-- `.paul/STATE.md`, `.paul/ROADMAP.md`
+- `~/.agents/paul-framework/templates/DEBT.toml.md`
+- `.paul/STATE.md`, `.paul/ROADMAP.md`, `.paul/DEBT.toml`

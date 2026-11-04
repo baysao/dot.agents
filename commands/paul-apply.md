@@ -37,11 +37,15 @@ Plan path: $ARGUMENTS
 <step name="execute">
 Follow workflow: @~/.agents/paul-framework/workflows/apply-phase.md
 
+Before the first task, run `python ~/.agents/paul-framework/scripts/debt.py --run-checks`. An `overdue` row with `blocking = "phase-NN-exit"` gates this phase shut; discharge it in this plan or say the phase cannot close.
+
 Execute tasks sequentially. For each task:
 - Read task definition
 - Execute action
 - Run verification
 - Confirm done criteria
+
+A deviation that is a deferral (a skipped task, a shortcut, a nice-to-have noticed) becomes a `[[debt]]` row in `.paul/DEBT.toml` with a runnable check — not a SUMMARY prose line, and not `.paul/ISSUES.md` unless no testable landing condition exists. `debt.py` rejects a row with no `due`, `trigger`, or `blocking`.
 </step>
 
 <step name="handle_checkpoints">
@@ -68,7 +72,8 @@ When a checkpoint task is reached:
 
 <step name="complete">
 After all tasks complete:
-- Report: "APPLY complete. Run /paul:unify to close loop."
+- If a task ended in a calendar wait: report "APPLY held until [date] — [reason]. Do not unify yet." and set `loop.hold_until` / `loop.hold_reason` in `paul.toml`.
+- Otherwise report: "APPLY complete. Run /paul:unify to close loop."
 - Show files modified
 - Show SUMMARY path to create
 </step>
@@ -76,8 +81,10 @@ After all tasks complete:
 </process>
 
 <success_criteria>
+- [ ] Debt gate run before the first task; no `overdue` blocking row left unaddressed
 - [ ] All tasks executed
-- [ ] All checkpoints handled
+- [ ] All checkpoints handled (a paused human checkpoint becomes a debt row **and** a STATE DUE NOW line)
+- [ ] Every deferral became a debt row with a runnable check
 - [ ] User informed of completion
 - [ ] Next action clear (run /paul:unify)
 </success_criteria>

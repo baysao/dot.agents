@@ -21,11 +21,11 @@ Example: `Use paul-progress instead of paul-status.`
 
 ### Sources
 
-`.paul/STATE.md` (milestone, phase X of Y, plan status, loop position, last activity) and `.paul/ROADMAP.md`.
+`.paul/STATE.md` (milestone, phase X of Y, plan status, loop position, last activity) and `.paul/ROADMAP.md`. If `.paul/DEBT.toml` exists, an overdue row likewise outranks the loop map — but prefer `paul-progress`, which runs the check.
 
 ### Loop Suggestion Map
 
-PLAN needed → run plan. PLAN ready → approve then apply. APPLY complete → unify. UNIFY complete → loop closed, ready for next phase.
+PLAN needed → run plan. PLAN ready → approve then apply. **APPLY held (`loop.hold_until` in the future) → wait, name the date.** APPLY complete → unify. UNIFY complete → loop closed, ready for next phase.
 
 ## Application
 

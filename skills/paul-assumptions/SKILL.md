@@ -32,6 +32,11 @@ Example: `Use paul-assumptions: check phase 3`
 ### Project Context
 
 - `.paul/PROJECT.md`, `.paul/STATE.md`, `.paul/ROADMAP.md`
+- `.paul/DEBT.toml` — rows naming this phase are assumptions already tested by reality
+
+### Debt Is an Assumption That Already Failed Once
+
+Before presenting assumptions, run `python ~/.agents/paul-framework/scripts/debt.py --run-checks` and read the rows naming this phase. Each one is a belief somebody held that turned out to need work later — the single richest source of "what will I get wrong this time". Present them at low confidence and mark them as inherited, so the user corrects the assumption rather than rediscovering the defect.
 
 ## Application
 

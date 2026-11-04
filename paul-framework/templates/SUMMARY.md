@@ -133,10 +133,15 @@ Or: "None - followed plan as specified"
 
 ### Deferred Items
 
-Logged to issue tracker for future consideration:
-- [Issue ID]: [Brief description] (discovered in Task [N])
+Rows added to `.paul/DEBT.toml` by this plan (a view of the store, not the store):
+
+| Debt row | What is deferred | Trigger | Check |
+|----------|------------------|---------|-------|
+| DEBT-0NN | [Brief description] | `phase:NN` / `event:…` | [file check / command] |
 
 Or: "None - plan executed exactly as written"
+
+**The table above is generated from the store.** If a deferral is not a row with a runnable check, it is not deferred — it is forgotten.
 
 ## Issues Encountered
 

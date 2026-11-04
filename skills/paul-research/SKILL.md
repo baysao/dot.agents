@@ -36,12 +36,14 @@ Example: `Use paul-research: JWT best practices 2026 --web`
 ### Project Context
 
 - `.paul/PROJECT.md`, `.paul/STATE.md`
+- `.paul/DEBT.toml` — a row whose trigger is an event (`vendor-reply`, `mxv-reply`) is research with a due date
 
 ## Application
 
-1. Validate the topic is non-trivial; pick agent type by flag or auto-detect. When the topic touches code structure and the `base` binary resolves, include `base ast query` in the codebase agent's toolkit. For open-ended prior-work questions ("why is X like this", "what did we decide about Y"), run `base graph query "<question>" --raw` first and synthesize from the subgraph — unlike `base recall`'s raw keyword hits, it traverses edges (`--raw` skips base's broken subprocess synthesis on gateway models).
+1. Validate the topic is non-trivial; pick agent type by flag or auto-detect. Codebase agents answer structural questions by grepping for the exact symbol and citing file:line. For open-ended prior-work questions ("why is X like this", "what did we decide about Y"), read `.paul/DECISIONS.md` and `LEARNINGS.md` first and synthesize from those before searching externally.
 2. Follow `research.md`: spawn the research subagent, save findings to `.paul/research/{topic}.md`.
 3. Present a summary for review.
+4. **Discharge the debt row the research answers.** If a `DEBT-NNN` row was waiting on this topic, the research is its evidence: say so in the summary and point the row's `check` at the research file (or at the artifact the finding enables) rather than leaving the row's trigger dangling. Research that answers a parked question but leaves the row `waiting` has produced a document, not a decision.
 
 ### pstack Fan-out (automatic)
 

@@ -18,6 +18,7 @@ Creates PROJECT.md, STATE.md, and ROADMAP.md populated from conversation - user 
 @~/.agents/paul-framework/templates/PROJECT.md
 @~/.agents/paul-framework/templates/STATE.md
 @~/.agents/paul-framework/templates/ROADMAP.md
+@~/.agents/paul-framework/templates/DEBT.toml.md
 </execution_context>
 
 <context>
@@ -30,7 +31,7 @@ Current directory state (check for existing .paul/)
 The workflow implements conversational setup:
 
 1. Check for existing .paul/ (route to resume if exists)
-2. Create directory structure
+2. Create directory structure, including `.paul/DEBT.toml` (header comment + `Schema:` pointer, no rows — an empty store is honest)
 3. Ask: "What's the core value this project delivers?"
 4. Ask: "What are you building?"
 5. Confirm project name (infer from directory)
@@ -50,5 +51,6 @@ The workflow implements conversational setup:
 - [ ] PROJECT.md populated with core value and description from conversation
 - [ ] STATE.md initialized with correct loop position
 - [ ] ROADMAP.md initialized (phases TBD until planning)
+- [ ] `.paul/DEBT.toml` created (empty) and parses with `scripts/debt.py`
 - [ ] User presented with ONE clear next action
 </success_criteria>

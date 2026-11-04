@@ -78,11 +78,17 @@ Decisions logged via decision-logger. Recent decisions affecting current work:
 
 ### Deferred Issues
 
-Issues logged but not yet addressed:
+The countable source is `.paul/DEBT.toml` — report the computed counts, do not retype the table:
+
+```bash
+python ~/.agents/paul-framework/scripts/debt.py
+```
+
+Only rows the next plan must actually act on belong here as prose. Everything else stays in the store, where a check can be run against it.
 
 | Issue | Origin | Effort | Revisit |
 |-------|--------|--------|---------|
-| [Brief description] | [Phase X] | [S/M/L] | [When to reconsider] |
+| [Brief description — omit if the store already covers it] | [Phase X] | [S/M/L] | [DEBT-NNN / when to reconsider] |
 
 ### Blockers/Concerns
 

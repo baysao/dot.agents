@@ -31,10 +31,12 @@ Example: `Use paul-pause: switching to other project`
 ## Application
 
 1. Follow `pause-work.md`: detect current position, gather session context (ask user if needed), create `HANDOFF-{date}.md` fully populated (no placeholders), update STATE.md continuity, optional WIP commit, confirmation display.
-2. pstack is present when `.paul/pstack-models.md` or the global `~/.agents/pstack-models.md` exists, or the `poteto-mode` skill is invocable in this session. If present, run the poteto-mode **pause-safely** playbook first so in-flight delegated work suspends cleanly, then write the PAUL handoff on top of it.
-2. Include the reason argument in handoff status when provided.
-3. Verify success criteria:
+2. **Sweep the debt store before you write the handoff.** Run `python ~/.agents/paul-framework/scripts/debt.py --run-checks`. Anything you were about to write as "TODO next session" in prose belongs in `.paul/DEBT.toml` as a row with a check, not in the handoff. The handoff summarises; the store schedules. An overdue row is named at the top of the handoff so the next session cannot miss that it outranks its own plan.
+3. pstack is present when `.paul/pstack-models.md` or the global `~/.agents/pstack-models.md` exists, or the `poteto-mode` skill is invocable in this session. If present, run the poteto-mode **pause-safely** playbook first so in-flight delegated work suspends cleanly, then write the PAUL handoff on top of it.
+4. Include the reason argument in handoff status when provided.
+5. Verify success criteria:
    - [ ] HANDOFF.md created with complete context (no placeholders)
+   - [ ] Debt store swept; new deferrals written as rows, not as prose TODOs
    - [ ] STATE.md updated with session continuity
    - [ ] Next action is clear and actionable
    - [ ] Resume instructions provided

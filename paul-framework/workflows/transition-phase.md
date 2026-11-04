@@ -47,7 +47,43 @@ Options:
 
 Wait for user decision before proceeding.
 
-**If complete:** Continue to next step.
+**If complete:** Continue to the debt gate.
+</step>
+
+<step name="debt_gate" priority="required" gate="blocking">
+**A phase does not close while a row that names this phase is unpaid.**
+
+This is the only gate in PAUL that can refuse a release, which is why it is here and not at session entry — the cost of a false positive is a stopped transition, so only rows a human or vendor can discharge are allowed to block.
+
+1. If `.paul/DEBT.toml` does not exist: skip silently.
+2. Otherwise run the gate named after this phase:
+   ```bash
+   python ~/.agents/paul-framework/scripts/debt.py --run-checks --gate phase-[N]-exit
+   ```
+3. **Exit code 0:** clear. Continue to `cleanup_handoffs`.
+4. **Exit code 1:** refuse the transition and report the rows:
+   ```
+   ════════════════════════════════════════
+   PHASE {N} CANNOT CLOSE — DEBT UNPAID
+   ════════════════════════════════════════
+
+   [ID]  [state]  [title]  (owner=…)
+
+   Each row names a check that still fails. Options:
+   [1] Discharge the row now   [2] Drop the row (records why it is abandoned)
+   [3] Stop the transition
+
+   Do NOT write "BLOCKED" into a phase document and keep going — an exception
+   recorded in prose is the same failure as a deferral recorded in prose.
+   ```
+5. Do not edit `status` on the user's behalf. A gate that marks its own rows done
+   is a gate that cannot fail.
+
+**Why this blocks:** the exit criteria of a phase are the one moment where an
+unpaid item has a named consequence (the phase claims to be done). Deferring it
+further is legitimate — but only as `status = "dropped"`, which leaves a diff
+saying so. A row that is neither paid nor dropped is a phase that has not closed,
+whatever the ROADMAP says.
 </step>
 
 <step name="cleanup_handoffs">

@@ -178,6 +178,40 @@ Include all standard sections:
    - Update resume file (point to SUMMARY)
 </step>
 
+<step name="update_debt_store">
+**Reconcile the debt store against what this plan actually did.**
+
+1. If `.paul/DEBT.toml` does not exist: skip silently (project predates the store).
+2. Run the checks to see what this plan's work discharged:
+   ```bash
+   python ~/.agents/paul-framework/scripts/debt.py --run-checks
+   ```
+3. For each row the run reports as discharged, set `status = "done"` in the file and
+   mention the ID in the SUMMARY. The evaluator never writes the file — the diff is
+   the record that the debt was paid by this plan.
+4. For each row that names **this** plan or phase as its trigger and did not land,
+   decide honestly:
+   - Still owed with a live trigger → leave it, and state the trigger in the SUMMARY.
+   - Not going to happen → `status = "dropped"` plus one line of why. Dropping is a
+     decision and belongs in the file; leaving it `open` forever is not.
+5. Any item this plan deferred instead of doing becomes a new row **now**, while the
+   reason is in context:
+   ```toml
+   [[debt]]
+   id = "DEBT-0NN"
+   title = "…"
+   kind = "tech"
+   origin = "[this plan ID]"
+   owner = "agent"
+   trigger = "phase:NN"
+   check = { type = "command", run = "…", expect = "…" }
+   ```
+   A deferral written as prose in a SUMMARY is not retrievable and will be
+   re-derived; a row with a failing check is.
+6. Report the resulting counts in the loop-close message:
+   `DEBT: N overdue · N waiting · N open`.
+</step>
+
 <step name="sync_paul_toml">
 **Sync project manifest and ledger:**
 
@@ -192,7 +226,7 @@ Reference: @src/references/toml-sync.md
      - `phase.name` → current phase name from STATE.md
      - `phase.status` → "complete" if phase done, "in_progress" if more plans remain
      - `phase.plans_completed` → increment by 1
-     - `loop.position` → "IDLE" (remove `plan` and `plan_path` keys entirely)
+     - `loop.position` → "IDLE" (remove `plan`, `plan_path`, `hold_until`, and `hold_reason` keys entirely)
      - `stats.total_plans` → increment by 1
      - `paul.version` → current PAUL framework version
      - `stats.last_activity` → current ISO timestamp

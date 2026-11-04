@@ -39,6 +39,11 @@ The plan format and phase workflow are defined outside this skill — follow the
 - `.paul/PROJECT.md` — project definition
 - `.paul/STATE.md` — current loop position (update on completion)
 - `.paul/ROADMAP.md` — phase/plan roadmap
+- `.paul/DEBT.toml` — deferred work, each row carrying the check that discharges it
+
+### The Debt Store Is an Input to Planning
+
+A plan is where deferred work either gets scheduled or quietly dies. Rows speak with their checks, not with their titles: `python ~/.agents/paul-framework/scripts/debt.py --run-checks` is one command and it is the only honest way to know what is still owed. A plan that ignores an `overdue` row inherits the defect the row was logged to prevent.
 
 ### Plan All Before Applying Any
 
@@ -56,10 +61,16 @@ Per PAUL workflow rules: create ALL plans for a phase before applying any of the
 ### Step 2: Load Context
 
 1. Read `.paul/PROJECT.md`, `.paul/STATE.md`, and `.paul/ROADMAP.md`.
-2. Read the workflow, template, and format reference listed under Framework Sources of Truth.
-3. **Reconcile the live surfaces before drafting.** State files are claims, not facts. When the project shares a dev database between worktrees or sessions, check the applied-migration set against the repo's migration files, and look for sibling worktrees or other sessions' commits (`git worktree list`, `git log --all --oneline`). A migration version present in the database but missing from `migrations/` means another session changed the database behind your back — reconcile that first, before planning work that touches it.
-4. Probe for an EGM design doc: `docs/designs/<FEATURE>.md` (or `<project>/docs/designs/`). If found, ingest it as Priority 1 context — the design doc's decisions, interfaces, and dependencies become plan Facts. Search BASE for prior decisions on this topic (`base recall` / `base decision search`) and inherit them as written decisions, never re-asked or silently re-guessed. If no design doc exists, continue without it.
-5. When the `base` binary resolves and a workspace AST map exists, query every touched symbol with `base ast query` (`--calls`, `-f`, `-c`) and write the measured callers/imports into Facts. Run `base sync --ast` first when the map may be stale; fall back to grep when base is absent. This is the code-side twin of measuring Facts with the live database.
+2. **Read `.paul/LEARNINGS.md` and inherit it.** Every `validated` row is a plan Fact —
+   carry it forward, never re-decide it. Every `candidate` row whose `applies-to` matches
+   this plan's track becomes a **Verification check** in the plan, not a piece of advice.
+   A learning the plan does not read is a defect the next plan pays for again. If the
+   file is absent, continue without it — do not invent one mid-plan.
+3. **Load the debt store and spend it.** Run `python ~/.agents/paul-framework/scripts/debt.py --run-checks` when `.paul/DEBT.toml` exists. Every `overdue` row becomes an acceptance criterion in this plan; every `open` row and every `waiting` row whose trigger names this phase becomes one too — or is named out-of-scope with a written reason. **Silent omission is a plan defect:** a row that nobody schedules is not deferred, it is forgotten, and the next session reads a clean STATE and believes the work landed.
+4. Read the workflow, template, and format reference listed under Framework Sources of Truth.
+5. **Reconcile the live surfaces before drafting.** State files are claims, not facts. When the project shares a dev database between worktrees or sessions, check the applied-migration set against the repo's migration files, and look for sibling worktrees or other sessions' commits (`git worktree list`, `git log --all --oneline`). A migration version present in the database but missing from `migrations/` means another session changed the database behind your back — reconcile that first, before planning work that touches it.
+6. Probe for an EGM design doc: `docs/designs/<FEATURE>.md` (or `<project>/docs/designs/`). If found, ingest it as Priority 1 context — the design doc's decisions, interfaces, and dependencies become plan Facts. Read `.paul/DECISIONS.md` for prior judgment calls on this topic and inherit them as written decisions, never re-asked or silently re-guessed. If no design doc exists, continue without it.
+7. Measure the code before planning against it: grep the touched symbols for callers and imports and write the measured results into Facts. This is the code-side twin of measuring Facts with the live database.
 
 ### Step 3: Draft the Plan
 
@@ -98,6 +109,13 @@ branch, not just a status class, and any new fixture must fit the schema
 constraints of the columns it touches — a fixture that violates a length or
 CHECK constraint is caught by an earlier validation and the test then passes for
 the wrong reason.
+
+**A learning that can be checked does not become prose.** When `.paul/LEARNINGS.md`
+carries a `candidate` row matching this plan's track, promote it into a named
+verification command in the plan's Verification section — a command that can be
+re-run at UNIFY. Only a learning that cannot be mechanically checked stays as a
+plan instruction. That ladder is the point of the index: prose is the last resort,
+not the first.
 
 Two more rules that keep a plan honest:
 
@@ -138,10 +156,12 @@ Write it to the correct phase directory per the template.
 ### Step 4: Close the Loop
 
 1. Update `STATE.md` with the new loop position.
-2. If the user's approval settled a durable judgment call that outlives this plan, log it with `base decision log` (rationale plus recall keywords from the plan topic).
+2. If the user's approval settled a durable judgment call that outlives this plan, append it to `.paul/DECISIONS.md` as `D-NN` (decision, phase, impact) and add the same row to the `STATE.md` `### Decisions` table.
 3. Verify success criteria:
    - [ ] PLAN.md created in correct phase directory
    - [ ] All acceptance criteria defined
+   - [ ] `.paul/LEARNINGS.md` read, and every `candidate` row matching this plan's track is present as a verification command
+   - [ ] `.paul/DEBT.toml` read; every overdue/open/phase-triggered row is an AC or named out-of-scope with a reason
    - [ ] STATE.md updated with loop position
 
 ## Examples
@@ -166,6 +186,8 @@ Result: rework. Plan all phase plans first, then apply sequentially.
 - **Vague acceptance criteria.** Consequence: apply phase has nothing verifiable to execute against. Fix: every task gets explicit done criteria.
 - **Skipping the STATE.md update.** Consequence: loop position drifts and resume lands in the wrong place. Fix: always update `STATE.md` before reporting done.
 - **A dismissed scope question treated as "the user said yes".** Consequence: the plan encodes an assumption nobody made. Fix: adopt the recommended default, write it into the plan with its rationale, and flag it at approval.
+- **Planning without reading `.paul/LEARNINGS.md`.** Consequence: the loop has a write edge and no read edge, so every plan re-derives the same lessons and the framework is a diary, not an improvement loop. Fix: read the index in Step 2 and carry each matching candidate into Verification as a command.
+- **Planning past the debt store.** Consequence: overdue rows survive another loop, and a ledger of deferrals becomes decoration. Fix: run `debt.py --run-checks` in Step 2 and convert or dismiss every row that names this plan or this phase.
 - **Removing a control without a risk block.** Consequence: an approval step, gate, or validation disappears and nobody notices until an audit. Fix: risk block + backlog item, surfaced at approval.
 - **A verify that only checks a status class.** Consequence: a test can pass while exercising the wrong validation branch. Fix: assert the specific error code/branch, and keep new fixtures inside the schema's limits.
 
@@ -175,3 +197,4 @@ Result: rework. Plan all phase plans first, then apply sequentially.
 - `~/.agents/paul-framework/templates/PLAN.md`
 - `~/.agents/paul-framework/references/plan-format.md`
 - `.paul/PROJECT.md`, `.paul/STATE.md`, `.paul/ROADMAP.md`
+- `.paul/LEARNINGS.md` — candidate/validated learnings inherited as plan Facts

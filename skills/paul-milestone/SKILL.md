@@ -37,10 +37,12 @@ Example: `Use paul-milestone: start v2.0 API Redesign`
 ## Application
 
 1. Load PROJECT.md, STATE.md, and ROADMAP.md.
-2. Follow `create-milestone.md`: guide through milestone definition, create the phase structure, update ROADMAP.md with milestone grouping.
-3. Verify success criteria:
+2. **Check the previous milestone's leftovers.** Run `python ~/.agents/paul-framework/scripts/debt.py --run-checks`. Rows still open at milestone boundary either belong to the new milestone's phases (name the phase in `trigger = "phase:NN"`) or are abandoned (set `status = "dropped"` with a reason). A new milestone that silently inherits a store nobody read just relocates the problem.
+3. Follow `create-milestone.md`: guide through milestone definition, create the phase structure, update ROADMAP.md with milestone grouping.
+4. Verify success criteria:
    - [ ] Milestone created in MILESTONES.md
    - [ ] ROADMAP.md updated with milestone grouping
+   - [ ] Carried debt rows point at a phase in this milestone, or are dropped with a reason
    - [ ] STATE.md reflects new milestone
 
 ## Examples

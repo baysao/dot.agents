@@ -48,16 +48,19 @@ pstack is present when `.paul/pstack-models.md` or the global `~/.agents/pstack-
 
 Write `.paul/HANDOFF-{date}-{context}.md` per the handoff template and display the HANDOFF CREATED confirmation (counts + `resume → read handoff` pointer).
 
-When the `base` binary resolves, register the doc so it resurfaces at the next session start: `base handoff create --project "<project>" --doc "<absolute-doc-path>"` (project name from PROJECT.md; registering archives any prior open handoff, so re-running is safe). An unregistered doc is just a file nobody opens.
+**Sweep the debt store before writing.** Run `python ~/.agents/paul-framework/scripts/debt.py --run-checks`; anything that is "still owed" belongs in `.paul/DEBT.toml` with a check, and the handoff's gap analysis cites the row id rather than restating the problem. A gap with no row is a gap the next session will re-derive from the prose and then lose again.
+
+Leave the doc at a discoverable path and name it in `STATE.md`'s Session-Continuity block as the Resume pointer so the next session reads it first. A handoff named nowhere is just a file nobody opens.
 
 Verify success criteria:
 - [ ] STATE.md read for current position
+- [ ] Debt store swept; gaps cite `DEBT-NNN` ids
 - [ ] Session context extracted (not just prompted)
 - [ ] User's inline input incorporated
 - [ ] Structured handoff generated
 - [ ] Reference files included
 - [ ] Next actions prioritized
-- [ ] Handoff registered with base (when base resolves)
+- [ ] Handoff named as the Resume pointer in STATE.md Session-Continuity
 
 ## Examples
 

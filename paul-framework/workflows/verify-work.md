@@ -42,6 +42,13 @@ Parse for:
 
 Focus on USER-OBSERVABLE outcomes, not implementation details.
 
+**Optional drift input (manual, never a gate):** if `docs/drift/*_DRIFT_REPORT.md`
+exists, read the newest one and add any finding that touches this plan's
+deliverables as an extra test item, citing the report path as its origin. Skip the
+step when no report exists - `egm-drift-report` is user-invoked and this workflow
+must not offer to run it, because a verification pass that can generate its own
+findings stops being verification by the user.
+
 Map AC to tests:
 - AC-1: "Feature X exists" → User can see/use Feature X
 - AC-2: "Behavior Y works" → User can trigger and verify Behavior Y
@@ -148,6 +155,31 @@ If any issues found:
 ```
 
 **Note:** Issues go to phase-scoped UAT file, NOT global `.paul/ISSUES.md`.
+
+**4. Add a debt row when the finding has a landing condition.**
+
+A UAT finding either gets fixed now or it is deferred. If deferred, it goes in
+`.paul/DEBT.toml` with the UAT ID as its origin, so a later session can test whether
+it is still real:
+
+```toml
+[[debt]]
+id = "DEBT-0NN"
+title = "UAT-00N: [brief description]"
+kind = "uat"
+origin = "[phase]-[plan] UAT-00N"
+owner = "agent"
+trigger = "phase:NN"
+check = { type = "text_present", path = ".paul/phases/[phase]/[plan]-UAT.md", pattern = "### UAT-00N" }
+```
+
+The check is deliberately about the UAT record, not the fix: it asserts the finding
+still exists until the fix plan removes it. When it is fixed, the plan's SUMMARY
+carries the AC and the row becomes `status = "done"`.
+
+A Blocker or Major that is deferred rather than fixed should also carry
+`blocking = "phase-NN-exit"` — something that stops the user from using the feature
+should not be allowed to drift out of a phase silently.
 </step>
 
 <step name="summarize">

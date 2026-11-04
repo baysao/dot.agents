@@ -37,8 +37,11 @@ The workflow implements:
 4. Guide user through each test via AskUserQuestion
 5. Collect and categorize any issues found
 6. Log issues to phase-scoped UAT file
-7. Present summary with verdict
-8. Offer next steps based on results
+7. **Mirror each Blocker/Major/Minor into a `kind = "uat"` row in `.paul/DEBT.toml`** — Blocker/Major carry `blocking = "phase-NN-exit"`, and the row's `check` asserts the behaviour the test was about, not that the UAT file still exists
+8. Present summary with verdict
+9. Offer next steps based on results
+
+Run `python ~/.agents/paul-framework/scripts/debt.py --run-checks` after writing the rows and confirm they parse; a row with a mistyped check field is invisible, not logged.
 </process>
 
 <success_criteria>
@@ -47,6 +50,8 @@ The workflow implements:
 - [ ] User guided through each test
 - [ ] All test results captured (pass/fail/partial/skip)
 - [ ] Any issues logged to `.paul/phases/XX-name/{plan}-UAT.md`
+- [ ] Blocker/Major/Minor issues mirrored as `kind = "uat"` debt rows with behavioural checks
+- [ ] Store parses after the write
 - [ ] Summary presented with verdict
 - [ ] User knows next steps based on results
 </success_criteria>

@@ -39,12 +39,14 @@ Example: `Use paul-add-plan: add a plan to 04-api-layer for rate limiting`
 ## Application
 
 1. Validate the target phase against ROADMAP.md; error with the incomplete-phase list if missing.
-2. Follow `add-plan.md`: compute the next plan number, draft the plan per plan-format.
-3. Write the PLAN.md to the output path.
-4. Update ROADMAP.md phase status (including reopening Complete → In progress) and STATE.md loop position + resume pointer.
-5. Verify success criteria:
+2. **Load the debt store before drafting.** Run `python ~/.agents/paul-framework/scripts/debt.py --run-checks`. This command exists for exactly this case: a full phase's plans ignored a row, so the work comes back as an appended plan. Every `overdue` row and every row that names this phase becomes an acceptance criterion here, or is explicitly out-of-scope with a reason. If the store reports more than 12 open non-blocking rows, this plan should schedule one.
+3. Follow `add-plan.md`: compute the next plan number, draft the plan per plan-format.
+4. Write the PLAN.md to the output path.
+5. Update ROADMAP.md phase status (including reopening Complete → In progress) and STATE.md loop position + resume pointer.
+6. Verify success criteria:
    - [ ] Target phase validated
    - [ ] Next plan number collision-free
+   - [ ] Debt rows touching this phase scheduled or named out-of-scope
    - [ ] PLAN.md created at the correct path per plan-format
    - [ ] ROADMAP.md and STATE.md updated
 

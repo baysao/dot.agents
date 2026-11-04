@@ -31,15 +31,16 @@ Example: `Use paul-unify: close .paul/phases/01-foundation/01-01-PLAN.md`
 - `~/.agents/paul-framework/workflows/unify-phase.md` — reconciliation workflow
 - `~/.agents/paul-framework/templates/SUMMARY.md` — summary template
 
-### BASE Integration
+### Where the Reflect Output Goes
 
-BASE is present when `.paul/config.md` shows `BASE: enabled` (or BASE integration status is enabled). When enabled, the reflect pass routes its output to the base graph:
+The reflect pass writes to four places in `.paul/`. There is no external store:
 
-- **Cross-skill behavior rules** (\"always/never do X when Y\") → `base rule add --domain <project> --text \"...\" --rationale \"...\" --keywords \"...\" --fires-on \"...\"`
-- **Context-bound judgment calls** (\"we chose X for this project\") → `base decision log --domain <project> --decision \"...\" --rationale \"...\" --recall \"...\"`
-- **Insights, corrections, commitments, shifts** → `base learn --domain <project> --type insight|correction|commitment|shift --text \"...\"`
+- **Cross-skill behavior rules** ("always/never do X when Y") → a numbered `R-N` block under `## Session Rules` in `.paul/SPECIAL-FLOWS.md`, with a rationale line. APPLY already reads that file.
+- **Context-bound judgment calls** ("we chose X for this project") → an appended `D-NN` row in `.paul/DECISIONS.md`, plus the same row in the `STATE.md` `### Decisions` table.
+- **Insights, corrections, commitments, shifts** → `.paul/LEARNINGS.md` (the learning store; see below).
+- **Anything owed later** → a `[[debt]]` row in `.paul/DEBT.toml`, with a check that can fail.
 
-The project domain name derives from the project folder (or `.paul/config.md` project name). The domain has a path trigger to `.paul/` so rules fire on PAUL project files. Record `base: N rules, M decisions, K learnings` in SUMMARY.md. If BASE is not enabled, fall back to `.paul/LEARNINGS.md`.
+Record `rules: N, decisions: M` in SUMMARY.md; the learning delta is recorded by the LEARNINGS.md step below.
 
 ### Guard
 
@@ -76,19 +77,34 @@ Create `SUMMARY.md` beside the PLAN: what was built, acceptance criteria results
 
 pstack is present when `.paul/pstack-models.md` or the global `~/.agents/pstack-models.md` exists, or the `poteto-mode` skill is invocable in this session. If present, write SUMMARY.md per the `technical-writing` skill, run `unslop` on the prose, and reference any `show-me-your-work` decision trail. Then run the `reflect` skill to mine this loop for durable learnings — a required close-out step, not an offer. Skip only when the loop was trivial (no corrections, no surprises, no new conventions) and record `reflect: skipped (trivial loop)` in SUMMARY.md. reflect's approval gate stands: skill edits land only on the user's explicit yes. **The gate follows the artifact:** if the project writes SUMMARY.md during APPLY, run the reflect pass there (or here, against that SUMMARY) so it is never skipped.
 
-### BASE Close-out (automatic)
+### Close-out Writes (automatic, always)
 
-BASE is present when `.paul/config.md` shows `BASE: enabled` (or BASE integration status is enabled). If present, route the reflect pass's approved items directly to the base graph — no staging gate, rules go live immediately:
+No staging gate and no approval step for the file writes: a rule, a decision, or a
+learning that came out of an approved reflect item lands in `.paul/` immediately.
 
-- **Cross-skill behavior rules** → `base rule add --domain <project> --text \"...\" --rationale \"...\" --keywords \"...\" --fires-on \"...\"` (injects on next matching prompt)
-- **Context-bound judgment calls** → `base decision log --domain <project> --decision \"...\" --rationale \"...\" --recall \"...\"` (durable, revisitable)
-- **Insights, corrections, commitments, shifts** → `base learn --domain <project> --type insight|correction|commitment|shift --text \"...\"` (queryable via `base recall`)
+| Item | File | Form |
+|---|---|---|
+| Cross-skill rule | `.paul/SPECIAL-FLOWS.md` | a numbered `R-N` block under `## Session Rules`, with the rationale line |
+| Judgment call | `.paul/DECISIONS.md` | an appended `D-NN` row, plus the same row in the `STATE.md` table |
+| Learning | `.paul/LEARNINGS.md` | the LEARNINGS.md Write step below |
+| Deferred work | `.paul/DEBT.toml` | a `[[debt]]` row with a check that can fail |
 
-The project domain name derives from the project folder (or `.paul/config.md` project name). Record `base: N rules, M decisions, K learnings` in SUMMARY.md. If BASE is not enabled, fall back to `.paul/LEARNINGS.md`.
+Record `rules: +N, decisions: +M`, `learnings: +N added, M bumped, K promoted`, and `debt: +N added, M discharged` in
+SUMMARY.md.
 
-### base Task Close-out (automatic)
+### LEARNINGS.md Write (automatic, always)
 
-When the `base` binary resolves, list open base tasks, find the one whose name carries this plan's id prefix (created at APPLY Step 1.7), and `base task done <slug>`. One task per plan, never per PAUL task. If no matching task exists, skip silently. Loop state still lives in STATE.md; base is a convenience mirror, and on conflict `.paul/` wins. The `*base` memory sweep (handoff, learnings, decisions) already runs inside the reflect pass — this step only closes the plan's board task, it does not re-sweep memory.
+`.paul/LEARNINGS.md` is the **only** learning store. `paul-plan` reads that file on every plan; nothing in the loop reads the graph. Do not keep the same learning live in both — `.paul/` wins, same as loop state.
+
+After the reflect pass, before flipping status to UNIFIED:
+
+1. **Append** each approved or candidate finding as a row: `id`, `status: candidate`, `rule` (one sentence, imperative), `applies-to` (plan / apply / unify / research / verify), `hits: 1`, `last-hit: {plan-id}`, `evidence: {plan-id}: what happened`.
+2. **Bump `hits`** on every existing row this loop actually hit — a FAIL AC, a recorded deviation, a user correction, or a skill gap of the same class. **Three layers of one mistake is `hits = 1`**, not 3; count independent occasions, or the promotion rule collapses into a self-fulfilling counter.
+3. **Flip `candidate → validated`** only at `hits >= 3`, or on a passing check / explicit user confirmation / reviewer confirmation. Never on reflection alone.
+4. **Apply the ceiling and expiry rules** from the file's header: archive beyond 30 active rows, prune a `validated` row not hit in 5 plans.
+5. **Record the delta** in SUMMARY.md: `learnings: +N added, M bumped, K promoted`.
+
+A finding that lands only in the SUMMARY's Reflect section has not been recorded — it is a paragraph the next plan will never read, and the file's first rule (`L-008` locally) says so.
 
 ### Step 4: Update State and Report
 
@@ -102,7 +118,32 @@ in the SUMMARY *and* in the close report: "UNIFIED ≠ landed, N files uncommitt
 until the user commits". Dirt left as an environmental fact in the transcript is
 invisible to the next session, which reads STATE.md and believes the work landed.
 
-**Artifact-debt inventory is a required UNIFY step.** Before closing, list every untracked operational file the plan produced or touched but did not commit: plans, screenshots, helper scripts, migrations, HANDOFFs, `.base/` dirs. For each, record the landing decision: `commit now`, `stash`, `discard`, or `owner + due date`. A summary sentence "UNIFIED ≠ LANDED" without this inventory is not a step — it is a claim ahead of evidence.
+**Artifact-debt inventory is a required UNIFY step, and it writes rows.** Before closing, list every untracked operational file the plan produced or touched but did not commit: plans, screenshots, helper scripts, migrations, HANDOFFs. Each one becomes a `[[debt]]` row (`kind = "artifact"`) whose check proves the artifact landed, or names the path that is the evidence:
+
+```toml
+[[debt]]
+id = "DEBT-0NN"
+title = "Commit docs/phase0/probe-results.md"
+kind = "artifact"
+origin = "01-02 unify"
+owner = "owner"
+trigger = "event:first-commit"          # or due = "..." when a date is real
+check = { type = "text_present", path = "docs/phase0/probe-results.md", pattern = "..." }
+```
+
+A summary sentence "UNIFIED ≠ LANDED" without rows is not a step — it is a claim ahead of evidence. The SUMMARY's `### Deferred Items` table is a **generated view** of the store: regenerate it from `debt.py`, never hand-edit it into disagreement.
+
+### Update the Debt Store (automatic, always)
+
+Before flipping status to UNIFIED and before `sync_paul_toml`:
+
+1. Run `python ~/.agents/paul-framework/scripts/debt.py --run-checks`.
+2. For every row the run reports `done`, set `status = "done"` in `.paul/DEBT.toml`. The TOML diff is the discharge record — never delete the row, never flip it without a passing check.
+3. For every row this plan abandoned, set `status = "dropped"` and add a `note` saying why. A dropped row is a decision; a deleted row is a disappearance.
+4. Append a row for each deferral the plan produced that is not yet in the store — with a check that can actually fail.
+5. Report the counts in the close-out: `DEBT: N overdue · N waiting · N open · N discharged`.
+
+**The pile-up budget is 12.** More than 12 open non-blocking rows means this loop added faster than it paid, and the next PLAN must schedule at least one. Same rationale as the learning index's row ceiling: an unbounded list is a place to put things, not a plan.
 
 **Reconcile against the repository, not against your own summary.** The SUMMARY
 was written by the same hand as the plan, so it can only confirm itself. Check
@@ -155,6 +196,9 @@ number, and dump the rendered block and read it before writing.
 Verify success criteria:
 - [ ] SUMMARY.md created
 - [ ] Reflect pass run, or trivial-skip line recorded
+- [ ] `.paul/LEARNINGS.md` updated: new candidates appended, hit rows bumped, promotions applied
+- [ ] `.paul/DEBT.toml` updated: discharged rows flipped, abandoned rows dropped with a reason, new deferrals appended
+- [ ] Debt counts and pile-up status reported
 - [ ] STATE.md updated with loop closure
 - [ ] User knows next action
 
@@ -171,9 +215,12 @@ Result: SUMMARY.md beside the plan, STATE.md closed, next phase or plan announce
 - **Skipping UNIFY.** Consequence: loop never closes, STATE drifts. Fix: always unify before planning the next unit.
 - **Thin summary.** Consequence: deferred issues and decisions are lost. Fix: record deviations, decisions, and deferred items every time.
 - **Treating reflect as optional.** Consequence: every loop re-derives the same lessons. Fix: run the reflect pass, or spend one line proving the loop was trivial.
+- **Leaving the reflect output in SUMMARY.md only.** Consequence: findings are prose no later plan reads; the next loop re-derives them. Fix: append to `.paul/LEARNINGS.md`, bump `hits` on rows the loop hit, and record the delta in the summary.
+- **Closing the loop with deferrals that only exist in prose.** Consequence: "UNIFIED ≠ LANDED" becomes a permanent disclaimer because nothing can ever test it. Fix: every landed-artifact claim gets a `kind = "artifact"` row with a check that proves it.
 
 ## References
 
 - `~/.agents/paul-framework/workflows/unify-phase.md`
 - `~/.agents/paul-framework/templates/SUMMARY.md`
-- `.paul/STATE.md`
+- `~/.agents/paul-framework/templates/DEBT.toml.md`
+- `.paul/STATE.md`, `.paul/DEBT.toml`

@@ -34,6 +34,18 @@ Next phase: UNIFY (after execution completes)
 2. Read STATE.md to verify:
    - Loop position shows PLAN complete
    - Correct phase and plan identified
+3. **Check no sibling plan already owns an overlapping file set.** Read every
+   other `PLAN.md` in the same phase and compare `files_modified` against this
+   plan's. If a sibling is APPLYING (or held — `loop.hold_until` present) and the
+   two plans write the same path, **stop**: two plans editing one artifact make
+   every mtime in that path useless as routing evidence, and a later reader
+   cannot tell which plan produced which line.
+
+   This is not a hard refusal. Record the exception explicitly — in `STATE.md`
+   under the current position, naming both plans, the shared path, and why
+   serializing them costs more than the ambiguity — and proceed only with that
+   note in place. An undocumented overlap is the defect; a documented one is a
+   decision.
 </step>
 
 <step name="load_plan">
@@ -308,6 +320,32 @@ Throughout execution:
    - Deviations from plan
    - Concerns flagged via DONE_WITH_CONCERNS (even if resolved)
 2. This information feeds into UNIFY phase
+
+**3. Deviations that are deferrals go to the debt store, not to a prose log:**
+
+When a task reveals work that is real but out of scope — an enhancement, a follow-up
+measurement, a file that must be regenerated once a window closes, a decision only the
+owner can make:
+
+```toml
+[[debt]]
+id = "DEBT-0NN"            # next free number
+title = "…"
+kind = "tech"              # artifact | reopen | decision | tech | uat
+origin = "[current plan ID]"
+owner = "agent"
+trigger = "phase:NN"       # or event:<name>, or due = "…" if it has a date
+check = { type = "command", run = "…", expect = "…" }
+```
+
+Append the row to `.paul/DEBT.toml` and continue the plan. Do not create or append to
+`.paul/ISSUES.md` for anything that has a landing condition — a row without a runnable
+check is rejected by `debt.py` at load time, which is the point: it forces the deferral
+to name its own evidence while the reason is still in context.
+
+**The check must be able to fail.** `expect = "11"` passes against a docstring in the
+same file; `expect = "flip count = 11"` does not. A check that always passes reports
+work as done and is worse than no check.
 </step>
 
 <step name="finalize">
@@ -322,6 +360,11 @@ After all tasks attempted:
 2. Update STATE.md:
    - Loop position: PLAN → APPLY → UNIFY
    - Last activity: timestamp and completion status
+   - **If a task was attempted but cannot complete until a calendar event, this is a
+     HOLD, not a completion.** Set loop position to APPLY, leave the plan APPLYING,
+     and write `loop.hold_until` + `loop.hold_reason` to `paul.toml`. Report the
+     date. Do not route to UNIFY while a hold is live — a plan whose evidence has
+     not arrived has nothing to reconcile.
 3. Report with quick continuation prompt:
    ```
    ════════════════════════════════════════
@@ -348,6 +391,8 @@ Reference: @src/references/toml-sync.md
    - If neither found: skip silently
    - Update fields:
      - `loop.position` → "APPLY"
+     - `loop.hold_until` / `loop.hold_reason` → set only when the run ends in a
+       calendar wait (see `finalize` step 2); omit otherwise
      - `paul.version` → current PAUL framework version
      - `stats.last_activity` → current ISO timestamp
 

@@ -30,6 +30,7 @@ Example: `Use paul-init: set up PAUL here`
 - `~/.agents/paul-framework/templates/PROJECT.md` — project template
 - `~/.agents/paul-framework/templates/STATE.md` — state template
 - `~/.agents/paul-framework/templates/ROADMAP.md` — roadmap template
+- `~/.agents/paul-framework/templates/DEBT.toml.md` — deferred-work store schema
 
 ### Behavior Contract
 
@@ -43,7 +44,7 @@ Check for existing `.paul/`. If present, route to resume instead of re-initializ
 
 ### Step 2: Scaffold and Ask
 
-1. Create the directory structure.
+1. Create the directory structure, including `.paul/DEBT.toml` — an empty store with the header comment and a `Schema:` pointer to `~/.agents/paul-framework/templates/DEBT.toml.md`. Create it empty: a store with invented rows is a store nobody trusts, and the first deferral writes its first row.
 2. Ask: "What's the core value this project delivers?"
 3. Ask: "What are you building?"
 4. Confirm project name (infer from directory).
@@ -63,6 +64,7 @@ Verify success criteria:
 - [ ] PROJECT.md populated from conversation
 - [ ] STATE.md initialized with correct loop position
 - [ ] ROADMAP.md initialized
+- [ ] `.paul/DEBT.toml` created (empty is correct) and parses with `debt.py`
 - [ ] pstack preset offered when pstack is present
 - [ ] User presented with ONE clear next action
 

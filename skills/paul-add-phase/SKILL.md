@@ -37,10 +37,12 @@ Example: `Use paul-add-phase: add API Authentication Layer`
 ## Application
 
 1. Load PROJECT.md, STATE.md, and ROADMAP.md.
-2. Follow `roadmap-management.md`, executing the **add-phase** operation for the named phase.
-3. Verify success criteria:
+2. **Ask whether the store already knows about this phase.** Run `python ~/.agents/paul-framework/scripts/debt.py --run-checks` and grep `.paul/DEBT.toml` for `phase:<NN>`. A phase that exists only in ROADMAP.md while rows already reference it is a phase the roadmap forgot to declare; a phase added for scope that debt rows predicted is a phase that should have been scheduled a loop earlier. Report which.
+3. Follow `roadmap-management.md`, executing the **add-phase** operation for the named phase.
+4. Verify success criteria:
    - [ ] Phase added to ROADMAP.md
    - [ ] Phase directory created
+   - [ ] Debt rows naming this phase are consistent with the new number
    - [ ] STATE.md updated with new phase
 
 ## Examples

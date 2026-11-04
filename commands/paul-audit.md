@@ -32,16 +32,18 @@ Plan path: $ARGUMENTS
 The workflow implements:
 1. Validate preconditions (PLAN exists, loop at PLAN complete)
 2. Load and parse the PLAN.md
-3. Execute enterprise audit (6-section structured review)
-4. Classify findings (must-have, strongly-recommended, can-safely-defer)
-5. Auto-apply must-have and strongly-recommended findings to PLAN.md
-6. Create AUDIT.md report in phase directory
-7. Update STATE.md with audit completion
-8. Present summary and route to APPLY
+3. Run `python ~/.agents/paul-framework/scripts/debt.py --run-checks`; a debt row the plan neither schedules nor names out-of-scope is a must-have finding
+4. Execute enterprise audit (6-section structured review)
+5. Classify findings (must-have, strongly-recommended, can-safely-defer)
+6. Auto-apply must-have and strongly-recommended findings to PLAN.md
+7. Create AUDIT.md report in phase directory
+8. Update STATE.md with audit completion
+9. Present summary and route to APPLY
 </process>
 
 <success_criteria>
 - [ ] PLAN.md audited against enterprise standards
+- [ ] Debt coverage checked; uncovered overdue rows raised as must-have findings
 - [ ] Must-have and strongly-recommended findings applied to PLAN.md
 - [ ] AUDIT.md report created in phase directory
 - [ ] STATE.md updated to reflect audit completion

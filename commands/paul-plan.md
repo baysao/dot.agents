@@ -27,10 +27,13 @@ $ARGUMENTS
 
 <process>
 Follow workflow: @~/.agents/paul-framework/workflows/plan-phase.md
+
+Before drafting, run `python ~/.agents/paul-framework/scripts/debt.py --run-checks`. Every `overdue` row, every `open` row, and every `waiting` row whose trigger names this phase must become an acceptance criterion or be named out-of-scope with a reason. Silent omission is a plan defect.
 </process>
 
 <success_criteria>
 - [ ] PLAN.md created in correct phase directory
 - [ ] All acceptance criteria defined
+- [ ] Debt rows touching this phase scheduled or named out-of-scope
 - [ ] STATE.md updated with loop position
 </success_criteria>

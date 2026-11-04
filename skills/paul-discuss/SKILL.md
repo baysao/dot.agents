@@ -30,15 +30,21 @@ Example: `Use paul-discuss: explore phase 3`
 ### Project Context
 
 - `.paul/PROJECT.md`, `.paul/STATE.md`, `.paul/ROADMAP.md`
+- `.paul/DEBT.toml` — deferred work already pointing at this phase
+
+### Debt Informs the Vision
+
+Run `python ~/.agents/paul-framework/scripts/debt.py --run-checks` before the conversation. Rows whose trigger names this phase are scope the vision has to account for: an unresolved decision, an artefact nobody committed, a check that has been failing since an earlier loop. Naming them in `CONTEXT.md` is how they enter the plan instead of surprising it at UNIFY.
 
 ## Application
 
 1. Resolve the phase from input; ask if missing.
-2. Follow `discuss-phase.md`: conversational exploration of goals and approach. When an open-ended "why did we choose X" question comes up and the `base` binary resolves, run `base graph query "<question>" --raw` for the matching subgraph, then synthesize the answer yourself before asking the user from scratch (`--raw` skips base's broken subprocess synthesis on gateway models).
-3. Write `CONTEXT.md` in the phase directory capturing vision, goals, and approach.
+2. Follow `discuss-phase.md`: conversational exploration of goals and approach. When an open-ended "why did we choose X" question comes up, read `.paul/DECISIONS.md` for the recorded rationale and `LEARNINGS.md` for the correction history, then synthesize the answer yourself before asking the user from scratch.
+3. Write `CONTEXT.md` in the phase directory capturing vision, goals, and approach, plus a `## Carried debt` list of the `DEBT-NNN` rows this phase inherits.
 4. Verify success criteria:
    - [ ] CONTEXT.md created in phase directory
    - [ ] Goals and approach articulated
+   - [ ] Debt rows naming this phase listed in CONTEXT.md
    - [ ] Ready for plan
 
 ## Examples

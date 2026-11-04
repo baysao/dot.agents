@@ -121,7 +121,7 @@ Plans are guides, not straitjackets. During APPLY:
 2. **Auto-add critical** - Security/correctness gaps, add immediately
 3. **Auto-fix blockers** - Can't proceed, fix immediately
 4. **Ask about architectural** - Major changes, stop and ask
-5. **Log enhancements** - Nice-to-haves, log to deferred issues
+5. **Log enhancements** - Nice-to-haves go to the debt store (`.paul/DEBT.toml`) when they have a landing condition, or `.paul/ISSUES.md` when they do not
 
 All deviations logged during UNIFY for audit trail.
 </deviation_rules>

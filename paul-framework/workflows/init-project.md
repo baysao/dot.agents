@@ -43,59 +43,6 @@ After init, project is ready for first PLAN.
 3. If not exists: proceed with initialization
 </step>
 
-<step name="detect_base" priority="early">
-**Detect BASE version for ecosystem integration.**
-
-1. Check for base binary:
-   ```bash
-   which base 2>/dev/null
-   ```
-
-2. **If base binary found:**
-   ```bash
-   base --version 2>/dev/null
-   ```
-   - If output contains a semver (e.g., "base 0.1.0") → Rust binary (v2) detected
-     - Store `base_v2_available = true`
-     - Silent pass — continue init
-   - If output is empty, errors, or doesn't match semver → v1/Python detected
-     - **HARD STOP.** Display:
-       ```
-       ════════════════════════════════════════
-       ⛔ BASE v1 detected — not compatible with PAUL v1.4+
-       ════════════════════════════════════════
-
-       BASE v1 (Python/MCP) is no longer supported.
-       PAUL now integrates with BASE v2 (Rust) for the
-       full Agentic OS experience.
-
-       Upgrade: https://chrisai.cv/skool
-
-       PAUL Framework · Chris AI Systems
-       ════════════════════════════════════════
-       ```
-     - Do NOT proceed with init
-
-3. **If no base binary on PATH:**
-   - Store `base_v2_available = false`
-   - Display:
-     ```
-     ℹ️ BASE not detected. PAUL works standalone, but for the
-     full Agentic OS — workspace intelligence, proactive context,
-     knowledge graph — get BASE v2: https://chrisai.cv/skool
-     ```
-   - Continue with init (not a hard stop)
-
-4. **Additional v1 artifact check** (even if no base binary):
-   - `.base/data/*.json` alone is NOT evidence of v1 — the current `@chrisai/base` npm kit (2.x/3.x) legitimately creates those files on a fresh install, and no 1.x was ever published. Only corroborated legacy state counts:
-     ```bash
-     ls .base/data/*.json 2>/dev/null && ls .base/workspace.json 2>/dev/null
-     ```
-   - **If `base_v2_available = true` (step 2 found the Rust binary):** silent pass — skip this check entirely.
-   - **If `.base/data/*.json` exists AND `.base/workspace.json` also exists:** current-generation npm kit — silent pass.
-   - **If `.base/data/*.json` exists AND `.base/workspace.json` is absent:** likely legacy state — display the v1 warning from step 2, but as a ⚠️ warning with a "continue anyway? [y/N]" prompt rather than an unconditional hard stop, since the heuristic is circumstantial.
-</step>
-
 <step name="detect_planning_md" priority="early">
 **Check for existing PLANNING.md (from SEED graduation or manual creation).**
 
@@ -483,7 +430,7 @@ Resume file: .paul/PROJECT.md
 </step>
 
 <step name="create_paul_toml">
-**Create project manifest and session ledger for BASE-v2 graph integration.**
+**Create project manifest and session ledger.**
 
 Reference: @src/templates/paul-toml.md, @src/references/toml-sync.md
 
@@ -528,52 +475,45 @@ last_activity = "[ISO timestamp]"
 Create `.paul/ledger.toml`:
 ```toml
 # .paul/ledger.toml — Session history for cost/time attribution
-# Append-only. BASE extracts for usage analytics cross-reference.
+# Append-only. One row per session, for cost/time attribution.
 ```
 
-**Note:** paul.toml and ledger.toml are infrastructure — no extra display or user prompts needed.
+Create `.paul/DEBT.toml`:
+```toml
+# .paul/DEBT.toml — the debt store for this project.
+#
+# A SET with state, not a log: a row is edited in place, so every discharge is a
+# diff. Contrast `.paul/ledger.toml`, which is append-only.
+#
+# Written by: apply-phase deviations, unify-phase reconciliation, verify-work UAT.
+# Read by:    ~/.agents/paul-framework/scripts/debt.py at the gates PAUL passes.
+#
+# status: open | done | dropped     (overdue/scheduled/waiting are COMPUTED)
+# Schema: @src/templates/DEBT.toml.md
+```
+
+No rows at init — an empty store is honest. The first deferral writes the first row.
+
+**Note:** paul.toml, ledger.toml, and DEBT.toml are infrastructure — no extra display
+or user prompts needed.
 </step>
 
 <step name="select_tags">
-**Domain-aware tag selection (if BASE v2 available).**
+**Free-form tag selection.**
 
-**If `base_v2_available = false`:** Skip this step silently. Tags remain `[]` in paul.toml.
+Tags are plain labels for this project (`rust`, `api`, `frontend`). They carry no
+external meaning and nothing consumes them automatically — skip this step entirely
+when the user has no preference. Tags remain `[]` in paul.toml.
 
-**If `base_v2_available = true`:**
+When the user does want tags, ask:
 
-1. Read available domains from BASE:
-   ```bash
-   base domain list 2>/dev/null
-   ```
-   If this fails, try reading domains.toml directly:
-   ```bash
-   cat .base/domains.toml 2>/dev/null || cat ~/.base-gbl/domains.toml 2>/dev/null
-   ```
-   Parse domain names from `[[domain]]` tables.
+```
+Any tags for this project? (comma-separated, or press Enter to skip)
+Example: "rust, framework, api"
+```
 
-2. Present domain-based tag suggestions:
-   ```
-   BASE v2 detected. Tags connect your project to BASE domains
-   for automatic context injection.
-
-   Available domains:
-     [1] BACKEND
-     [2] FRONTEND
-     [3] DEVELOPMENT
-     [4] CONTENT
-     ...
-
-   Select tags (comma-separated numbers, or type custom tags):
-   Example: "1,3" or "rust, framework, api"
-   Press Enter to skip (can add later in paul.toml).
-   ```
-
-3. Parse response:
-   - Numbers → map to domain names (lowercased)
-   - Text → split by comma, trim whitespace
-   - Enter/empty → keep tags as `[]`
-
-4. Update `.paul/paul.toml` tags field with selected values.
+Split the response by comma, trim whitespace, lowercase. Write the result to the
+`tags` field of `.paul/paul.toml`.
 </step>
 
 <step name="prompt_integrations">
@@ -770,8 +710,9 @@ Created:
   .paul/PROJECT.md    ✓  (requirements populated from walkthrough)
   .paul/ROADMAP.md    ✓
   .paul/STATE.md      ✓
-  .paul/paul.toml     ✓  (project manifest for BASE-v2 graph integration)
+  .paul/paul.toml     ✓  (project manifest)
   .paul/ledger.toml   ✓  (session history for cost/time attribution)
+  .paul/DEBT.toml     ✓  (debt store — checked at session entry, planning, phase exit)
   .paul/config.md     ✓  (if integrations_enabled: list enabled integrations)
   .paul/SPECIAL-FLOWS.md  ✓  (if specialized_flows_enabled: "[N] skills configured")
   .paul/phases/       ✓
@@ -804,8 +745,9 @@ If neither was enabled, show the minimal version without those lines.
 - `.paul/PROJECT.md` (populated from walkthrough or PLANNING.md import)
 - `.paul/ROADMAP.md` (skeleton for planning)
 - `.paul/STATE.md` (initialized state)
-- `.paul/paul.toml` (project manifest for BASE-v2 graph integration)
+- `.paul/paul.toml` (project manifest)
 - `.paul/ledger.toml` (session history for cost/time attribution)
+- `.paul/DEBT.toml` (empty debt store)
 - `.paul/config.md` (if integrations enabled)
 - `.paul/SPECIAL-FLOWS.md` (if specialized flows enabled)
 - `.paul/phases/` (empty directory)

@@ -31,15 +31,18 @@ Example: `Use paul-discuss-milestone: explore what v2 should be`
 ### Project Context
 
 - `.paul/PROJECT.md`, `.paul/STATE.md`, `.paul/ROADMAP.md`, `.paul/MILESTONES.md`
+- `.paul/DEBT.toml` — the backlog the last milestone left behind, which is often the honest input to "what should the next one be"
 
 ## Application
 
 1. Load PROJECT.md, STATE.md, ROADMAP.md, and MILESTONES.md.
-2. Follow `discuss-milestone.md`: conversational exploration of themes and goals.
-3. Write `MILESTONE-CONTEXT.md` with the articulated vision.
-4. Verify success criteria:
+2. Run `python ~/.agents/paul-framework/scripts/debt.py --run-checks`. Group surviving rows by theme and use them as raw material: a cluster of unowned `decision` rows is a milestone theme nobody planned; ten `artifact` rows is a "land what we built" milestone. The store is a better predictor of the needed work than a brainstorm.
+3. Follow `discuss-milestone.md`: conversational exploration of themes and goals.
+4. Write `MILESTONE-CONTEXT.md` with the articulated vision and a `## Inherited debt` list of row ids the milestone must absorb or explicitly abandon.
+5. Verify success criteria:
    - [ ] MILESTONE-CONTEXT.md created with vision
    - [ ] Key themes and goals articulated
+   - [ ] Debt store reviewed; inherited rows named (absorbed or abandoned with a reason)
    - [ ] Ready for milestone creation
 
 ## Examples

@@ -35,9 +35,11 @@ Example: `Use paul-complete-milestone: close out v0.3`
 ## Application
 
 1. Load PROJECT.md, STATE.md, ROADMAP.md, and MILESTONES.md.
-2. Follow `complete-milestone.md`: verify all phases complete, archive the milestone with summary, evolve PROJECT.md with learnings, create the git tag, update STATE.md.
-3. Verify success criteria:
+2. **Run the milestone debt gate.** `python ~/.agents/paul-framework/scripts/debt.py --run-checks`, then `--gate milestone-<version>-exit` if any row carries that gate. A milestone is a claim that a body of work is complete; archiving one with an open `blocking` row makes the tag a lie. Discharge it, drop it with a written reason, or stop.
+3. Follow `complete-milestone.md`: verify all phases complete, archive the milestone with summary, evolve PROJECT.md with learnings, create the git tag, update STATE.md.
+4. Verify success criteria:
    - [ ] Milestone archived with summary
+   - [ ] Debt gate run; no open `blocking` row survives the tag (or each is dropped with a reason)
    - [ ] PROJECT.md evolved with learnings
    - [ ] Git tag created for version
    - [ ] STATE.md updated to reflect completion
@@ -53,8 +55,10 @@ Result: milestone archived, tag created, project evolved for the next cycle.
 ## Common Pitfalls
 
 - **Closing with unverified phases.** Consequence: incomplete work gets archived as done. Fix: verify every phase before completing.
+- **Tagging over an open blocking debt row.** Consequence: the version number certifies work the store says is unpaid. Fix: run the gate; discharge or drop with a reason before tagging.
 
 ## References
 
 - `~/.agents/paul-framework/workflows/complete-milestone.md`
 - `.paul/PROJECT.md`, `.paul/STATE.md`, `.paul/ROADMAP.md`, `.paul/MILESTONES.md`
+- `.paul/DEBT.toml`

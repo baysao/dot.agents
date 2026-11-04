@@ -47,9 +47,17 @@ Compare plan to actual:
 Create SUMMARY.md in same directory as PLAN.md:
 - Document what was built
 - Record acceptance criteria results
-- Note any deferred issues
+- Deferred items as `[[debt]]` rows (the table is a generated view of `.paul/DEBT.toml`, never the store)
 - Capture decisions made
 - List files created/modified
+</step>
+
+<step name="update_debt_store">
+Run `python ~/.agents/paul-framework/scripts/debt.py --run-checks`, then:
+- Rows the run reports `done` → set `status = "done"` in `.paul/DEBT.toml` (the TOML diff is the discharge record; never delete)
+- Rows this loop abandoned → `status = "dropped"` plus a `note` saying why
+- New deferrals (including every uncommitted artifact) → a row with a check that can fail
+- Report `DEBT: N overdue · N waiting · N open · N discharged`; more than 12 open non-blocking means the next PLAN schedules one
 </step>
 
 <step name="update_state">
@@ -82,6 +90,8 @@ Next: [phase complete message or next plan]
 
 <success_criteria>
 - [ ] SUMMARY.md created
+- [ ] `.paul/DEBT.toml` synced: discharged rows flipped, abandoned rows dropped with a reason, new deferrals appended
+- [ ] Debt counts reported
 - [ ] STATE.md updated with loop closure
 - [ ] User knows next action
 </success_criteria>

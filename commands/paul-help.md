@@ -276,9 +276,10 @@ Usage: `/paul:discover "authentication patterns"`
 ---
 
 ### `/paul:consider-issues [source]`
-Review deferred issues with codebase context, triage and route.
+Review deferred debt with codebase context, triage and route.
 
-- Reads deferred issues from STATE.md or specified source
+- Runs `.paul/DEBT.toml` checks via `scripts/debt.py` — a row that passes is discharged
+- Reads legacy `ISSUES.md` entries and phase-scoped UAT files
 - Analyzes with current codebase context
 - Suggests routing: fix now, defer, or close
 

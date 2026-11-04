@@ -30,11 +30,12 @@ The workflow implements:
 1. Verify .paul/ exists
 2. Detect handoff files (use $ARGUMENTS if provided, else find most recent)
 3. Load STATE.md
-4. Present handoff content if detected
-5. Reconcile handoff vs STATE.md
-6. Determine exactly ONE next action based on loop position
-7. Display resume status with single routing
-8. After work proceeds: archive/delete consumed handoff
+4. **Run `python ~/.agents/paul-framework/scripts/debt.py --run-checks`** when `.paul/DEBT.toml` exists. An `overdue` row outranks the loop table: report the row id, its title, and the failing check, and make discharging it the next action. `scheduled` and `waiting` rows are not reported; only a passed date is news.
+5. Present handoff content if detected
+6. Reconcile handoff vs STATE.md
+7. Determine exactly ONE next action based on loop position
+8. Display resume status with single routing
+9. After work proceeds: archive/delete consumed handoff
 
 **Key behavior:** Suggest exactly ONE next action, not multiple options.
 
@@ -44,6 +45,7 @@ The workflow implements:
 <success_criteria>
 - [ ] Context restored from STATE.md and/or handoff
 - [ ] Loop position correctly identified
+- [ ] Debt store evaluated; overdue rows surfaced (or confirmed absent)
 - [ ] Exactly ONE next action suggested (not multiple options)
 - [ ] User can proceed or redirect with context
 </success_criteria>

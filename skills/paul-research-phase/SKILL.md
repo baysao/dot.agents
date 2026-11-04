@@ -34,6 +34,10 @@ Example: `Use paul-research-phase: research phase 10`
 
 Codebase (Explore agent), Web/Docs (general-purpose agent), Comparison, Architecture. Max 3 parallel agents; only substantial (15+ min) unknowns qualify.
 
+### Debt Rows Are Pre-Identified Unknowns
+
+Run `python ~/.agents/paul-framework/scripts/debt.py --run-checks` first. A `kind = "decision"` or `kind = "tech"` row naming this phase already carries a question somebody was blocked on — it belongs in the unknown list, with the row id attached. Discovering from a blank page while the store holds the real questions is how a phase researches the wrong thing thoroughly.
+
 ## Application
 
 ### Step 1: Validate Phase
@@ -42,11 +46,11 @@ Parse the phase number; error with usage if missing. Validate against ROADMAP.md
 
 ### Step 2: Analyze Unknowns
 
-Read ROADMAP.md scope, PROJECT.md context, and any phase CONTEXT.md. Identify and classify unknowns, present the list, and wait for user confirmation.
+Read ROADMAP.md scope, PROJECT.md context, and any phase CONTEXT.md. Add every debt row naming this phase to the unknown list. Identify and classify unknowns, present the list, and wait for user confirmation.
 
 ### Step 3: Spawn Agents
 
-Validate against subagent-criteria, then spawn up to 3 research agents in parallel (Explore for codebase, general-purpose for web). Codebase agents get `base ast query` in their toolkit when the `base` binary resolves — the workspace AST map answers structure questions faster than file fan-out. Other harnesses: `explore`/`general` in OpenCode and Kilo Code (`task` tool), `spawn_agent` in Codex and Cline (CLI/Desktop only) — drop the type where unsupported, or run the agents sequentially yourself when there is no subagent tool.
+Validate against subagent-criteria, then spawn up to 3 research agents in parallel (Explore for codebase, general-purpose for web). Codebase agents answer structure questions by grepping for the exact symbol and citing file:line — faster than file fan-out. Other harnesses: `explore`/`general` in OpenCode and Kilo Code (`task` tool), `spawn_agent` in Codex and Cline (CLI/Desktop only) — drop the type where unsupported, or run the agents sequentially yourself when there is no subagent tool.
 
 ### Step 4: Consolidate
 
@@ -54,6 +58,7 @@ Write individual findings to `.paul/phases/{NN}-{name}/research/{unknown-slug}.m
 
 Verify success criteria:
 - [ ] Phase validated against ROADMAP.md
+- [ ] Debt rows naming this phase folded into the unknown list
 - [ ] Unknowns identified and classified
 - [ ] User confirmed research list
 - [ ] Appropriate agents spawned in parallel

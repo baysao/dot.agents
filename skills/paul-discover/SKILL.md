@@ -34,6 +34,11 @@ Example: `Use paul-discover: decide auth approach for phase 4`
 ### Project Context
 
 - `.paul/STATE.md`, `.paul/ROADMAP.md`
+- `.paul/DEBT.toml` — a row that names a technical option (which library, which chain, which vendor) is a discovery question that was parked instead of answered
+
+### Debt Rows Become Discovery Questions
+
+Run `python ~/.agents/paul-framework/scripts/debt.py --run-checks` and read the `kind = "decision"` / `kind = "tech"` rows. Each `open` or `overdue` one is a decision the phase inherited: it is already the question, phrased by whoever was blocked. Fold them into the unknowns list rather than discovering around them, and when the recommendation settles one, name the `DEBT-NNN` in `DISCOVERY.md` — the row discharges when the plan applies the choice, not when discovery mentions it.
 
 ## Application
 

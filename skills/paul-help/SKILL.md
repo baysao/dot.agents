@@ -29,7 +29,19 @@ Core Loop (init, plan, apply, unify, help, progress); Session (pause, resume, pr
 
 ### Project Shape
 
-`.paul/` holds PROJECT.md, ROADMAP.md, STATE.md, config.md, SPECIAL-FLOWS.md, MILESTONES.md, LEARNINGS.md (candidate/validated learnings from the reflect pass), and `phases/` with `{NN}-{PP}-PLAN.md` / AUDIT.md / SUMMARY.md per plan. Task types: auto, checkpoint:decision, checkpoint:human-verify, checkpoint:human-action.
+`.paul/` holds PROJECT.md, ROADMAP.md, STATE.md, config.md, SPECIAL-FLOWS.md, MILESTONES.md, LEARNINGS.md (candidate/validated learnings from the reflect pass), DEBT.toml (deferred work, each row carrying the check that discharges it), and `phases/` with `{NN}-{PP}-PLAN.md` / AUDIT.md / SUMMARY.md per plan. Task types: auto, checkpoint:decision, checkpoint:human-verify, checkpoint:human-action.
+
+### The Debt Store
+
+PAUL has no daemon. Deferred work is evaluated at the gates the loop already passes, by one script:
+
+```
+python ~/.agents/paul-framework/scripts/debt.py            # report
+python ~/.agents/paul-framework/scripts/debt.py --run-checks   # run every row's check
+python ~/.agents/paul-framework/scripts/debt.py --gate phase-3-exit  # exit 1 if blocked
+```
+
+Called at session entry (resume/progress), plan drafting (an uncovered row is a plan defect), phase exit (the only gate that can stop a release), and loop close (discharge or drop). States: `overdue` (date passed, check fails), `scheduled` (date ahead), `waiting` (event-gated), `open` (blocking-only), `done`/`dropped`. Only `overdue` interrupts. See `templates/DEBT.toml.md`.
 
 ### Other Harnesses
 

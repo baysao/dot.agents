@@ -4,7 +4,9 @@
 
 Shared reference for paul.toml sync, ledger.toml append, and paul.json auto-migration. All PAUL workflows that change project state reference this document for consistent behavior.
 
-**Templates:** @src/templates/paul-toml.md (field schema), @src/templates/ledger-toml.md (ledger schema)
+**Templates:** @src/templates/paul-toml.md (field schema), @src/templates/ledger-toml.md (ledger schema), @src/templates/DEBT.toml.md (debt store schema)
+
+> **Note:** `DEBT.toml` is *not* synced by the patterns below. paul.toml is a snapshot and ledger.toml is append-only; DEBT.toml is a set whose state is derived by `scripts/debt.py` at read time and whose rows are edited only by the workflow that paid or dropped them. No lifecycle workflow rewrites it wholesale — a sweep would erase the diff that records a discharge.
 
 ---
 
@@ -47,6 +49,8 @@ Shared reference for paul.toml sync, ledger.toml append, and paul.json auto-migr
 | `loop.position` | ✓ | ✓ | ✓ | ✓ | | ✓ | | | | |
 | `loop.plan` | | ✓ | | omit | | omit | | | | |
 | `loop.plan_path` | | ✓ | | omit | | omit | | | | |
+| `loop.hold_until` | | | ✓ | omit | | omit | | | | |
+| `loop.hold_reason` | | | ✓ | omit | | omit | | | | |
 | `satellite.groom` | ✓ | | | | | | | | | |
 | `stats.total_plans` | ✓ | | | +1 | | | | | | |
 | `stats.total_phases` | ✓ | | | | +1 | | | | | |
@@ -54,7 +58,9 @@ Shared reference for paul.toml sync, ledger.toml append, and paul.json auto-migr
 
 *`complete-ms` sets `status` → "complete" only if this is the final milestone.
 
-**TOML null handling:** When setting loop to IDLE, REMOVE the `plan` and `plan_path` keys entirely rather than setting them to empty strings. TOML has no null — field absence = idle.
+**TOML null handling:** When setting loop to IDLE, REMOVE the `plan`, `plan_path`, `hold_until`, and `hold_reason` keys entirely rather than setting them to empty strings. TOML has no null — field absence = idle.
+
+**Holds:** `apply-phase` may write `loop.hold_until` + `loop.hold_reason` when a task is attempted but cannot complete until a calendar event. A hold keeps `position = "APPLY"`; it is not a fourth loop position. `unify-phase` removes both keys, so a stale hold can never survive its plan.
 
 ---
 
@@ -65,7 +71,7 @@ Shared reference for paul.toml sync, ledger.toml append, and paul.json auto-migr
 1. If `.paul/ledger.toml` doesn't exist, create it with header:
    ```toml
    # .paul/ledger.toml — Session history for cost/time attribution
-   # Append-only. BASE extracts for usage analytics cross-reference.
+   # Append-only. One row per session, for cost/time attribution.
    ```
 
 2. Append one `[[entry]]` block to the end of the file:
@@ -135,8 +141,8 @@ cat .paul/paul.json
 | *(absent)* | `[stats].total_plans` | Default: `0` |
 | *(absent)* | `[stats].total_phases` | Default: `0` |
 | *(absent)* | `[stats].last_activity` | Current ISO timestamp |
-| `id` | *(dropped)* | BASE-v2 uses IRI identity, not satellite UUIDs |
-| `timestamps.*` | *(dropped)* | BASE manages lastActive via extraction |
+| `id` | *(dropped)* | Identity is name + path, not a UUID |
+| `timestamps.*` | *(dropped)* | Replaced by `[stats].last_activity` |
 | `handoff.*` | *(dropped)* | Not part of manifest |
 | `next_action` | *(dropped)* | Not part of manifest |
 | `last_plan_completed_at` | *(dropped)* | Replaced by stats.last_activity |
@@ -151,31 +157,7 @@ Write the mapped TOML to `.paul/paul.toml`.
 rm .paul/paul.json
 ```
 
-### Step 5: Check for BASE v2
-
-```bash
-which base 2>/dev/null && base --version 2>/dev/null
-```
-
-**Evaluate result:**
-
-- **base binary found + version output contains a semver** (Rust binary) → Silent pass. Integration active.
-
-- **base binary found + version output is empty/error/Python format** (v1 detected) → Display:
-  ```
-  ⚠️ BASE v1 detected — no longer supported with PAUL.
-  BASE v2 is part of the Official Agentic OS by Chris AI Systems.
-  Upgrade: https://chrisai.cv/skool
-  ```
-
-- **No base binary on PATH** → Display:
-  ```
-  ℹ️ BASE not installed. PAUL works standalone, but for the full
-  Agentic OS experience — workspace intelligence, proactive context,
-  knowledge graph — get BASE v2: https://chrisai.cv/skool
-  ```
-
-### Step 6: Confirm
+### Step 5: Confirm
 
 Display: `"Migrated paul.json → paul.toml ✓"`
 

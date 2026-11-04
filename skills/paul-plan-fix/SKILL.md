@@ -34,11 +34,15 @@ Example: `Use paul-plan-fix: 04-02`
 
 Issues come from `.paul/phases/XX-name/{plan}-UAT.md` (created by verify); the original `.paul/phases/XX-name/{plan}-PLAN.md` is reference only. Output is `.paul/phases/XX-name/{plan}-FIX.md` (+ `{plan}-FIX-SUMMARY.md` after execution).
 
+### The UAT File Is Not the List of Work
+
+`paul-verify` mirrors every Blocker/Major/Minor into a `kind = "uat"` row in `.paul/DEBT.toml`. Run `python ~/.agents/paul-framework/scripts/debt.py --run-checks` and treat the surviving `kind = "uat"` rows **plus** the UAT file as the issue set — the file carries the repro, the row carries the check that will discharge it. A UAT issue with no row gets one now, not after the fix.
+
 ## Application
 
 ### Step 1: Parse and Locate
 
-Parse `XX-NN` from input; error with usage if absent. Locate `.paul/phases/*/{plan}-UAT.md`; if missing, report that no fix plan is needed and exit.
+Parse `XX-NN` from input; error with usage if absent. Locate `.paul/phases/*/{plan}-UAT.md`; if missing, check `.paul/DEBT.toml` for open `kind = "uat"` rows originating from this plan — if there are none either, report that no fix plan is needed and exit.
 
 ### Step 2: Read and Prioritize
 
@@ -46,7 +50,9 @@ Read the UAT file; parse each issue (ID, title, severity, repro, AC ref); count 
 
 ### Step 3: Write FIX.md
 
-One task per issue (group related minors). Each task names the UAT issue, lists affected files, fix action with original AC reference, test, and done criteria. Write the FIX.md with frontmatter (phase, `{plan}-FIX`, type fix), objective, context (STATE, ROADMAP, UAT + original plan refs), generated acceptance criteria, tasks, boundaries (UAT scope only, no creep), and verification checklist.
+One task per issue (group related minors). Each task names the UAT issue **and the `DEBT-NNN` row it discharges**, lists affected files, fix action with original AC reference, test, and done criteria. Write the FIX.md with frontmatter (phase, `{plan}-FIX`, type fix), objective, context (STATE, ROADMAP, UAT + original plan refs), generated acceptance criteria, tasks, boundaries (UAT scope only, no creep), and verification checklist.
+
+The task's done criterion is the row's `check` — not "it looked fixed". After APPLY, `debt.py --run-checks` either flips that row or the fix is not done.
 
 If an issue class already survived a previous fix cycle (same root cause in an earlier `{plan}-UAT.md` or `{plan}-FIX-SUMMARY.md`), stage a preventive rule with `carl_v2_stage_proposal` (`source: decisions`) and surface it with the Step 4 approval prompt. Approve on yes, archive on no.
 
@@ -55,8 +61,9 @@ If an issue class already survived a previous fix cycle (same root cause in an e
 Display the FIX PLAN CREATED block (severity counts) and ask: approved-run-APPLY, review-first, or pause. On approval: apply the FIX.md.
 
 Verify success criteria:
-- [ ] UAT.md found and parsed
+- [ ] UAT.md found and parsed (or open `kind = "uat"` rows located in the store)
 - [ ] Fix tasks created for each issue (or grouped)
+- [ ] Each task names the debt row it will discharge
 - [ ] FIX.md written with proper PAUL structure
 - [ ] User offered to execute or review
 

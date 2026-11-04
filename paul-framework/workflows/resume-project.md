@@ -64,11 +64,27 @@ No multiple options. Prevents decision fatigue. User can redirect if needed.
    - Will be consumed after resume proceeds
 </step>
 
+<step name="evaluate_debt" priority="early">
+**Run the debt store before reading the loop position — because a date that passed while nobody was working is exactly what a resume is for.**
+
+1. If `.paul/DEBT.toml` does not exist: skip silently (project predates the store).
+2. If it exists:
+   ```bash
+   python ~/.agents/paul-framework/scripts/debt.py --run-checks
+   ```
+3. Keep the `overdue` rows and any `blocking` row for the routing step.
+   Rows that are `scheduled` or `waiting` are not reported — a future date is not news.
+4. If `--run-checks` discharges a row (check passes but `status = "open"`), say so and
+   offer to set `status = "done"`. Do not edit the row silently: the discharge is the diff.
+</step>
+
 <step name="load_state">
 1. Read `.paul/STATE.md`
 2. Extract:
    - Current Position (phase, plan, status)
    - Loop Position (PLAN/APPLY/UNIFY markers)
+   - Hold, from `.paul/paul.toml`: `loop.hold_until` and `loop.hold_reason`
+     (absent = no hold; compare `hold_until` against the current time)
    - Last activity (what was happening)
    - Session Continuity section:
      - Stopped at
@@ -98,11 +114,17 @@ Based on loop position, determine **exactly ONE** next action:
 
 | Loop State | Single Next Action |
 |------------|-------------------|
+| Any, with an `overdue` debt row whose `owner = "owner"` | **Debt first.** Report the row ID, title, and the check that still fails. The loop table below is not the answer until it is discharged or explicitly dropped. |
+| Any, with an `overdue` debt row whose `owner` is not `owner` | Do that row's check and discharge it before resuming the loop. |
 | PLAN ○ (no plan yet) | `/paul:plan` |
 | PLAN ✓, APPLY ○ (plan awaiting approval) | `/paul:apply [plan-path]` |
-| PLAN ✓, APPLY ✓, UNIFY ○ (executed, not reconciled) | `/paul:unify [plan-path]` |
+| PLAN ✓, APPLY ►, `hold_until` in the future | **Wait.** Report the date and `hold_reason`. Do not unify, do not start another plan. |
+| PLAN ✓, APPLY ►, `hold_until` passed | Run the plan's exit verification, then `/paul:unify [plan-path]` |
+| PLAN ✓, APPLY ✓, UNIFY ○ (exit condition observed, not reconciled; no hold) | `/paul:unify [plan-path]` |
 | All ✓ (loop complete) | `/paul:plan` (next phase) |
 | Blocked | "Address blocker: [specific issue]" |
+
+**APPLY is two states, not one.** `position = "APPLY"` means APPLY has *started*. It does not mean APPLY is *done* — a task that waits on a calendar (a probe window, a counterparty reply, a batch job) leaves the plan legitimately APPLYING with all its tasks attempted. Never read "tasks executed" as "ready to unify". Ask instead: has the plan's own exit condition been observed? If the plan says it cannot be, that is a hold, and the hold belongs in `paul.toml` where routing can read it, not only in prose.
 
 **Do NOT offer multiple options.** Pick the ONE correct action.
 </step>
@@ -127,6 +149,8 @@ Loop Position:
 
 Last Session: [timestamp]
 Stopped at: [what was happening]
+[If held:] Held until: [hold_until] — [hold_reason]
+[If overdue debt:] Debt overdue: DEBT-004 — [title] (check still fails)
 
 ────────────────────────────────────────
 ▶ NEXT: [single command with path]

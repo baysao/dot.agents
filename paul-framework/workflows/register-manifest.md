@@ -28,7 +28,7 @@ Migrate paul.json → paul.toml for pre-v1.4 PAUL projects, or create paul.toml 
    ```bash
    ls .paul/paul.toml 2>/dev/null
    ```
-   If exists: "paul.toml already exists. Nothing to do. BASE v2 will detect this project on next session start."
+   If exists: "paul.toml already exists. Nothing to do."
    Stop.
 
 3. Determine mode:
@@ -76,7 +76,6 @@ Execute Pattern 3 from @src/references/toml-sync.md:
 7. Add `[stats]` with defaults (total_plans = 0, total_phases = 0, last_activity = now)
 8. Write .paul/paul.toml
 9. Delete .paul/paul.json
-10. Run BASE v2 detection check (per Pattern 3, Step 5)
 
 **If `creation_mode`:**
 
@@ -88,7 +87,6 @@ Create paul.toml from STATE.md values using @src/templates/paul-toml.md:
 5. Set `tags = []`
 6. Set `[stats]` with defaults
 7. Write .paul/paul.toml
-8. Run BASE v2 detection check (per Pattern 3, Step 5)
 
 **Both modes:**
 
@@ -99,7 +97,18 @@ ls .paul/ledger.toml 2>/dev/null
 If not found, create:
 ```toml
 # .paul/ledger.toml — Session history for cost/time attribution
-# Append-only. BASE extracts for usage analytics cross-reference.
+# Append-only. One row per session, for cost/time attribution.
+```
+
+Create DEBT.toml if missing (empty store — the first deferral writes the first row):
+```bash
+ls .paul/DEBT.toml 2>/dev/null
+```
+If not found, create:
+```toml
+# .paul/DEBT.toml — the debt store for this project.
+# A SET with state, not a log. Checked by scripts/debt.py at the PAUL gates.
+# Schema: ~/.agents/paul-framework/templates/DEBT.toml.md
 ```
 </step>
 
@@ -121,8 +130,7 @@ Migrated paul.json → paul.toml ✓
 paul.json deleted ✓
 paul.toml created ✓
 ledger.toml ready ✓
-
-BASE v2 will auto-detect on next session start.
+DEBT.toml ready ✓
 
 PAUL Framework v1.4 · Chris AI Systems · https://chrisai.cv/skool · https://youtube.com/@chris-ai-systems
 ════════════════════════════════════════
@@ -144,8 +152,7 @@ paul.toml created for [project_name] ✓
 
 paul.toml created ✓
 ledger.toml ready ✓
-
-BASE v2 will auto-detect on next session start.
+DEBT.toml ready ✓
 
 PAUL Framework v1.4 · Chris AI Systems · https://chrisai.cv/skool · https://youtube.com/@chris-ai-systems
 ════════════════════════════════════════

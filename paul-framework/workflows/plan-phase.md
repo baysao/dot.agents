@@ -102,8 +102,17 @@ Wait for response. Store as `plan_track`.
    - What was built
    - Decisions made
    - Any deferred issues
-3. Read source files relevant to this phase's work
-4. Do NOT reflexively chain all prior summaries — instead only load what's genuinely needed for THIS plan, because unnecessary context loading wastes tokens and dilutes focus
+3. **Load the debt store** (`.paul/DEBT.toml` if it exists):
+   ```bash
+   python ~/.agents/paul-framework/scripts/debt.py --run-checks
+   ```
+   For every row that is `overdue`, `open`, or `waiting` with a trigger naming this phase:
+   - Either it becomes an acceptance criterion in this plan, or
+   - Name it in the plan's out-of-scope section with the reason it still waits.
+
+   **Silent omission is a plan defect.** The reason this step exists is that a plan written the day after a deferral is exactly the moment a deferral is cheapest to honour — and exactly the moment it is easiest to forget, because nothing in the phase's own scope mentions it. Discharging rows during planning also keeps the `blocking` gate from failing at the end of the phase, when the only options are delay or an exception.
+4. Read source files relevant to this phase's work
+5. Do NOT reflexively chain all prior summaries — instead only load what's genuinely needed for THIS plan, because unnecessary context loading wastes tokens and dilutes focus
 </step>
 
 <step name="check_specialized_flows">
@@ -262,6 +271,12 @@ This is NOT the enterprise audit — it's a quick validation pass that runs in s
    - Read the phase description in ROADMAP.md
    - Does the plan's scope match what the phase is supposed to deliver?
    - Example: Phase says "UI components" but plan does database migrations
+
+5. **Debt coverage** (only if `.paul/DEBT.toml` exists):
+   - Every `overdue` row and every row whose `trigger` names this phase should appear
+     either as an acceptance criterion or as a named out-of-scope item.
+   - A row that is neither is the failure mode the store exists to prevent: the deferral
+     survives the plan that should have paid it.
 
 **If issues found:**
 ```

@@ -36,10 +36,14 @@ must-have and strongly-recommended findings are auto-applied to PLAN.md; can-saf
 
 No invented requirements, no "future phases will fix it", no unjustified "fine for v1", correctness over politeness, never skip applying findings.
 
+### Debt Coverage Is Part of the Audit
+
+A plan that silently ignores an `overdue` debt row is defective in a way no amount of prose review catches, because the defect is an absence. Before classifying findings, run `python ~/.agents/paul-framework/scripts/debt.py --run-checks` and check each surviving row against the plan's acceptance criteria and boundaries. A row the plan neither schedules nor names out-of-scope is a **must-have** finding — add the AC.
+
 ## Application
 
 1. Follow `audit-plan.md`: validate preconditions (PLAN exists, loop at PLAN complete); load and parse PLAN.md.
-2. Execute the 6-section structured review; classify findings; auto-apply must-have + strongly-recommended to PLAN.md.
+2. Execute the 6-section structured review — including debt coverage (`debt.py --run-checks`; an unscheduled, unnamed row is a must-have); classify findings; auto-apply must-have + strongly-recommended to PLAN.md.
 3. Create `AUDIT.md` in the phase directory; update STATE.md; present summary and route to APPLY.
 
 ### pstack Adversarial Panel (automatic)
@@ -47,6 +51,7 @@ No invented requirements, no "future phases will fix it", no unjustified "fine f
 pstack is present when `.paul/pstack-models.md` or the global `~/.agents/pstack-models.md` exists, or the `poteto-mode` skill is invocable in this session. If present, run the `interrogate` skill on the PLAN before classifying findings: multiple models try to break the plan, including a strict code-quality lens. Fold its verdicts into the finding classes. For small-looking changes with wide reach, also run `blast-radius` so the audit carries a proven safety fact, not an assertion.
 4. Verify success criteria:
    - [ ] PLAN.md audited against enterprise standards
+   - [ ] Debt coverage checked; uncovered overdue rows raised as must-have findings
    - [ ] Must-have and strongly-recommended findings applied
    - [ ] AUDIT.md report created in phase directory
    - [ ] STATE.md updated to reflect audit completion

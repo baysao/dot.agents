@@ -6,6 +6,13 @@ Template for `.paul/ISSUES.md` — deferred enhancements discovered during execu
 
 **Location:** `.paul/ISSUES.md` (project-level, not phase-level)
 
+> **Use `.paul/DEBT.toml` first.** This log is for enhancements with no landing
+> condition ("add a spinner"), where there is nothing to check. Anything with a
+> testable finish — a file that must land, a measurement that must re-run, a written
+> decision that must exist — belongs in the debt store, because `scripts/debt.py`
+> can then answer "is it done" without a human re-reading the entry. See
+> `templates/DEBT.toml.md`.
+
 ---
 
 ## File Template
@@ -86,8 +93,15 @@ Enhancements discovered during execution. Not critical - address in future phase
 ## Workflow
 
 1. During APPLY, notice enhancement opportunity
-2. Log to `.paul/ISSUES.md` with ISS-NNN format
-3. Note in SUMMARY.md: "Logged ISS-003 for future consideration"
+2. Decide which store it belongs in:
+   - **Testable finish** (file lands, check re-runs, decision gets written) → `[[debt]]` row in `.paul/DEBT.toml`
+   - **No landing condition** ("add a spinner", "rename this") → this file, ISS-NNN
+3. Note the ID in SUMMARY.md: "Logged DEBT-003 / ISS-003 for future consideration"
 4. Continue with current plan
-5. Review ISSUES.md during phase planning
+5. Review both stores during phase planning
 6. Address issues in appropriate future phase
+
+**Choosing wrong is not harmless.** An item logged here has no check, so nothing will
+ever tell you it is still open — it depends on someone remembering to read this file.
+That is exactly the failure the debt store exists to remove, so when in doubt, write a
+check.

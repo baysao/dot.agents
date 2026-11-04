@@ -42,6 +42,14 @@ Also check `.paul/config.md` (if exists):
 - Store `audit_enabled` and `audit_completed` flags for routing
 </step>
 
+<step name="evaluate_debt">
+If `.paul/DEBT.toml` exists, run `python ~/.agents/paul-framework/scripts/debt.py --run-checks` and hold the result.
+
+- An **`overdue`** row outranks the routing table below: report the row id, its title, and the check that still fails, and make discharging it the single next action.
+- `scheduled` and `waiting` rows are **not** reported — only a passed date is news, or every session opens with false alarms.
+- A row the run reports `done` is discharged only when its `status` is set in the store; offer that, never do it silently.
+</step>
+
 <step name="calculate_progress">
 Determine overall progress:
 
@@ -74,10 +82,13 @@ Based on state (+ user context if provided), determine **ONE** next action:
 
 | Situation | Single Suggestion |
 |-----------|-------------------|
+| **An `overdue` debt row exists** | **Discharge it: [DEBT-NNN title] — its check still fails** |
 | No plan exists | `/paul:plan` |
 | Plan awaiting approval (audit enabled, not yet audited) | `/paul:audit [path]` |
 | Plan awaiting approval (audit complete or not enabled) | "Approve plan to proceed" |
 | Plan approved, not executed | `/paul:apply [path]` |
+| Applying, held (`loop.hold_until` in the future) | "Wait until [date]: [hold_reason]" |
+| Applying, hold elapsed | "Run the exit verification, then `/paul:unify [path]`" |
 | Applied, not unified | `/paul:unify [path]` |
 | Loop complete, more phases | `/paul:plan` (next phase) |
 | Milestone complete | "Create next milestone or ship" |
@@ -132,6 +143,7 @@ If context is at DEEP or CRITICAL bracket:
 <success_criteria>
 - [ ] Overall progress displayed visually
 - [ ] Current loop position shown
+- [ ] Debt store evaluated; overdue rows surfaced (or confirmed absent)
 - [ ] Exactly ONE next action suggested (not multiple)
 - [ ] User context considered if provided
 - [ ] Context advisory shown if needed

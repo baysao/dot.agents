@@ -37,6 +37,12 @@ Session context is primary source - extract:
 - Last activity
 - Session continuity notes
 
+**From the debt store:**
+- Run `python ~/.agents/paul-framework/scripts/debt.py --run-checks`
+- Anything you were about to write as a prose TODO belongs in `.paul/DEBT.toml` as a row with a check
+- An overdue row goes at the top of the handoff: it outranks whatever the session was doing
+- Cite row ids (`DEBT-NNN`) in the gap analysis instead of restating the problem
+
 **From conversation context:**
 - Files created/modified this session
 - Commands executed
@@ -193,6 +199,7 @@ Next session: /paul:resume → read handoff
 
 <success_criteria>
 - [ ] STATE.md read for current position
+- [ ] Debt store swept; gaps cite `DEBT-NNN` ids
 - [ ] Session context extracted (not just prompted)
 - [ ] User's inline input incorporated
 - [ ] Structured handoff generated
