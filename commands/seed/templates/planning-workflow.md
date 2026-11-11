@@ -9,7 +9,7 @@ seed_source: "https://chrisai.cv/skool"
 
 # {Project Name}
 
-> {One-line description of what this workflow does}
+> Building {this workflow} to {fix the broken/slow/missing step} — {measurable effect on the work it touches}.
 
 **Created:** {date}
 **Type:** Claude Code Workflow
@@ -20,7 +20,33 @@ seed_source: "https://chrisai.cv/skool"
 
 ## Problem Statement
 
-{What workflow pain or gap does this solve? Be specific about what's broken, slow, or missing.}
+{What workflow pain or gap does this solve? Be specific about what's broken, slow, or missing. Evidence beats opinion — how often does this hurt, and who hits it? Tag unvalidated claims inline as 🔶 **Assumption** until observed in real use.}
+
+### Who Hits This?
+{Which sessions, projects, or roles run into the gap?}
+
+### What's Broken Today?
+{The current manual steps, failure mode, or missing capability.}
+
+### Cost of the Pain
+{Time lost, errors introduced, or steps skipped — rough numbers are fine.}
+
+---
+
+## Success Metrics
+
+{How do we know the workflow is worth keeping?}
+
+### Primary Metric
+**{e.g., time per run of the task / error rate / adoption (runs per week)}**
+- **Current:** {manual baseline}
+- **Target:** {goal}
+- **Measured:** {how — timing a run, log count, usage over first N weeks}
+
+### Guardrail Metrics
+{What must not regress — existing flows the workflow touches.}
+
+- {e.g., existing commands still behave identically; no new required steps for users who don't opt in}
 
 ---
 

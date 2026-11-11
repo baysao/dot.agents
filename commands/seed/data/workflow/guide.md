@@ -1,8 +1,8 @@
 # Workflow — Conversation Guide
 
 ## Section 1: Problem Statement
-**Explore:** What workflow pain or gap does this solve? What's the current process, and where does it break down? Is this a new capability or improving an existing one?
-**Suggest:** Frame it as "before vs after" — what does the user do today vs what they'll do with this workflow. If it's replacing manual steps, list them.
+**Explore:** What workflow pain or gap does this solve? What's the current process, and where does it break down? Is this a new capability or improving an existing one? How often does this hurt, and what does it cost — time, errors, skipped steps?
+**Suggest:** Frame it as "before vs after" — what does the user do today vs what they'll do with this workflow. If it's replacing manual steps, list them. Get one rough number for the pain ("~10 min lost per run") and a success signal ("manual step gone, existing commands unchanged") — mark unverified claims as assumptions.
 **Depth:** required
 
 ## Section 2: Scope Definition

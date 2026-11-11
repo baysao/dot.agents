@@ -15,5 +15,6 @@
 - Edge Cases & Constraints
 
 ## Optional Sections
+- Success Metrics
 - Downstream Handoff
-- Tool Discovery
+- Skill/Tool Discovery

@@ -1,8 +1,8 @@
 # Client — Conversation Guide
 
 ## Section 1: Business Context
-**Explore:** Who's the client? What industry? Who's the target audience? What's the brand personality? Do they have an existing site?
-**Suggest:** Build the context from conversation: industry, audience demographics, competitive positioning. If they have an existing site, browse it for additional details.
+**Explore:** Who's the client? What industry? Who's the target audience? What's the brand personality? Do they have an existing site? Who exactly lands on the site and must be converted — what do they want, what stops them?
+**Suggest:** Build the context from conversation: industry, audience demographics, competitive positioning. Capture 1-2 audience personas (context, what they want, what stops them) — anything the client hasn't confirmed is an assumption until they sign off. If they have an existing site, browse it for additional details.
 **Depth:** required
 
 ## Section 2: Competitor Analysis
@@ -11,8 +11,8 @@
 **Depth:** required
 
 ## Section 3: Conversion Strategy
-**Explore:** What's the primary CTA? What's the funnel — visitor → lead → customer? What objections does the audience have? How does the site overcome them?
-**Suggest:** Every page needs a clear next step. For service businesses: contact form or calendar booking. For products: add to cart or free trial. Map the objection → response pairs.
+**Explore:** What's the primary CTA? What's the funnel — visitor → lead → customer? What objections does the audience have? How does the site overcome them? How will you measure whether the new site actually converted better — what's the primary metric, its baseline, and the target?
+**Suggest:** Every page needs a clear next step. For service businesses: contact form or calendar booking. For products: add to cart or free trial. Map the objection → response pairs. Capture the primary metric with baseline → target (e.g., booked calls/month) plus one guardrail (mobile load time, phone inquiries don't drop) — this becomes the launch scorecard.
 **Depth:** required
 
 ## Section 4: Content Needs

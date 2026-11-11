@@ -26,8 +26,8 @@
 **Depth:** required
 
 ## Section 6: Success Metrics
-**Explore:** Define metrics BEFORE execution, not after. What's the baseline? What's the target? How will you measure?
-**Suggest:** Pick 2-3 metrics max. For content: views, engagement rate, conversion to next step. For launches: signups, revenue, retention. Don't track everything — track what matters.
+**Explore:** Define metrics BEFORE execution, not after. What's the baseline? What's the target? How will you measure? Which single metric is the campaign optimized for — and what should NOT get worse while chasing it?
+**Suggest:** Pick 2-3 metrics max and designate ONE as primary. For content: views, engagement rate, conversion to next step. For launches: signups, revenue, retention. Add a guardrail ("unsubscribes stay under X") — chasing signups into burning the audience is a real failure mode. Don't track everything — track what matters.
 **Depth:** required
 
 ## Section 7: Skill Loadout

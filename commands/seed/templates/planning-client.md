@@ -9,7 +9,7 @@ seed_source: "https://chrisai.cv/skool"
 
 # {Client Name} — {Project Name}
 
-> {One-line description of what we're building for this client}
+> Building {a website/redesign} for {client} to {solve their problem} — {measurable outcome, e.g., more booked calls}.
 
 **Created:** {date}
 **Type:** Client Website
@@ -30,6 +30,15 @@ seed_source: "https://chrisai.cv/skool"
 - **Brand voice:** {formal, casual, authoritative, friendly}
 - **Brand colors:** {if known}
 - **Existing assets:** {logos, photos, testimonials, case studies}
+
+### Target Audience Personas
+
+{Who actually lands on this site and must be converted? Tag unvalidated audience claims inline as 🔶 **Assumption** until the client confirms.}
+
+| Persona | Context | What They Want | What Stops Them |
+|---------|---------|----------------|-----------------|
+| {Primary — e.g., local homeowner} | {role, device, how they found the client} | {the job they're hiring for} | {trust, price, urgency, confusion} |
+| {Secondary, if any} | {how they differ} | {their goal} | {their blocker} |
 
 ---
 
@@ -61,6 +70,27 @@ seed_source: "https://chrisai.cv/skool"
 | Objection | How We Address It |
 |-----------|------------------|
 | {e.g., "Too expensive"} | {e.g., ROI calculator, payment plans, guarantee} |
+
+---
+
+## Success Metrics
+
+{How do we know the site worked? Define BEFORE launch, capture the baseline from the current site if one exists.}
+
+### Primary Metric
+**{e.g., contact-form submissions / booked calls / quote requests}**
+- **Current:** {baseline from existing site, or "none — new site"}
+- **Target:** {e.g., X/month within 60 days of launch}
+- **Measured:** {tool — analytics, form log, call calendar}
+
+### Secondary Metrics
+- {e.g., organic search impressions: {current} → {target}}
+- {e.g., bounce rate on landing page: {current} → {target}}
+
+### Guardrail Metrics
+{What must NOT regress with the new site.}
+
+- {e.g., mobile page load < {X}s; phone-call inquiries don't drop}
 
 ---
 
@@ -108,6 +138,36 @@ seed_source: "https://chrisai.cv/skool"
 
 ### Client Review Checkpoints
 {When does the client see work? How do they provide feedback? What's the approval process?}
+
+---
+
+## Out of Scope
+
+{What this engagement does NOT include — prevents expectation creep with the client.}
+
+| Excluded | Why Not Now | Revisit When |
+|----------|-------------|--------------|
+| {e.g., ongoing SEO retainer} | {separate engagement, quote separately} | {after launch review} |
+| {e.g., e-commerce} | {not part of the agreed scope} | {client requests + new estimate} |
+
+---
+
+## Dependencies & Risks
+
+### Dependencies
+{Client-side and third-party items that block progress if late.}
+
+| Dependency | Type | Owner | Needed By |
+|-----------|------|-------|-----------|
+| {e.g., logo files, photos} | {client asset} | {client} | {before design} |
+| {e.g., domain registrar access} | {access} | {client} | {before launch} |
+
+### Risks & Mitigations
+
+| Risk | Likelihood | Impact | Mitigation |
+|------|-----------|--------|------------|
+| {e.g., content delivery delays} | {med} | {med} | {draft placeholder copy, deadline in timeline, escalation path} |
+| {e.g., approval round-trips} | {med} | {low} | {batched review checkpoints, written sign-off} |
 
 ---
 

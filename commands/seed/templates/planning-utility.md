@@ -9,7 +9,7 @@ seed_source: "https://chrisai.cv/skool"
 
 # {Tool Name}
 
-> {One sentence. If you need two, this might not be a utility.}
+> {One sentence pitch: fixes {problem} for {who}. If you need two, this might not be a utility.}
 
 **Created:** {date}
 **Type:** Utility Tool
@@ -21,7 +21,7 @@ seed_source: "https://chrisai.cv/skool"
 
 ## Problem Statement
 
-{What specific problem does this solve? One sentence. If you can't say it in one sentence, it might not be a utility tool.}
+{What specific problem does this solve? One sentence. If you can't say it in one sentence, it might not be a utility tool. Add one line of evidence — how often you hit it and what it costs you (rough is fine). If you can't evidence the pain, why build it?}
 
 ---
 

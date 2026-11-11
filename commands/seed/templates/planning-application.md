@@ -9,7 +9,7 @@ seed_source: "https://chrisai.cv/skool"
 
 # {Project Name}
 
-> {One-line description of what this application does}
+> Building {solution} for {audience} to {solve problem} — {measurable impact}.
 
 **Created:** {date}
 **Type:** Application
@@ -21,7 +21,51 @@ seed_source: "https://chrisai.cv/skool"
 
 ## Problem Statement
 
-{What does this solve? Who's it for (solo, team, public)? Why build vs buy?}
+{What does this solve, and why build vs buy? Structure the problem like a PRD — evidence beats opinion. Tag unvalidated claims inline as 🔶 **Assumption** (plausible, not yet verified).}
+
+### Who Has This Problem?
+{Primary audience — solo, team, or public? Who feels the pain today?}
+
+### What Is the Problem?
+{The specific pain — what's broken, slow, or missing today?}
+
+### Why Is It Painful?
+- **User impact:** {what users lose or waste}
+- **Business impact:** {cost, risk, or missed opportunity}
+
+### Evidence
+{Data, quotes, observations, support tickets, first-hand experience. If evidence is thin, say so — don't invent it.}
+
+| Source | Finding |
+|--------|---------|
+| {e.g., own workflow} | {e.g., ~30 min/day lost to manual X} |
+
+### Target Users
+
+| Persona | Context | Primary Goal | Key Pain Point |
+|---------|---------|--------------|----------------|
+| {Primary — e.g., solo operator} | {role, tech level} | {what they want to achieve} | {what blocks them today} |
+| {Secondary, if any} | {how they differ} | {their goal} | {their pain} |
+
+---
+
+## Success Metrics
+
+{Define BEFORE build. What is the ONE metric this must move? What else do we watch? What must NOT regress?}
+
+### Primary Metric
+**{metric name}** — {precise definition}
+- **Current:** {baseline or "none — new capability"}
+- **Target:** {goal}
+- **Measured:** {how and when — tool, cadence}
+
+### Secondary Metrics
+- {metric: current → target}
+
+### Guardrail Metrics
+{What should NOT get worse while chasing the primary metric.}
+
+- {e.g., page load time stays < X; existing workflow unaffected}
 
 ---
 
@@ -142,11 +186,40 @@ seed_source: "https://chrisai.cv/skool"
 - **Build:** {what gets built}
 - **Testable:** {what can be verified}
 - **Outcome:** {user-facing result}
+- **Accept:** {acceptance criteria — the check that says this phase is done}
 
 ### Phase 2: {Name}
 - **Build:** {what gets built}
 - **Testable:** {what can be verified}
 - **Outcome:** {user-facing result}
+- **Accept:** {acceptance criteria}
+
+---
+
+## Out of Scope
+
+{What we are NOT building — and why. Prevents scope creep and sets expectations.}
+
+| Excluded | Why Not Now | Revisit When |
+|----------|-------------|--------------|
+| {feature/capability} | {rationale — complexity, dependencies, unproven need} | {trigger or phase} |
+
+---
+
+## Dependencies & Risks
+
+### Dependencies
+{What must exist or arrive before work starts — technical, external, or human.}
+
+| Dependency | Type | Owner | Needed By |
+|-----------|------|-------|-----------|
+| {e.g., API credentials} | {external} | {who provides it} | {phase} |
+
+### Risks & Mitigations
+
+| Risk | Likelihood | Impact | Mitigation |
+|------|-----------|--------|------------|
+| {what could go wrong} | {low/med/high} | {low/med/high} | {concrete response, not "monitor"} |
 
 ---
 

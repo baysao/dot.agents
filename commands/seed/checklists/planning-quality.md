@@ -5,7 +5,9 @@ Quality gate for `/seed graduate` and `/seed launch`. Determines if a PLANNING.m
 ## Universal Checks (All Types)
 
 - [ ] **Type metadata** present in header — any type in `ls data/` (Application, Workflow, Client, Utility, Campaign, or a custom type)
-- [ ] **Problem statement** is specific — names the problem, the audience, and why it matters
+- [ ] **Problem statement** is specific — names the problem, the audience, and why it matters, with at least a line of evidence or first-hand rationale (PRD rule: evidence beats opinion; thin evidence is stated as thin, never invented)
+- [ ] **Success metrics** defined or explicitly N/A — a primary metric (what success is), a target, and how it's measured; guardrails where regressions matter
+- [ ] **Out of scope** stated or explicitly N/A — what is NOT being built and why
 - [ ] **Design decisions** documented — at least 1 resolved decision with rationale
 - [ ] **Open questions** section exists (even if "None")
 - [ ] **Next actions** defined — at least 1 concrete next step
@@ -39,7 +41,7 @@ A custom type with no `config.md` cannot pass this gate — there is no required
 These are only required if the user intends to run `/seed launch` (graduate + PAUL init). Skip for `/seed graduate` alone.
 
 - [ ] **Phase breakdown** exists with independently shippable milestones
-- [ ] **Each phase** has build, testable, and outcome defined
+- [ ] **Each phase** has build, testable, and outcome defined — acceptance criteria where the done-line isn't obvious
 - [ ] **Tech stack decisions** are resolved — no critical "TBD" items
 - [ ] **Enough detail** that PAUL can derive milestones, phases, and structure without re-asking questions
 

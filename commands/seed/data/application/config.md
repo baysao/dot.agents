@@ -17,5 +17,8 @@
 - Phase Breakdown
 
 ## Optional Sections
+- Success Metrics
+- Out of Scope
+- Dependencies & Risks
 - Integration Points
 - Skill Loadout

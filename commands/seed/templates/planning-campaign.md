@@ -9,7 +9,7 @@ seed_source: "https://chrisai.cv/skool"
 
 # {Campaign Name}
 
-> {One-line description of the campaign objective}
+> Running {campaign} to {objective} — {measurable result by {date}}.
 
 **Created:** {date}
 **Type:** Campaign
@@ -77,7 +77,12 @@ seed_source: "https://chrisai.cv/skool"
 
 ## Success Metrics
 
-{Define BEFORE execution.}
+{Define BEFORE execution. Mark the ONE primary metric — the one this campaign is optimized for; the rest are secondary.}
+
+### Primary Metric
+**{e.g., Skool signups}** — {precise definition} · Baseline {current} → Target {target} · Measured via {tool}, assessed {when}
+
+### Full Metric Table
 
 | Metric | Baseline | Target | Measurement Tool |
 |--------|----------|--------|-----------------|
@@ -85,8 +90,32 @@ seed_source: "https://chrisai.cv/skool"
 | {e.g., New subscribers} | {current count} | {target} | {YouTube Analytics} |
 | {e.g., Skool signups} | {current} | {target} | {Skool admin} |
 
+### Guardrail Metrics
+{What should NOT get worse while chasing the primary metric.}
+
+- {e.g., unsubscribes stay under {X}; existing series' view averages don't dip}
+
 ### Post-Campaign Review Date
 {When to assess results: ____}
+
+---
+
+## Out of Scope
+
+{What this campaign deliberately does NOT include — content formats, channels, or promises left out.}
+
+| Excluded | Why Not Now | Revisit When |
+|----------|-------------|--------------|
+| {e.g., paid ads} | {validate organic performance first} | {if primary metric hits {threshold}} |
+
+---
+
+## Risks & Mitigations
+
+| Risk | Likelihood | Impact | Mitigation |
+|------|-----------|--------|------------|
+| {e.g., production slip on main video} | {med} | {high} | {buffer day in timeline, teaser can ship standalone} |
+| {e.g., low early traction} | {med} | {med} | {predefined promotion window, cross-post plan} |
 
 ---
 

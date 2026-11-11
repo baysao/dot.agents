@@ -1,8 +1,8 @@
 # Application — Conversation Guide
 
 ## Section 1: Problem Statement
-**Explore:** What does this solve? Who's it for — just you, a team, the public? Why build it instead of buying something off the shelf? What's the pain point that makes this worth the effort?
-**Suggest:** If the user is vague, try: "What's the one thing a user would do in their first 5 minutes?" If they're solving their own problem, that's valid — note it as "dogfooding" and move on.
+**Explore:** What does this solve? Who's it for — just you, a team, the public? Why build it instead of buying something off the shelf? What's the pain point that makes this worth the effort? How do you know it's real — data, repeated experience, complaints? How will you know the app succeeded — what number moves?
+**Suggest:** If the user is vague, try: "What's the one thing a user would do in their first 5 minutes?" If they're solving their own problem, that's valid — note it as "dogfooding" and move on. Push for at least one line of evidence (even "I lose ~30 min/day to this") — mark anything unverified as an assumption. Ask for a primary success metric with a target ("activation within 5 minutes: 60% in month 1") and one guardrail ("page load stays < 2s"). Capture 1-2 target personas: who they are, what they want, what blocks them.
 **Depth:** required
 
 ## Section 2: Tech Stack
@@ -41,8 +41,8 @@
 **Depth:** optional
 
 ## Section 9: Phase Breakdown
-**Explore:** What's the minimum slice that proves the concept? What comes after that? Can you ship something useful in 3-5 phases? What's the "it works" moment for each phase?
-**Suggest:** Phase 1 should be the smallest thing that delivers value. Each phase should be independently testable. If they're planning more than 7 phases, the scope might be too big.
+**Explore:** What's the minimum slice that proves the concept? What comes after that? Can you ship something useful in 3-5 phases? What's the "it works" moment for each phase? What's explicitly NOT being built, and what could block or derail the plan?
+**Suggest:** Phase 1 should be the smallest thing that delivers value. Each phase should be independently testable — capture an acceptance check per phase ("done when X works against Y"). List out-of-scope items with a reason and a revisit trigger; pair each real risk with a concrete mitigation, not "monitor it". If they're planning more than 7 phases, the scope might be too big.
 **Depth:** required
 
 ## Section 10: Skill Loadout

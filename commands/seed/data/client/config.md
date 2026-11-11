@@ -15,4 +15,7 @@
 - Timeline & Deliverables
 
 ## Optional Sections
+- Success Metrics
+- Out of Scope
+- Dependencies & Risks
 - Skill Loadout

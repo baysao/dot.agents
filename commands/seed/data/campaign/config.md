@@ -15,4 +15,6 @@
 - Success Metrics
 
 ## Optional Sections
+- Out of Scope
+- Risks & Mitigations
 - Skill Loadout
