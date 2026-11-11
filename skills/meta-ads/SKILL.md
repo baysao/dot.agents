@@ -1,21 +1,17 @@
 ---
 name: meta-ads
 description: >-
-  End-to-end playbook for planning, building, launching, optimizing, and scaling
-  paid ads on Meta (Facebook and Instagram). Use when the user mentions Meta Ads,
-  Facebook Ads, Instagram Ads, FB/IG ads, Advantage+, Advantage+ Shopping, Ads
-  Manager, Business Manager, the Meta/Facebook Pixel or Dataset, Conversions API
-  / CAPI, server-side tracking, custom audiences, lookalike audiences,
-  retargeting/remarketing, campaign objectives, ad sets, ad copy or creative,
-  hooks, video ads, boosted posts, ad funnels and offers, interest/audience
-  targeting, CPA/CPC/CPM/ROAS/relevance, ad fatigue or frequency, scaling ad
-  spend, or troubleshooting underperforming campaigns (zero conversions, high
-  CPA, ads not converting). Walks the user through the Facebook Flight Plan:
-  foundation -> tracking -> funnel/offer -> audiences -> objective -> ad set ->
-  creative/copy -> launch -> report -> optimize -> scale -> troubleshoot.
-  Surfaces named frameworks (Flight Plan, UPSYD, FANS, BCOP, A.P.B., Michigan
-  Method, Five-Tier Scaling, 7 Power Questions, EDIE, STEPPS), benchmark tables,
-  and copy-paste templates and checklists.
+  Meta ads playbook. Plan, build, launch, fix, scale FB/IG paid ads. Use when
+  user say Meta Ads, Facebook Ads, Instagram Ads, Advantage+, Ads Manager,
+  Business Manager, Pixel, Dataset, CAPI, server-side tracking, custom or
+  lookalike audience, retargeting, campaign objective, ad set, ad copy, creative,
+  hook, video ad, boosted post, funnel, offer, interest targeting, CPA, CPC, CPM,
+  ROAS, frequency, ad fatigue, scale spend, or campaign dead (zero conversion,
+  high CPA, high CTR low conversion, policy warning). Flow: Flight Plan =
+  foundation, tracking, funnel/offer, audience, objective, ad set, creative,
+  launch, report, optimize, scale, troubleshoot. Got benchmark tables, named
+  frameworks, paste-ready templates and checklists. Not for Google, TikTok,
+  LinkedIn ads, organic social, or pure page CRO.
 ---
 
 # Meta Ads

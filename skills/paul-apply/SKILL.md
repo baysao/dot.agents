@@ -1,6 +1,6 @@
 ---
 name: paul-apply
-description: Execute an approved PAUL PLAN with checkpoint handling. Use after plan approval to run tasks sequentially.
+description: Execute an approved PAUL PLAN with checkpoint handling. Use after plan approval to run tasks sequentially. Also use the moment you notice a defect, an out-of-boundary module, or a deferral you are about to skip — "record it in the SUMMARY and continue", "note it and move on", "not mine to fix", a test that pins wrong behaviour, or any deferral being parked in prose instead of a debt row. That is the trigger, not only "the plan is approved".
 metadata:
   opencode/slash: "true"
 ---
@@ -61,7 +61,7 @@ origin = "01-02 task 3"          # phase-plan and task
 owner = "agent"                  # agent | owner | phase-NN | vendor
 due = "2026-11-05T09:00:00Z"     # omit if event-gated
 trigger = "event:probe-close"    # or phase:NN / plan-count:N — at least one of due/trigger/blocking
-check = { type = "command", command = "...", expect = "..." }
+check = { type = "command", run = "...", expect = "..." }
 ```
 
 `debt.py` rejects a row that has no `due`, `trigger`, or `blocking` — that is the point. The check must be able to fail; a check that cannot fail reports a deferred item as done.

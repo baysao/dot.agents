@@ -1,0 +1,4 @@
+interface:
+  display_name: "Master File và trang bán hàng"
+  short_description: "Shopify Binh Le: master file và trang bán hàng"
+  default_prompt: "Dùng $bl-shopify-product-page. Hãy dùng dữ kiện sản phẩm anh gửi để lập Master File và viết trang bán hàng, đánh dấu claim chưa có bằng chứng."

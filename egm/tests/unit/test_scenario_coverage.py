@@ -50,3 +50,21 @@ def test_all_skills_have_co_located_test_scenarios(
       assert "turns" in sc and sc["turns"], (
           f"Scenario in {scenarios_file} missing non-empty 'turns'"
       )
+
+    # A required_pattern with no structural anchor is a vocabulary test: it
+    # passes on any output using one of its words, including "No drift
+    # detected." Even "(drift|matches|report)" - the pattern this suite shipped
+    # with - let a clean result satisfy a drift assertion. Patterns must anchor
+    # on structure the report format mandates: a heading (^ ... $) or a
+    # file:line citation (\d).
+    for sc in scenarios:
+      for turn in sc["turns"]:
+        for assertion in turn.get("assertions", []):
+          if assertion.get("type") != "required_pattern":
+            continue
+          pattern = assertion.get("pattern", "")
+          assert ("^" in pattern or "$" in pattern or "\\d" in pattern), (
+              f"{scenarios_file}: required_pattern {pattern!r} carries no "
+              "structural anchor (^, $, or \\d), so a no-finding answer also "
+              "satisfies it; assert on the report's structure instead."
+          )

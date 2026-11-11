@@ -27,6 +27,35 @@ and wait for the report. If your harness cannot nest subagents,
 use direct dispatch instead of the synthesizer. See `~/.agents/egm/docs/harnesses.md`.
 If your harness has no subagent tool, stop and tell the user: a review in the same context is not a Goldfish review.
 
+### ZCode
+
+ZCode has no pre-registered `egm-*` subagent types — map the personas to the
+`Agent` tool like this:
+
+1.  **Reviewer spawn**: `subagent_type: "general-purpose"`. Begin the prompt
+    with: "Read the persona file at `~/.agents/egm/agents/<file>.md` first and
+    adopt it fully." then pass the reviewer prompt verbatim. End with:
+    "Report only your findings — do not modify any files."
+2.  **Parallel batch (CRITICAL)**: launch ALL reviewer Agent calls in ONE
+    message — multiple tool uses in a single response run concurrently in
+    ZCode. Spawning reviewers one per turn reintroduces the sequential bias
+    the Goldfish model exists to prevent.
+3.  **Concurrency waves**: if parallel spawns are rejected (e.g., "user
+    concurrency limit exceeded"), the platform caps concurrent subagents.
+    Partition the batch into waves at that cap — spawn wave 1, collect its
+    reports, then spawn wave 2 — keeping lenses independent. Never merge
+    lenses into one agent to fit a wave.
+4.  **Synthesis**: direct dispatch at the root. ZCode general-purpose agents
+    can technically nest (they have the Agent tool), but a nested synthesizer
+    hides per-reviewer failures — spawn every reviewer yourself in one
+    parallel batch and synthesize inline.
+5.  **Failure tolerance**: if one reviewer errors or returns nothing, note the
+    gap in the synthesis and retry that lens once; never block the batch on a
+    single reviewer.
+6.  **Follow-ups**: to re-ask or deepen one reviewer's findings, use
+    `SendMessage` with that agent's ID (persona context stays intact) instead
+    of spawning a fresh agent.
+
 ## Execution Constraints (CRITICAL)
 
 1.  **Artifact-First Delivery (MANDATORY)**: You are **STRICTLY FORBIDDEN** from
@@ -77,6 +106,14 @@ If your harness has no subagent tool, stop and tell the user: a review in the sa
 *   **`Step` (Optional)**: Specific pipeline preset or stage to run (e.g.
     `interactive`, `uninterrupted`, `feature_spec`, `implementation`, or an
     individual stage `5`, `6`, `7`, `8`, `9`). If omitted, the user is prompted.
+
+When the document specifies a rendered surface (a page, marketing site,
+portfolio, product page, or an app screen such as a dashboard or settings view),
+pass `~/.agents/egm/resources/document_standards/visual-design-standard.md` as the
+Target Standard for `egm-design` in Stages 7 and 9, alongside the
+`feature-spec-standard`. That standard asks a document only what a document can
+answer — the idea, the argument, the imagery that exists, the states, the gate —
+and leaves the rendered judgement to the page skill's own critique rubric.
 
 ## Workflow
 

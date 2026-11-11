@@ -1,0 +1,4 @@
+interface:
+  display_name: "Thiết kế test quảng cáo"
+  short_description: "Shopify Binh Le: thiết kế test quảng cáo"
+  default_prompt: "Dùng $bl-shopify-ad-test. Hãy lập kế hoạch test quảng cáo dạng nháp từ kinh tế đơn và creative của anh, nêu rõ giới hạn lỗ."

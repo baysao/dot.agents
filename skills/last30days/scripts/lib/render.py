@@ -30,7 +30,7 @@ from . import (
 def _skill_version() -> str:
     """Read plugin version from .claude-plugin/plugin.json, falling back to SKILL.md frontmatter.
 
-    Per-harness skill install dirs (`~/.agents/skills`, `~/.codex/skills`, `~/.agents/skills`,
+    Per-harness skill install dirs (`~/.agents/skills`, `~/.agents/skills`, `~/.agents/skills`,
     Hermes, etc.) do not always carry `.claude-plugin/plugin.json` — that file ships with
     plugin-cache installs but not with per-harness skill installs. SKILL.md frontmatter is
     the fallback that keeps the badge from emitting v? on those installs. Returns "?" only

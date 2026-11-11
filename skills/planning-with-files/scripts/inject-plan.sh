@@ -115,7 +115,7 @@ if [ -n "${PWF_PLAN_ROOT:-}" ]; then
 fi
 
 # --- Session-attachment guard (issue #212, parity with the Codex adapter). ---
-# Enforcement matches .codex/hooks/user-prompt-submit.sh: when the plan root
+# Enforcement matches .agents/hooks/user-prompt-submit.sh: when the plan root
 # carries a .planning/sessions/ dir, only sessions holding an .attached
 # sentinel receive plan context. Absence of the sessions dir is the legacy
 # single-session case and stays byte-identical.

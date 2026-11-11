@@ -1,0 +1,4 @@
+interface:
+  display_name: "Đọc số liệu, dừng và scale"
+  short_description: "Shopify Binh Le: đọc số liệu, dừng và scale"
+  default_prompt: "Dùng $bl-shopify-performance. Hãy phân tích báo cáo anh gửi và đề xuất dừng, sửa, tiếp tục hay scale, kèm số liệu và mức chắc chắn."

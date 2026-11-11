@@ -1,0 +1,4 @@
+interface:
+  display_name: "Tính giá và biên lợi nhuận"
+  short_description: "Shopify Binh Le: tính giá và biên lợi nhuận"
+  default_prompt: "Dùng $bl-shopify-unit-economics. Hãy tính kinh tế đơn hàng cho giá 49 USD, landed 13, phí 3, dự phòng hoàn 2, mục tiêu đóng góp 20%."

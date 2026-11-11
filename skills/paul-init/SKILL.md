@@ -16,6 +16,7 @@ Use it when starting a new project with PAUL or adding PAUL to an existing codeb
 No input required. The skill drives the conversation:
 
 - **Works best with:** zero input — just invoke it in the target directory
+- **Also useful:** a design document in the project root (e.g., `wechain.md`, written by a SEED/EGM pipeline) — if present, treat it as the project brief and skip the redundant questions (core value, what you're building) it already answers; derive PROJECT.md and ROADMAP.md phases from it
 - **Also useful:** any known project context up front (skips redundant questions)
 
 Example: `Use paul-init: set up PAUL here`

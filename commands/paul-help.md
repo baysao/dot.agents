@@ -52,7 +52,7 @@ Every unit of work follows this cycle:
 | Pre-Planning | discuss, assumptions, discover, consider-issues |
 | Research | research, research-phase |
 | Specialized | flows, config, map-codebase |
-| Quality | verify, plan-fix, audit |
+| Quality | verify, plan-fix, audit, security |
 
 ---
 
@@ -381,6 +381,19 @@ Plan fixes for UAT issues from verify.
 - Smaller scope than full phase plan
 
 Usage: `/paul:plan-fix`
+
+---
+
+### `/paul:security [phase|plan|--full]`
+Run `security-audit` against a plan's diff or the whole tree and schedule findings as debt.
+
+- Guidance mode by default for one plan's trust surface; `--full` or a shipping phase runs the skill's six phases
+- Scope is the diff since the last phase commit unless the trigger is a release
+- Confirmed critical/high → `blocking = "<phase>-exit"` debt row whose check runs the regression test; `needs_validation` → `kind = "reopen"`, no severity
+- Validators need POSIX; on Windows a run is `incomplete` and writes no `confirmed` rows
+
+Usage: `/paul:security`
+Usage: `/paul:security --full`
 
 ---
 

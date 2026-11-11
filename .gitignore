@@ -1,0 +1,15 @@
+# secrets — live API tokens, never commit
+mcp.json
+
+# machine-local junk
+__pycache__/
+.DS_Store
+*.bak
+
+# nested repos with their own git history (submodule later if needed)
+/aris_repo/
+/stellar-dev-skill/
+/ux-ui-agent-skills/
+
+# one-off temp extraction duplicate of stellar-dev-skill
+/stellar-dev-skill-40037b11c6c4f9f693d6c131ac9598d690b1c039/

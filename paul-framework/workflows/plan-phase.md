@@ -111,7 +111,15 @@ Wait for response. Store as `plan_track`.
    - Name it in the plan's out-of-scope section with the reason it still waits.
 
    **Silent omission is a plan defect.** The reason this step exists is that a plan written the day after a deferral is exactly the moment a deferral is cheapest to honour — and exactly the moment it is easiest to forget, because nothing in the phase's own scope mentions it. Discharging rows during planning also keeps the `blocking` gate from failing at the end of the phase, when the only options are delay or an exception.
-4. Read source files relevant to this phase's work
+4. Read source files relevant to this phase's work. **When `.paul/config.md` enables
+   xerj** (reference: `@~/.agents/paul-framework/references/xerj-integration.md`),
+   locate those files by search before reading them:
+   - Code question → `xerj search "<plain words>" --prefix {index_prefix}` (via
+     `binary_path` when `xerj` is not on PATH)
+   - Known symbol → `xerj def "<symbol>" --prefix {index_prefix}`
+   - Hub question (public source/standard, not this repo) → `xerj ask "<question>"`
+   Cite what you rely on as `path:line` from the printed passage; if a search prints a
+   stale-index hint, run the exact reindex command it prints before trusting anything.
 5. Do NOT reflexively chain all prior summaries — instead only load what's genuinely needed for THIS plan, because unnecessary context loading wastes tokens and dilutes focus
 </step>
 
@@ -301,6 +309,13 @@ Wait for user response if issues found.
 4. If config missing or section missing: `audit_enabled = false`
 
 This flag determines whether the post-plan routing suggests audit before APPLY.
+
+**Also read `security_audit:` for `enabled` and `default_profile`.** When enabled and the
+plan touches a trust surface (auth, authorization, input parsing, a new endpoint, a file
+path, a subprocess, a third-party dependency), name `/paul:security` as a plan task in
+guidance mode. Do not schedule a full audit here: a per-plan full audit costs more than
+the change and is the fastest way to make the gate ignored. A phase that ships names
+`--full` at its exit instead, where `transition-phase`'s `debt_gate` already runs.
 </step>
 
 <step name="update_state" priority="required">

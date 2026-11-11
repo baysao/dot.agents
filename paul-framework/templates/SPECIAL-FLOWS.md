@@ -47,6 +47,22 @@ During UNIFY, confirm:
 - [ ] Required skills were invoked for matching work types
 - [ ] Gaps documented in STATE.md Deviations section
 - [ ] Patterns updated if intentional deviation is now standard
+- [ ] If security rows exist: `python ~/.agents/paul-framework/scripts/debt.py --run-checks --gate phase-NN-exit` passes, or the unpaid row is named
+
+### Security Audit (optional)
+
+Declare this row when the project has a trust boundary worth reviewing. Guidance mode
+is cheap and runs anywhere; a full audit's JSON cannot be validated on Windows, so the
+row is `optional` — an unvalidatable run must not gate a phase.
+
+```markdown
+| Work Type | Skill/Command | Priority | When Required | Notes |
+|-----------|---------------|----------|---------------|-------|
+| task touching auth, input parsing, an endpoint, a path, or a dependency | /paul-security | optional | Before the task is marked done | Guidance mode; confirmed critical/high becomes `blocking = "phase-NN-exit"` |
+```
+
+Set `security_audit.enabled: true` in `.paul/config.md`, and pick a `default_profile`
+(`quick` for a diff, `standard` for a shipping phase, `deep` for a release).
 
 ### Skill Audit Template
 

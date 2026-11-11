@@ -49,7 +49,7 @@ REQUIRED_SHARED = (
 ) + tuple(
     f"resources/document_standards/{name}-standard.md" for name in (
         "feature-spec", "heilmeier", "implementation-readiness",
-        "re-implementation", "zoom-out",
+        "re-implementation", "visual-design", "zoom-out",
     )
 )
 

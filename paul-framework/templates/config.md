@@ -66,6 +66,51 @@ enterprise_plan_audit:
 - No external dependencies (runs within Claude Code session)
 - Best suited for commercial, regulated, or enterprise-grade projects
 
+### Security Audit
+
+Source-first vulnerability review, scoped to the diff by default.
+
+```yaml
+security_audit:
+  enabled: false
+  default_profile: quick  # quick | standard | deep
+```
+
+**When enabled:**
+- A plan touching auth, input parsing, a new endpoint, a path, or a dependency names a guidance-mode review as a task
+- `/paul:security` runs a full audit when a phase ships or a milestone closes
+- Confirmed critical/high findings become `blocking = "phase-NN-exit"` debt rows, so the existing phase-exit gate refuses the close until they are fixed
+- `needs_validation` findings become `kind = "reopen"` rows with no severity
+
+**Requirements:**
+- `~/.agents/skills/security-audit/SKILL.md` installed
+- POSIX (Linux/macOS/WSL) to validate `findings.json` and `coverage-ledger.json`; on Windows the validators cannot read their input and a run is marked `incomplete`
+
+### XERJ Discovery & Search
+
+Zero-config code search, definitions, and passage-level citations for planning. The prefix is **asked for at enable time and stored** — it is the only thing that ties searches to this project's index.
+
+```yaml
+xerj:
+  enabled: false
+  index_prefix: [asked-at-enable]  # e.g. akka-pricehub — never defaulted
+  index_root: "."                  # folder passed to autoindex (`.` = repo root)
+  index_cwd: "[dir autoindex runs from]"  # absolute; makes index_root replayable
+  binary_path: ""                  # only needed when `xerj` is not on PATH
+```
+
+**When enabled:**
+- `/paul:map` indexes the tree once (`cd <index_cwd> && xerj autoindex --prefix <prefix> <index_root>`), answers mapping questions from searches before spawning Explore agents
+- **Every write to source re-indexes before the step reports success** — `apply-phase` after `execute_tasks`, `debug`'s `fix_and_verify`, and `verify-work`'s `log`; `.paul/`-only writes are exempt
+- Codebase research (`/paul:research --codebase`) tries the index before spawning
+- `load_context` locates phase files by `xerj search`/`xerj def --prefix <prefix>` instead of reflexively chaining summaries
+- Feedback auto-submits via `xerj feedback --submit` — set `XERJ_DISABLE_FEEDBACK=true` to opt out
+
+**Requirements:**
+- `xerj` CLI or a running local node (default `http://localhost:9200`)
+- `xerj autoindex --prefix <prefix> <index_root>` run once; incremental after
+- Every query repeats `--prefix <prefix>`; omitting it searches the shared default `ax` and misses this project
+
 ### Future Integrations
 
 Reserved for future use:
@@ -132,6 +177,39 @@ sonarqube:
 enterprise_plan_audit:
   enabled: false
 ```
+
+### Security Audit
+
+```yaml
+security_audit:
+  enabled: true
+  default_profile: quick
+```
+
+### XERJ Discovery & Search
+
+Zero-config code search, definitions, and passage-level citations for planning. The prefix is **asked for at enable time and stored** — it is the only thing that ties searches to this project's index.
+
+```yaml
+xerj:
+  enabled: false
+  index_prefix: [asked-at-enable]  # e.g. akka-pricehub — never defaulted
+  index_root: "."                  # folder passed to autoindex (`.` = repo root)
+  index_cwd: "[dir autoindex runs from]"  # absolute; makes index_root replayable
+  binary_path: ""                  # only needed when `xerj` is not on PATH
+```
+
+**When enabled:**
+- `/paul:map` indexes the tree once (`cd <index_cwd> && xerj autoindex --prefix <prefix> <index_root>`), answers mapping questions from searches before spawning Explore agents
+- **Every write to source re-indexes before the step reports success** — `apply-phase` after `execute_tasks`, `debug`'s `fix_and_verify`, and `verify-work`'s `log`; `.paul/`-only writes are exempt
+- Codebase research (`/paul:research --codebase`) tries the index before spawning
+- `load_context` locates phase files by `xerj search`/`xerj def --prefix <prefix>` instead of reflexively chaining summaries
+- Feedback auto-submits via `xerj feedback --submit` — set `XERJ_DISABLE_FEEDBACK=true` to opt out
+
+**Requirements:**
+- `xerj` CLI or a running local node (default `http://localhost:9200`)
+- `xerj autoindex --prefix <prefix> <index_root>` run once; incremental after
+- Every query repeats `--prefix <prefix>`; omitting it searches the shared default `ax` and misses this project
 
 ### Future Integrations
 

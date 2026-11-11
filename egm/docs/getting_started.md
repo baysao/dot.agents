@@ -88,7 +88,7 @@ The "core" workflow looks like:
 To ensure that your design specifications and active codebase remain
 synchronized over time, EGM provides a drift detection skill:
 
-*   **`/egm-drift-report`**: Scan your design directory and referenced code for
+*   **`Use `egm-drift-report``**: Scan your design directory and referenced code for
     drift. Any detected divergence should be reconciled. Either update the doc,
     or the code. Human picks which.
 

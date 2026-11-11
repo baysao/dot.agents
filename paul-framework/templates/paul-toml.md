@@ -1,8 +1,8 @@
 # paul.toml Template
 
-Template for `.paul/paul.toml` — machine-readable project manifest for BASE-v2 graph ingestion.
+Template for `.paul/paul.toml` — machine-readable project manifest.
 
-**Purpose:** Provides a standardized TOML signal file that BASE-v2's extraction layer scans, parses, and ingests into the knowledge graph as `ops:Project` entities. Replaces paul.json (deprecated v1.4).
+**Purpose:** Provides a standardized TOML signal file describing this project's identity, milestone/phase position, loop state, and lifetime stats. Replaces paul.json (deprecated v1.4).
 
 ---
 
@@ -42,6 +42,10 @@ position = "IDLE"
 # plan = "02-04"
 # plan_path = "phases/02-api-layer/02-04-PLAN.md"
 # When IDLE, omit plan and plan_path entirely.
+# When the plan is waiting on a calendar event, add:
+# hold_until = "2026-11-05T09:00:00Z"
+# hold_reason = "ICE_EU needs SESSIONS=3 windows; earliest close is the EU morning session"
+# Clear both keys at unify. A hold whose date has passed is stale, not satisfied.
 
 # ─── Satellite ───────────────────────────────────────────────
 [satellite]
@@ -64,13 +68,13 @@ last_activity = "{ISO 8601}"
 | `version` | string | Yes | Current milestone version (semver) | Format: `X.Y.Z` |
 | `status` | string | Yes | Project-level status | Enum: `active`, `paused`, `complete`, `blocked` |
 | `path` | string | Yes | Workspace-relative path to project root | Forward slashes, no leading `/` |
-| `tags` | string[] | Yes | Domain association tags | Creates `hasDomain` edges in BASE graph. Empty array `[]` is valid. |
+| `tags` | string[] | Yes | Free-form project labels | Empty array `[]` is valid. |
 | `paul.version` | string | Yes | PAUL framework version that last touched this file | Semver of the installed PAUL framework |
 | `paul.source` | string | Yes | Canonical framework origin URL | Always `"https://chrisai.cv/skool"` |
 | `milestone.name` | string | Yes | Current milestone name | e.g., `"v0.2 API Layer"` |
 | `milestone.version` | string | Yes | Milestone version tag | Semver |
 | `milestone.status` | string | Yes | Milestone progress | Enum: `not_started`, `in_progress`, `complete` |
-| `milestone.phases` | integer | Yes | Total phases in this milestone | Used by BASE for completion percentage |
+| `milestone.phases` | integer | Yes | Total phases in this milestone | Used for completion percentage |
 | `phase.number` | integer | Yes | Current phase number | 0 = no phase yet |
 | `phase.name` | string | Yes | Current phase name | `"None"` if no phase |
 | `phase.status` | string | Yes | Phase progress | Enum: `not_started`, `planning`, `in_progress`, `complete` |
@@ -78,10 +82,12 @@ last_activity = "{ISO 8601}"
 | `loop.position` | string | Yes | Current loop state | Enum: `IDLE`, `PLAN`, `APPLY`, `UNIFY` |
 | `loop.plan` | string | Conditional | Active plan ID | Present only when position ≠ IDLE. e.g., `"02-04"` |
 | `loop.plan_path` | string | Conditional | Relative path to active PLAN.md | Present only when position ≠ IDLE |
-| `satellite.groom` | boolean | Yes | Include in BASE groom health checks | Default: `true` |
+| `loop.hold_until` | string | Conditional | ISO 8601 timestamp at which the active plan can be re-checked | Present only when the plan is APPLYING but cannot progress until a calendar event. Cleared at unify. |
+| `loop.hold_reason` | string | Conditional | One line: what is being waited on, and why the plan cannot close yet | Required whenever `hold_until` is present |
+| `satellite.groom` | boolean | Yes | Reserved for consumer-side health checks | Default: `true` |
 | `stats.total_plans` | integer | Yes | Lifetime plans completed across all milestones | Increment-only counter |
 | `stats.total_phases` | integer | Yes | Lifetime phases completed across all milestones | Increment-only counter |
-| `stats.last_activity` | string | Yes | ISO 8601 timestamp of last PAUL action | PAUL-owned (distinct from BASE extraction timestamp) |
+| `stats.last_activity` | string | Yes | ISO 8601 timestamp of last PAUL action | PAUL-owned |
 
 ---
 
@@ -92,7 +98,7 @@ last_activity = "{ISO 8601}"
 | `init-project` | All fields (initial creation) |
 | `plan-phase` | `loop.position` → `"PLAN"`, `loop.plan`, `loop.plan_path`, `stats.last_activity` |
 | `apply-phase` | `loop.position` → `"APPLY"`, `stats.last_activity` |
-| `unify-phase` | `loop.position` → `"IDLE"` (omit `plan`/`plan_path`), `phase.plans_completed`++, `stats.total_plans`++, `stats.last_activity` |
+| `unify-phase` | `loop.position` → `"IDLE"` (omit `plan`/`plan_path`/`hold_until`/`hold_reason`), `phase.plans_completed`++, `stats.total_plans`++, `stats.last_activity` |
 | `transition-phase` | `phase.*` → next phase values, `stats.total_phases`++, `stats.last_activity` |
 | `create-milestone` | `milestone.*`, `version`, reset `phase.*`, reset `loop` to IDLE, `stats.last_activity` |
 | `complete-milestone` | `milestone.status` → `"complete"`, `stats.last_activity` |
@@ -189,14 +195,14 @@ last_activity = "2026-06-03T14:30:00-05:00"
 
 ## Design Notes
 
-- **Machine-readable only.** paul.toml is for BASE-v2 graph ingestion, not humans. Humans read STATE.md.
+- **Machine-readable only.** paul.toml is a manifest, not a document. Humans read STATE.md.
 - **Always tooling-generated.** Created by init, synced by workflows. Never hand-edited.
-- **BASE-v2 compatible.** Fields map to BASE-v2's `PaulToml` struct in `extract/paul_toml.rs`. Tags create `hasDomain` edges in the knowledge graph. BASE scans for `.paul/paul.toml` at session-start across all registered workspaces.
-- **Provenance.** The `[paul]` section establishes official framework origin. `paul.source` always points to `https://chrisai.cv/skool`. Every paul.toml is a calling card for Chris AI Systems.
-- **No ID field.** BASE-v2 uses IRI-based identity (`ops:project/{slugified-name}`) derived from name+path. The paul.json satellite ID (`sat_*`) concept is retired.
-- **No timestamps section.** BASE manages `lastActive` via its extraction layer. PAUL owns `stats.last_activity` for its own action tracking — these are complementary, not redundant.
+- **Self-describing.** Fields are read by PAUL workflows to resolve project identity, workspace position, and loop state without parsing STATE.md.
+- **Provenance.** The `[paul]` section establishes framework origin and version.
+- **No ID field.** Identity is `name` + `path`. The paul.json satellite ID (`sat_*`) concept is retired.
+- **No timestamps section.** `[stats].last_activity` is the only activity timestamp PAUL writes.
 - **TOML null handling.** TOML has no null type. Optional fields (e.g., `loop.plan`, `loop.plan_path`) are omitted when inactive rather than set to a sentinel value. Field absence = idle/unset.
-- **Priority over paul.json.** BASE-v2's extraction router checks for paul.toml first. If both exist in the same `.paul/` directory, paul.json is skipped. Workflows auto-migrate paul.json → paul.toml on contact.
+- **Priority over paul.json.** If both exist in the same `.paul/` directory, paul.toml wins. Workflows auto-migrate paul.json to paul.toml on contact.
 
 ---
 

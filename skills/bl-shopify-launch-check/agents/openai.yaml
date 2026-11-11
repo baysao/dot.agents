@@ -1,0 +1,4 @@
+interface:
+  display_name: "Kiểm tra trước mở bán"
+  short_description: "Shopify Binh Le: kiểm tra trước mở bán"
+  default_prompt: "Dùng $bl-shopify-launch-check. Hãy audit độ sẵn sàng mở bán của store anh, phân biệt lỗi chặn mở bán và mục chưa kiểm chứng."

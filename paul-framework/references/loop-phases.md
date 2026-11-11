@@ -230,6 +230,9 @@ Symbols:
 - `✓` = Phase complete
 - `○` = Phase pending
 - `►` = Currently in this phase (optional)
+- `⏸` = In this phase but held on a calendar event (see `loop.hold_until`); draw it in place of `►` and name the date on the line
+
+A held plan is **not** a failed plan and not a finished one. It has done its work and is waiting on the world. Show the hold date rather than letting `APPLY ►` imply progress that has stopped.
 
 ## Anti-Patterns
 

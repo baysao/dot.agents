@@ -25,5 +25,11 @@ scenarios:
       - user_input: "Run egm-drift-report on `docs/designs/drift_report.md` against implemented source files."
         assertions:
           - type: "required_pattern"
-            pattern: "(drift|discrepancy|matches|out of sync|report)"
-            message: "Drift report must evaluate alignment between design documents and source code."
+            pattern: "^## .+\\.md\\s*$"
+            message: "Report must carry one section per design document, headed by the document name, which the strict format requires."
+          - type: "required_pattern"
+            pattern: "(?:^|\\s)(?:[\\w./-]+\\.(?:py|ts|tsx|js|go|rs|java|md)):\\d+"
+            message: "Report must cite at least one concrete file:line, so a finding can be located rather than asserted."
+          - type: "forbidden_pattern"
+            pattern: "file inventory|undocumented|not referenced in (?:a|any) design"
+            message: "Undocumented code is out of scope; reporting it means the unbounded filter has regressed."

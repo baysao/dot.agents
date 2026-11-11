@@ -49,10 +49,34 @@ kind = "uat"
 origin = "04-02 UAT-003"
 owner = "agent"
 blocking = "phase-4-exit"
-check = { type = "command", command = "go test ./internal/invoice -run TestRounding", expect = "ok" }
+check = { type = "command", run = "go test ./internal/invoice -run TestRounding", expect = "ok" }
 ```
 
 Note the check asserts the *behaviour the test was about*, not `file exists`. A check that only proves the UAT file still has the word "open" in it can never discharge.
+
+### A Visual Finding Becomes a Command Check
+
+The workflow's `## Visual/UX Check` is the one visual section with an exit code, so photograph it the same way:
+
+```toml
+[[debt]]
+id = "DEBT-0NN"
+title = "UAT-004: hero headline wraps to four lines at 390px"
+kind = "uat"
+origin = "04-02 UAT-004"
+owner = "agent"
+trigger = "phase:4"
+check = { type = "command", run = "node ~/.agents/skills/design-taste-frontend/scripts/inspect.mjs http://localhost:5173", expect = "RESULT: 0 FAIL" }
+```
+
+`inspect.mjs` exits 1 on any FAIL and prints `RESULT: 0 FAIL, N WARN` on success, so both halves of the check hold: the exit code refuses a partial pass, and `expect` stops a report that only happens to be clean at the widths it did not open. Prefer the production build over the dev server — the workflow's `## Visual/UX Check` says why.
+
+Two rules for this row, both learned the hard way elsewhere in this file:
+
+- **Never `text_present` on a source file.** `expect` must be the gate's own summary line, not a class name you believe is in the hero. A `text_present` check passes the moment the string appears in a comment.
+- **Name the widths.** If the contract only holds at one viewport, the check is not the gate — say which widths you ran in the UAT file and log the rest as `kind = "artifact"` with the screenshot as the artifact.
+
+When the skill or Node 22/Chrome is absent, do not invent a substitute. Record the check as unrun in the UAT verdict; the row keeps `trigger` and no `blocking`, so the phase can close while the visual debt stays visible.
 
 ### Anti-Patterns
 

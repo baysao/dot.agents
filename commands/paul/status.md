@@ -65,6 +65,7 @@ Next: [recommended action]
 Based on loop position, suggest next action:
 - If PLAN needed: "Run /paul:plan to create plan"
 - If PLAN ready: "Approve plan, then run /paul:apply"
+- If APPLY is held (`loop.hold_until` in the future): "Held until [date]: [hold_reason]. Do not unify."
 - If APPLY complete: "Run /paul:unify to close loop"
 - If UNIFY complete: "Loop closed. Ready for next phase."
 </step>

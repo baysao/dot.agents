@@ -50,7 +50,7 @@ Never ask what you can read. Before the first question, gather:
 | Existing linters | `eslint.config.*`, `biome.json`, `.ruff.toml` |
 | Coverage today | `coverage/` output, or run the suite once |
 | CI | `.github/workflows/`, `.gitlab-ci.yml` |
-| Agent harness | `.claude/`, `.codex/`, `AGENTS.md` |
+| Agent harness | `.claude/`, `.agents/`, `AGENTS.md` |
 
 Report what you found in two lines, then ask only what's left.
 

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Chọn việc cần làm"
+  short_description: "Shopify Binh Le: chọn việc cần làm"
+  default_prompt: "Dùng $bl-shopify-coach. Hãy xác định việc dễ áp dụng nhất với tình trạng shop hiện tại của anh."

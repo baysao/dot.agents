@@ -1,0 +1,4 @@
+interface:
+  display_name: "Nghiên cứu và chọn hàng"
+  short_description: "Shopify Binh Le: nghiên cứu và chọn hàng"
+  default_prompt: "Dùng $bl-shopify-product-research. Hãy đánh giá các sản phẩm anh cung cấp và chọn ứng viên đáng kiểm mẫu, ghi rõ bằng chứng còn thiếu."

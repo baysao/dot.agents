@@ -44,8 +44,13 @@ implement the specifications described by those designs or READMEs.
 
 4.  **Report**: Produce a single report listing all discrepancies found.
 
-    *   Append the analysis for each file to `{YYYY-MM-DD}_DRIFT_REPORT.md`
-        using your file-writing tool.
+    *   Write the analysis for each file to `docs/drift/{YYYY-MM-DD}_DRIFT_REPORT.md`
+        using your file-writing tool, creating `docs/drift/` if absent. **Never
+        write to the repository root** - a bare dated filename lands in whatever
+        the working directory happens to be, where nobody looks for it and where
+        it is easy to commit by accident. If the project has a different
+        convention (a `.paul/` tree, a `reports/` directory), use it and say which
+        path you chose in the report's first line.
     *   Strict Format:
 
         ```markdown
@@ -59,8 +64,15 @@ implement the specifications described by those designs or READMEs.
 
     -   Be rigorous. If a design doc mentions a specific object, field or file
         name and the code doesn't have it, that is a reportable drift. Double
-        check for coverage. If there is some part of the logic that is not
-        referenced in a design or README, this is a reportable drift.
+        check for coverage.
+    -   **Undocumented code is out of scope for this report.** A function the
+        design never mentions is not drift; it may be an unplanned addition, a
+        utility, or a deliberate extension. Report it only when the design
+        *claims* the area - a file, class, or behaviour the document describes -
+        and the code inside that claim does something else. Widening the rule to
+        "any logic not referenced by a design" makes every partially-documented
+        repository a permanent drift case and the report degenerates into a file
+        inventory, which is why the scope stops at the design's own claims.
     -   Read files liberally to ensure you are looking at the current state
         of the code, not relying on memory.
     -   Process the files sequentially to ensure the tool output buffer doesn't

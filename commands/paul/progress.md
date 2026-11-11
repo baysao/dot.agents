@@ -78,6 +78,8 @@ Based on state (+ user context if provided), determine **ONE** next action:
 | Plan awaiting approval (audit enabled, not yet audited) | `/paul:audit [path]` |
 | Plan awaiting approval (audit complete or not enabled) | "Approve plan to proceed" |
 | Plan approved, not executed | `/paul:apply [path]` |
+| Applying, held (`loop.hold_until` in the future) | "Wait until [date]: [hold_reason]" |
+| Applying, hold elapsed | "Run the exit verification, then `/paul:unify [path]`" |
 | Applied, not unified | `/paul:unify [path]` |
 | Loop complete, more phases | `/paul:plan` (next phase) |
 | Milestone complete | "Create next milestone or ship" |

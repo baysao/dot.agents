@@ -1,4 +1,12 @@
-# PAUL × base Integration Map
+# PAUL × base Integration Map — HISTORICAL, NOT OPERATIONAL
+
+> **This document is a record of an integration that no longer exists.** It was written
+> 2026-10-29 and described how PAUL called the `base` CLI. On **2026-11-03** the `base`
+> integration was removed from every `paul-*` and `poteto-mode` skill, every PAUL command,
+> and every `paul-framework` workflow, template, and reference. Nothing below should be
+> followed, and no line in it describes current behaviour. The live stores are
+> `.paul/LEARNINGS.md`, `.paul/DECISIONS.md`, and `## Session Rules` in
+> `.paul/SPECIAL-FLOWS.md`.
 
 Inventory from all 29 `paul-*/SKILL.md` + `reflect/SKILL.md` (verified 2026-10-29).
 

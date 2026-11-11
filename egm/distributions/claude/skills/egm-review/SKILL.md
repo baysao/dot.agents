@@ -78,6 +78,14 @@ If your harness has no subagent tool, stop and tell the user: a review in the sa
     `interactive`, `uninterrupted`, `feature_spec`, `implementation`, or an
     individual stage `5`, `6`, `7`, `8`, `9`). If omitted, the user is prompted.
 
+When the document specifies a rendered surface (a page, marketing site,
+portfolio, product page, or an app screen such as a dashboard or settings view),
+pass `resources/document_standards/visual-design-standard.md` as the Target
+Standard for `egm-design` in Stages 7 and 9, alongside the
+`feature-spec-standard`. That standard asks a document only what a document can
+answer — the idea, the argument, the imagery that exists, the states, the gate —
+and leaves the rendered judgement to the page skill's own critique rubric.
+
 ## Workflow
 
 ### Step 1: Intake & Setup

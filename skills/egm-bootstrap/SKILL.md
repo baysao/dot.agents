@@ -34,6 +34,39 @@ and wait for the report. If your harness cannot nest subagents,
 use direct dispatch instead of the synthesizer. See `~/.agents/egm/docs/harnesses.md`.
 If your harness has no subagent tool, run the scout steps inline.
 
+### ZCode
+
+ZCode has no pre-registered `egm-*` subagent types — map the personas to the
+`Agent` tool like this:
+
+1.  **Scout spawn** (`goldfish-explorer`): `subagent_type: "general-purpose"`.
+    Begin the prompt with: "Read the persona file at
+    `~/.agents/egm/agents/<file>.md` first and adopt it fully." then pass the
+    scout prompt verbatim. End with: "You are read-only — do not modify any
+    files." Do NOT use the `Explore` type for scouts: it reads excerpts, not
+    whole files, which violates the full-file scout contract.
+2.  **Worker spawn** (`egm-bootstrap-orchestrator`):
+    `subagent_type: "general-purpose"`, prompt begins with the persona read
+    instruction for `~/.agents/egm/agents/bootstrap_orchestrator.md`, then the
+    verbatim worker prompt.
+3.  **Parallel batch (CRITICAL)**: launch ALL Agent calls for one tier in ONE
+    message — multiple tool uses in a single response run concurrently in
+    ZCode. Chunked scouts especially: one Agent call per chunk, all in one
+    message. Partition workers likewise.
+4.  **Concurrency waves**: if parallel spawns are rejected (e.g., "user
+    concurrency limit exceeded"), the platform caps concurrent subagents.
+    Partition the batch into waves at that cap — spawn wave 1, collect its
+    reports, then spawn wave 2 — keeping scouts/workers independent. Never
+    merge chunks or partitions into one agent to fit a wave.
+5.  **Synthesis**: direct dispatch at the root — spawn scouts and workers
+    yourself and compile inline. A nested orchestrator hides per-call
+    failures from the root.
+6.  **Failure tolerance**: a failed scout → placeholder values per the child
+    fault tolerance rule; a failed worker → placeholder warning link; retry
+    each once.
+7.  **Follow-ups**: use `SendMessage` with the agent's ID to re-ask a scout
+    or worker without losing its context.
+
 ## Inputs
 
 *   **`path`**: The target root directory path to bootstrap (Required).
@@ -371,6 +404,23 @@ If your harness has no subagent tool, run the scout steps inline.
         spawn a `goldfish-explorer` scout for `path` to extract local symbols
         and invariants, appending them under the optional `## Local Interface &
         Invariants` section.
+    *   **Planning-stage grounding**: If the tree holds no (or almost no)
+        source code but contains a `PLANNING.md` — at `path` itself or one
+        level below (e.g., `path=docs/projects/{name}` with
+        `docs/projects/{name}/PLANNING.md`) — use that PLANNING.md as the primary
+        content basis for the repo-root `$PROJECT_ROOT/README.md` (the git root
+        containing `docs/projects/`; the contract file lives there, NOT inside
+        `docs/projects/{name}/`): Problem Statement,
+        Tech Stack, Data Model, API Surface, Deployment, Security, Phase
+        Breakdown, and Open Questions map to the blueprint's contract
+        sections, tagged as **planning-stage contracts (not yet
+        code-verified)**. Cite the PLANNING.md section for every claim; do not
+        invent code symbols. When later builds add code, `/egm-resolve` (or a
+        re-run of this skill) replaces planning-stage contracts with
+        code-grounded ones. Note: `/seed graduate` later re-synthesizes this
+        same `$PROJECT_ROOT/README.md` into the full graduation brief
+        (Correction & Modification Policy applies — title and status header
+        survive).
     *   Compile the final root `target_filename` using the **Repository Root Blueprint
         Template**, rolling up all top-level subdirectory boundaries. Ensure any
         root architecture or sequence diagrams strictly match the synchronous /

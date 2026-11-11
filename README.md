@@ -1,6 +1,8 @@
-# ~/.agents — PAUL × BASE × EGM × AEGIS
+# ~/.agents — PAUL × EGM × AEGIS
 
-This directory is the root of the local agent-skill installation. It contains the **PAUL** phase-loop skills, the **BASE** memory/satellite integration, the **EGM** (Elephant-Goldfish Model) design skills, the **AEGIS** adversarial audit framework, and shared configuration.
+This directory is the root of the local agent-skill installation. It contains the **PAUL** phase-loop skills, the **EGM** (Elephant-Goldfish Model) design skills, the **AEGIS** adversarial audit framework, and shared configuration.
+
+**BASE is no longer part of PAUL** (removed 2026-11-03). The `base` CLI and the `base-help` skill remain installed; nothing in the PAUL path calls them.
 
 ### Upstream repositories
 
@@ -16,12 +18,11 @@ This directory is the root of the local agent-skill installation. It contains th
 ~/.agents/
 ├── README.md              # this file
 ├── AGENTS.md              # shell/coding conventions (Karpathy + ponytail)
-├── PAUL-BASE-CARL-INTEGRATION.md  # BASE-only integration map (CARL removed)
+├── PAUL-BASE-CARL-INTEGRATION.md  # historical record — base removed from PAUL 2026-11-03
 ├── pstack-models.md       # pstack model routing configuration
 ├── skills/                # all installed skills (paul-*, egm-*, aegis-*, etc.)
 ├── paul-framework/        # PAUL workflows, templates, references, rules
 ├── aegis/                 # AEGIS adversarial audit framework
-├── base/                  # BASE satellite configuration
 ├── commands/              # legacy command shims
 ├── rules/                 # global rule store
 └── update.ps1             # skill update script
@@ -74,52 +75,24 @@ Confirm skill choices at plan approval before applying.
 
 ---
 
-## 2. paul-base — BASE Memory & Satellite Integration
+## 2. paul-base — REMOVED (2026-11-03)
 
-**Reference:** `~/.agents/PAUL-BASE-CARL-INTEGRATION.md`
+The `base` integration was removed from every PAUL skill, command, and workflow on
+2026-11-03. There are now zero `base` CLI calls on the PAUL path and nothing reads
+`.base/`.
 
-`paul-base` is the BASE integration layer (CARL has been fully removed). It provides four integration surfaces across the PAUL skills:
+State that used to route to the graph lives in `.paul/` and nowhere else:
 
-### Surface 1 — Task Tracking (board mirror)
+| Item | Store | Read by |
+| --- | --- | --- |
+| Learnings | `.paul/LEARNINGS.md` | `paul-plan` Step 2, `paul-resume` |
+| Decisions | `.paul/DECISIONS.md` + `STATE.md` `### Decisions` | `paul-plan` Step 5, `paul-resume` |
+| Rules | `## Session Rules` in `.paul/SPECIAL-FLOWS.md` | `paul-apply`, `paul-resume` |
+| Paused checkpoints | `STATE.md` Session-Continuity, as **DUE NOW** lines | `paul-resume` |
 
-- **`paul-apply`** (`paul-apply:60`): creates **one** base task per plan, named with plan-id prefix (e.g. `08-01 implement auth`). Never per PAUL task — `.paul/` owns fine grain.
-- **`paul-unify`** (`paul-unify:77`): finds the task by the same prefix, `base task done <slug>`. On conflict `.paul/` wins.
-
-Commands: `base task done <slug>`, `base reminder add --name "..." --due ...`, `base reminder archive`
-
-### Surface 2 — AST Map (structural queries)
-
-- **`paul-map-codebase`** (`paul-map-codebase:37`): `base sync --ast` before spawning agents. Explore agents use `base ast query` (`--calls`, `-f`, `-c`) before reading files.
-- **`paul-plan`** (`paul-plan:62`): measured callers/imports become plan **Facts**; grep fallback when base is absent.
-- **`paul-research` / `paul-research-phase`**: AST query injected into the codebase-agent toolkit.
-
-Commands: `base sync --ast`, `base ast query --calls -f <symbol> -c <context>`
-
-### Surface 3 — Memory (decision promotion only)
-
-- **`paul-unify`** (`paul-unify:73`): decisions that outlive their topic → `base decision log`. **Never keep the same fact live in both.**
-- **`paul-unify`** (`paul-unify:77`): `*base` memory sweep (handoff/learnings/decisions) runs inside the reflect pass.
-
-Commands: `base decision log --domain <project> --decision "..." --rationale "..." --recall "..."`, `base learn --domain <project> --type insight|correction|commitment|shift --text "..."`
-
-> **Note:** Zero occurrences of `base learn` or `base recall` exist in PAUL skills themselves. The two base rules in the PAUL domain (added 2026-10-29) use session-start injection, which base is explicitly allowed to own.
-
-### Surface 4 — Project Registration
-
-- **`paul-register`** (`paul-register:12`): writes `.paul/paul.json` manifest so the BASE satellite auto-discovers the project.
-
-### Verified wiring (2026-10-29)
-
-- `base context "paul-plan resume the loop"` returns both PAUL rules (learn @0, recall @1) plus the GLOBAL MOP rule.
-- `base rule test --domain PAUL` is green (0 misses, 0 false fires).
-- `base learn --domain PAUL --type insight` from the workspace persisted successfully.
-- `base handoff create --project <p> --doc <abs-path> --slug ` registered and listed.
-- `base reminder add --due today` surfaced immediately; `reminder archive`/`remove` cleared it.
-
-### Known blocker
-
-`base graph query` without `--raw` shells out to `claude -p`, which inherits `ANTHROPIC_MODEL=z-ai/glm4.7` (gateway) and fails. Always use `--raw` for graph queries on this machine.
-
+`PAUL-BASE-CARL-INTEGRATION.md` is a historical record of the removed integration.
+Nothing links to it operationally. The `base` CLI and the `base-help` skill are left
+installed and untouched — they are simply no longer part of PAUL.
 
 ---
 
@@ -138,9 +111,12 @@ Commands: `base decision log --domain <project> --decision "..." --rationale "..
 | `egm-draft` | `docs/designs/<FEATURE>.md` | Section-by-section design doc |
 | `egm-review` | `comprehension_report.md`, `critic_report.md`, `implementation_readiness_report.md` | 5-stage Goldfish design review |
 | `egm-resolve` | edited design doc | Resolve review findings (CONTEST/ESCALATE/PROPOSE FIX/DECLINE) |
-| `egm-drift-report` | `{date}_DRIFT_REPORT.md` | Detect design/code drift |
+| `egm-drift-report` | `docs/drift/{date}_DRIFT_REPORT.md` | Detect design/code drift |
 
 ### Handoff flow
+
+Solid arrows are implemented. The dashed step is not: a drift report has no
+consumer in PAUL, so reading it and opening a fix plan is your job, not the loop's.
 
 ```
 egm-brainstorm → concepts_brief.md
@@ -148,32 +124,44 @@ egm-brainstorm → concepts_brief.md
 egm-draft → docs/designs/<FEATURE>.md
     ↓ (egm-review + egm-resolve polish it)
     ↓ HANDOFF: user runs `paul-plan <plan-id>` with design doc as context
-paul-plan → PLAN.md + acceptance criteria (ingesting design doc)
+paul-plan → PLAN.md + acceptance criteria (reads the design doc)
     ↓
 paul-apply → code
     ↓
 paul-unify → SUMMARY.md + STATE.md closure
-    ↓ (periodically)
-egm-drift-report → drift check
+    ⋯⋯ (periodically, manual) egm-drift-report → docs/drift/{date}_DRIFT_REPORT.md
 ```
 
 ### How `paul-plan` ingests EGM
 
 **Step 2 (Load Context)** now probes for an EGM design doc:
 
-> Probe for an EGM design doc: `docs/designs/<FEATURE>.md` (or `<project>/docs/designs/`). If found, ingest it as Priority 1 context — the design doc's decisions, interfaces, and dependencies become plan Facts. Search BASE for prior decisions on this topic (`base recall` / `base decision search`) and inherit them as written decisions, never re-asked or silently re-guessed. If no design doc exists, continue without it.
+> Probe for an EGM design doc: `docs/designs/<FEATURE>.md` (or `<project>/docs/designs/`). If found, ingest it as Priority 1 context — the design doc's decisions, interfaces, and dependencies become plan Facts. Read `.paul/DECISIONS.md` for prior decisions on this topic and inherit them as written decisions, never re-asked or silently re-guessed. If no design doc exists, continue without it.
 
-**Step 4 (Close the Loop)** logs durable decisions to BASE:
+**Step 4 (Close the Loop)** writes durable decisions to `.paul/DECISIONS.md`:
 
-> If the user's approval settled a durable judgment call that outlives this plan, log it with `base decision log` (rationale plus recall keywords from the plan topic).
+> If the user's approval settled a durable judgment call that outlives this plan, append it to `.paul/DECISIONS.md` as `D-NN` (rationale plus the plan topic), and add the summary row to `STATE.md`'s `### Decisions` table.
 
-### Handoff gates (documented, zero code)
+### Handoff gates — one is implemented, two are not
 
-| EGM step | Output | PAUL input | How to hand off |
-|----------|--------|------------|-----------------|
-| `egm-draft` | `docs/designs/<FEATURE>.md` | `paul-plan` context | After design finalized, run `paul-plan <plan-id>` |
-| `egm-review` findings | review reports | `paul-consider-issues` / `paul-plan-fix` | Review findings become issues → fix plans |
-| `egm-drift-report` | `{date}_DRIFT_REPORT.md` | `paul-verify` / `paul-status` | Drift findings feed into PAUL verification cycle |
+Measured against the code on 2026-11-03. Do not read this table as a pipeline.
+
+| EGM step | Output | PAUL input | Status |
+|----------|--------|------------|--------|
+| `egm-draft` | `docs/designs/<FEATURE>.md` | `paul-plan` Step 2 item 5 | **Implemented.** The only EGM→PAUL mechanism: a read of the design doc as Priority 1 plan context. |
+| `egm-review` findings | `comprehension_report.md`, `critic_report.md`, `implementation_readiness_report.md` | `paul-consider-issues` / `paul-plan-fix` | **Manual only.** No PAUL skill names those files. You carry the findings across by hand and open a fix plan. |
+| `egm-drift-report` | `docs/drift/{date}_DRIFT_REPORT.md` | none | **No consumer.** Nothing in PAUL reads a drift report; `paul-verify` and `paul-status` contain zero references to one. Read it yourself and, if a finding warrants work, open a `paul-plan-fix`. |
+
+EGM writes nothing into `.paul/`, exposes no gate, and ships no command into
+`commands/`. Anything describing EGM as an automated stage of the PAUL loop is
+describing an intention, not the install.
+
+### Interaction rules for EGM skills
+
+All seven `egm-*` skills carry `disable-model-invocation: true`. The model cannot
+call them; invoke them yourself in prose, e.g. `Use egm-drift-report: docs/designs/`.
+There are no `/egm-*` slash commands in this install — references to one in the
+upstream EGM docs assume the plugin packaging, not `~/.agents/skills/`.
 
 ---
 
@@ -240,44 +228,45 @@ AEGIS feeds into the PAUL loop at the verify/unify boundary:
 1. Run an AEGIS audit phase (e.g. `phase-4-adversarial-review`) to produce findings.
 2. Findings become issues via `paul-consider-issues` or `paul-plan-fix`.
 3. Fix plans are created with `paul-plan-fix` and applied with `paul-apply`.
-4. Durable risk decisions are logged with `base decision log` via `paul-unify`.
+4. Durable risk decisions are logged in `.paul/DECISIONS.md` via `paul-unify`.
 
 ---
 
 ## 5. Full PAUL Skill Reference
 
-All 27 `paul-*` skills live in `~/.agents/skills/paul-*`:
+All 30 `paul-*` skills live in `~/.agents/skills/paul-*`:
 
 | Skill | Purpose |
 |-------|---------|
 | `paul-add-phase` | Add a new phase to the roadmap |
 | `paul-add-plan` | Add a plan to a phase |
-| `paul-apply` | Execute plan tasks; creates base task mirror |
+| `paul-apply` | Execute plan tasks |
 | `paul-assumptions` | Phase assumptions workflow |
 | `paul-audit` | Audit plan/code |
 | `paul-complete-milestone` | Close a milestone |
-| `paul-config` | Configure project/CARL/BASE settings |
+| `paul-config` | Configure project settings, flows, and integrations |
 | `paul-consider-issues` | Consider issues for a plan |
 | `paul-discover` | Discover project context |
 | `paul-discuss` | Discuss a phase/plan |
 | `paul-discuss-milestone` | Discuss milestone status |
 | `paul-flows` | Special flows configuration |
-| `paul-handoff` | Register handoffs (BASE-integrated) |
+| `paul-handoff` | Write and register handoffs |
 | `paul-help` | PAUL help |
 | `paul-init` | Initialize a PAUL project |
-| `paul-map-codebase` | AST map of codebase (BASE-integrated) |
+| `paul-map-codebase` | Map the codebase |
 | `paul-milestone` | Milestone management |
-| `paul-pause` | Pause work (BASE reminder) |
-| `paul-plan` | Create/continue a PLAN (EGM + BASE integrated) |
+| `paul-pause` | Pause work |
+| `paul-plan` | Create/continue a PLAN (EGM integrated) |
 | `paul-plan-fix` | Fix plan from UAT issues |
 | `paul-progress` | Progress tracking |
-| `paul-register` | Register project with BASE |
+| `paul-register` | Create the project manifest |
 | `paul-remove-phase` | Remove a phase |
-| `paul-research` | Research with AST queries (BASE-integrated) |
+| `paul-research` | Research a topic |
 | `paul-research-phase` | Research phase |
 | `paul-resume` | Resume a project |
+| `paul-security` | Security audit of the diff; findings become debt rows |
 | `paul-status` | Project status |
-| `paul-unify` | Reconcile plan vs actual; close loop (BASE-integrated) |
+| `paul-unify` | Reconcile plan vs actual; close loop |
 | `paul-verify` | Verify work |
 
 PAUL phase loop: **plan → apply → unify → (fix if issues)**
@@ -287,7 +276,7 @@ PAUL phase loop: **plan → apply → unify → (fix if issues)**
 ## 6. Quick Start
 
 ```bash
-# 1. Register your project with BASE
+# 1. Create your project manifest
 paul-register <project-name>
 
 # 2. (Optional) Run EGM design first
@@ -303,14 +292,15 @@ paul-plan <plan-id>
 # 5. Apply the plan
 paul-apply <plan-id>
 
-# 6. Unify / close the loop (logs decisions to BASE)
+# 6. Unify / close the loop (writes learnings/decisions to .paul/)
 paul-unify <plan-path>
 
 # 7. If issues found, create fix plan
 paul-plan-fix <plan-id>
 
-# 8. Periodic drift check
-egm-drift-report docs/designs/
+# 8. Periodic drift check (manual — no PAUL consumer; read the report yourself)
+#    Ask: Use egm-drift-report: docs/designs/
+#    Writes docs/drift/{YYYY-MM-DD}_DRIFT_REPORT.md
 ```
 
 ---
@@ -323,4 +313,4 @@ All tool/framework paths in this installation use `~/.agents/` as the root (migr
 - `~/.agents/paul-framework/` — PAUL workflows/templates/references
 - `~/.agents/aegis/` — AEGIS framework
 - `~/.agents/pstack-models.md` — pstack model routing
-- `~/.agents/PAUL-BASE-CARL-INTEGRATION.md` — BASE integration map (CARL removed)
+- `~/.agents/PAUL-BASE-CARL-INTEGRATION.md` — historical record of the removed BASE integration

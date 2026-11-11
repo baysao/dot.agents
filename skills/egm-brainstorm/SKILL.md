@@ -35,6 +35,35 @@ and wait for the report. If your harness cannot nest subagents,
 use direct dispatch instead of the synthesizer. See `~/.agents/egm/docs/harnesses.md`.
 If your harness has no subagent tool, stop and tell the user: a review in the same context is not a Goldfish review.
 
+### ZCode
+
+ZCode has no pre-registered `egm-*` subagent types — map the personas to the
+`Agent` tool like this:
+
+1.  **Reviewer spawn**: `subagent_type: "general-purpose"`. Begin the prompt
+    with: "Read the persona file at `~/.agents/egm/agents/<file>.md` first and
+    adopt it fully." then pass the reviewer prompt verbatim. End with:
+    "Report only your findings — do not modify any files."
+2.  **Parallel batch (CRITICAL)**: launch ALL reviewer Agent calls in ONE
+    message — multiple tool uses in a single response run concurrently in
+    ZCode. Spawning reviewers one per turn reintroduces the sequential bias
+    the Goldfish model exists to prevent.
+3.  **Concurrency waves**: if parallel spawns are rejected (e.g., "user
+    concurrency limit exceeded"), the platform caps concurrent subagents.
+    Partition the batch into waves at that cap — spawn wave 1, collect its
+    reports, then spawn wave 2 — keeping lenses independent. Never merge
+    lenses into one agent to fit a wave.
+4.  **Synthesis**: direct dispatch at the root. ZCode general-purpose agents
+    can technically nest (they have the Agent tool), but a nested synthesizer
+    hides per-reviewer failures — spawn every reviewer yourself in one
+    parallel batch and synthesize inline.
+4.  **Failure tolerance**: if one reviewer errors or returns nothing, note the
+    gap in the synthesis and retry that lens once; never block the batch on a
+    single reviewer.
+5.  **Follow-ups**: to re-ask or deepen one reviewer's findings, use
+    `SendMessage` with that agent's ID (persona context stays intact) instead
+    of spawning a fresh agent.
+
 ## Execution Constraints (CRITICAL)
 
 1.  **Artifact-First Delivery (MANDATORY)**: You are **STRICTLY FORBIDDEN** from
@@ -103,8 +132,22 @@ If your harness has no subagent tool, stop and tell the user: a review in the sa
 ### Step 1: Deep Clarification & Problem Statement Drilling
 
 1.  **Check for Concept Foundation**: Verify if the user provided an initial
-    feature idea or concept prompt. If missing, prompt the user to describe what
-    they want to brainstorm.
+    feature idea or concept prompt.
+    *   **If provided:** use it as the concept foundation.
+    *   **If missing:** look for an existing plan before asking. Scan
+        `docs/projects/*/PLANNING.md` (one directory level, no recursive search;
+        ignore hidden directories):
+        *   **Exactly one found:** read it fully and anchor the concept on it.
+            Treat its Problem Statement, Design Decisions, Phase Breakdown,
+            Integration Points, and Open Questions as the working hypothesis
+            and skip ahead to the iterative drilling below (drill into its
+            Open Questions and weakest assumptions rather than re-asking what
+            the plan already answers).
+        *   **Several found:** list them by name (with the one-line
+            description from each PLANNING.md header) and ask which one to
+            brainstorm.
+        *   **None found:** prompt the user to describe what they want to
+            brainstorm.
 2.  **Iterative Problem Drilling (Multi-Turn Chat)**: Do **NOT** rush into
     launching subagents after a single response. Continue asking targeted,
     open-ended clarifying questions across multiple chat turns as needed until

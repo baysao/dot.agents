@@ -212,7 +212,21 @@ Update Resolution.files_changed with modified files.
 - Reference debug file in plan context
 - Debug file stays in "fixing" until plan completes
 
-**2. Verify**
+**2. Re-index if the fix wrote source**
+
+When `.paul/config.md` has `xerj: enabled: true` and the fix touched a file outside
+`.paul/`, run the replay pair before verifying (reference:
+`@~/.agents/paul-framework/references/xerj-integration.md`):
+
+```bash
+cd <index_cwd> && xerj autoindex --prefix <index_prefix> <index_root>
+```
+
+The verification step may search for the fixed symbol; searching a pre-fix index would
+return the old line and make a correct fix look unfixed. If the node is down, say so —
+do not verify against a stale index.
+
+**3. Verify**
 
 Update status to "verifying".
 

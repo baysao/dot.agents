@@ -166,23 +166,11 @@ Next session: /paul:resume → read handoff
 </step>
 
 <step name="register_handoff">
-**Register the handoff with `base` so it resurfaces at next session start.**
+**Point the next session at the handoff.**
 
-Without this, the doc sits on disk but the session-start resume list never queues it (the gap that loses handoffs). The project slug comes from `.paul/paul.toml`'s `name` field; the doc path must be absolute.
-
-```bash
-if command -v base >/dev/null 2>&1; then
-  PROJECT=$(grep -m1 '^name *= *' .paul/paul.toml 2>/dev/null | sed -E 's/^name *= *"(.*)"/\1/')
-  DOC="$(pwd)/.paul/HANDOFF-{date}-{context}.md"
-  if [ -n "$PROJECT" ] && [ -f "$DOC" ]; then
-    base handoff create --project "$PROJECT" --doc "$DOC" \
-      && echo "✓ Registered with base — resurfaces at next session start" \
-      || echo "Note: base handoff registration skipped (pre-handoff base version)"
-  fi
-fi
-```
-
-Substitute the real `{date}-{context}` from the file just written. If `base` is absent or predates the `handoff` subcommand, the step no-ops — the handoff is still on disk.
+Without this, the doc sits on disk but the next session never learns it exists. Write
+the handoff's absolute path into `STATE.md`'s Session-Continuity block as the Resume
+pointer — that block is what the resume command reads first.
 </step>
 
 </process>
@@ -218,5 +206,5 @@ Substitute the real `{date}-{context}` from the file just written. If `base` is 
 - [ ] Structured handoff generated
 - [ ] Reference files included
 - [ ] Next actions prioritized
-- [ ] Handoff registered with `base` (resurfaces next session)
+- [ ] Handoff named as the Resume pointer in STATE.md Session-Continuity
 </success_criteria>

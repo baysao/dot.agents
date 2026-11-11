@@ -18,7 +18,7 @@ describes, plus the new `cavemem_offload` move.
 ## Install path
 `caveman tools skills install caveman-learn` (in `../../cli/src/index.ts`) writes this file
 into a repo's `.claude/skills/caveman-learn/SKILL.md` (Claude Code) or
-`~/.codex/skills/caveman-learn/SKILL.md` (Codex). The CLI **embeds a byte-identical copy**
+`~/.agents/skills/caveman-learn/SKILL.md` (Codex). The CLI **embeds a byte-identical copy**
 (`CAVEMAN_LEARN_SKILL_MD`) because the published CLI ships no sibling assets;
 `../../cli/tests/skills.runtime.mjs` asserts the embedded copy equals this canonical
 file (the drift guard). **Change this file and that constant together.**

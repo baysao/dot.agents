@@ -25,7 +25,7 @@ PLAN (define) → APPLY (execute) → UNIFY (reconcile). Never skip UNIFY — ev
 
 ### Command Groups
 
-Core Loop (init, plan, apply, unify, help, progress); Session (pause, resume, progress, handoff); Roadmap (add-phase, remove-phase); Milestone (milestone, complete-milestone, discuss-milestone); Pre-Planning (discuss, assumptions, discover, consider-issues); Research (research, research-phase); Specialized (flows, config, map-codebase); Quality (verify, plan-fix, audit). Status is deprecated in favor of progress.
+Core Loop (init, plan, apply, unify, help, progress); Session (pause, resume, progress, handoff); Roadmap (add-phase, remove-phase); Milestone (milestone, complete-milestone, discuss-milestone); Pre-Planning (discuss, assumptions, discover, consider-issues); Research (research, research-phase); Specialized (flows, config, map-codebase); Quality (verify, plan-fix, audit, security). Status is deprecated in favor of progress.
 
 ### Project Shape
 

@@ -346,6 +346,36 @@ to name its own evidence while the reason is still in context.
 **The check must be able to fail.** `expect = "11"` passes against a docstring in the
 same file; `expect = "flip count = 11"` does not. A check that always passes reports
 work as done and is worse than no check.
+
+**A trust-boundary finding from guidance-mode `/paul-security` is a deferral like any
+other.** A `confirmed` critical/high becomes a row with `blocking = "<phase>-exit"` and a
+check that runs the regression test the fix will add; a `needs_validation` record becomes
+`kind = "reopen"` with **no severity**, because the skill assigns severity only to
+confirmed records and inventing one is how a guess becomes a scheduled fact.
+</step>
+
+<step name="refresh_index">
+**Re-index when the tasks wrote source.** Reference:
+`@~/.agents/paul-framework/references/xerj-integration.md`
+
+Skip silently when `.paul/config.md` has no `xerj: enabled: true`, or when every task
+in this plan wrote only `.paul/` files (plans, summaries, debt rows, STATE are not
+indexed source).
+
+Otherwise run the replay pair from the config, after `execute_tasks` and before
+`finalize`:
+
+```bash
+cd <index_cwd> && xerj autoindex --prefix <index_prefix> <index_root>
+```
+
+Autoindex is incremental, so this is a scan, not a rebuild.
+
+- **Success:** note it in the execution summary (one line, record count).
+- **Node down or command fails:** report the gap in the summary — name the searches
+  that are now untrustworthy and that UNIFY will read a stale index. Do not claim the
+  index is current, and do not fail the phase for it; a stale index is a degraded
+  discovery layer, not a correctness defect in the delivered code.
 </step>
 
 <step name="finalize">

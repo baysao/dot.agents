@@ -43,6 +43,35 @@ use direct dispatch instead of the synthesizer. See `~/.agents/egm/docs/harnesse
 If your harness has no subagent tool, stop and tell the user: a review in the same
 context is not a Goldfish review.
 
+### ZCode
+
+ZCode has no pre-registered `egm-*` subagent types — map the personas to the
+`Agent` tool like this:
+
+1.  **Reviewer spawn**: `subagent_type: "general-purpose"`. Begin the prompt
+    with: "Read the persona file at `~/.agents/egm/agents/<file>.md` first and
+    adopt it fully." then pass the reviewer prompt verbatim. End with:
+    "Report only your findings — do not modify any files."
+2.  **Parallel batch (CRITICAL)**: launch ALL reviewer Agent calls in ONE
+    message — multiple tool uses in a single response run concurrently in
+    ZCode. The review-loop re-spawns auditors every iteration; keep the whole
+    batch in one message each iteration so they run concurrently.
+3.  **Concurrency waves**: if parallel spawns are rejected (e.g., "user
+    concurrency limit exceeded"), the platform caps concurrent subagents.
+    Partition the batch into waves at that cap — spawn wave 1, collect its
+    reports, then spawn wave 2 — keeping lenses independent. Never merge
+    lenses into one agent to fit a wave.
+4.  **Synthesis**: direct dispatch at the root. ZCode general-purpose agents
+    can technically nest (they have the Agent tool), but a nested synthesizer
+    hides per-reviewer failures — spawn every auditor yourself in one
+    parallel batch and parse the flat deficiency reports inline.
+5.  **Failure tolerance**: if one auditor errors or returns nothing, note the
+    gap in the findings list and retry that lens once; never block the batch
+    on a single auditor.
+6.  **Follow-ups**: to re-ask or deepen one auditor's findings, use
+    `SendMessage` with that agent's ID (persona context stays intact) instead
+    of spawning a fresh agent.
+
 ## Inputs
 
 The caller or user provides exactly these parameters:

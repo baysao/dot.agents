@@ -68,7 +68,8 @@ When a checkpoint task is reached:
 
 <step name="complete">
 After all tasks complete:
-- Report: "APPLY complete. Run /paul:unify to close loop."
+- If a task ended in a calendar wait: report "APPLY held until [date] — [reason]. Do not unify yet." and set `loop.hold_until` / `loop.hold_reason` in `paul.toml`.
+- Otherwise report: "APPLY complete. Run /paul:unify to close loop."
 - Show files modified
 - Show SUMMARY path to create
 </step>

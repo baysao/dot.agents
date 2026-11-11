@@ -36,6 +36,8 @@ Example: `Use paul-resume: .paul/HANDOFF-phase10-audit.md`
 
 STATE.md grows append-only Session-Continuity blocks, each with its own `Resume pointer` / `pending` lines. **Only the newest block's pointer is authoritative** — older blocks are narrative log, not routing. Treat any older `Resume pointer` that names a plan now marked UNIFIED as stale: ignore it when routing, and strike it (`~~…~~` → point at the UNIFIED bullet) the moment you (or a unify pass) notice the mismatch. A stale pointer is a routing instruction to do work that is already done.
 
+**Extend the same doctrine to every counter and totals line.** The newest paragraph reads as truth because it is newest, not because it is right: a close touches about nine places in STATE.md plus four in ROADMAP.md, and each states the same fact in its own words. **Derive the number, do not read it.** Resolve "how many plans are applied", "what percentage is this phase", "how many decisions exist" with a command over the structured source — `paul.toml`, the `D-NN` ids, the ledger entries — and report the derived value. When the newest prose block and the structured file disagree, **the structured file wins**; that precedence is what makes `loop.hold_until` outrank a paragraph describing a wait, and it applies unchanged to counts. Do not "fix" a disagreement by trusting whichever number is larger or appears later.
+
 ### Debt Gate at Session Entry
 
 Before routing, run `python ~/.agents/paul-framework/scripts/debt.py --run-checks` when `.paul/DEBT.toml` exists. This is the scheduler: PAUL has no daemon, so the only moment deferred work gets evaluated is the moment somebody looks.
@@ -43,6 +45,8 @@ Before routing, run `python ~/.agents/paul-framework/scripts/debt.py --run-check
 - An `overdue` row **outranks the loop table**. The one next action is discharging it, or dropping it with a written reason. Report the row id, its title, and the check output that still fails.
 - A `scheduled` or `waiting` row is not news. Opening every session with five future dates is how a debt store gets ignored.
 - If `--run-checks` reports a row as discharged, offer to set `status = "done"` in the store — a discharge must be a diff, never a silent flip.
+
+**Report a class, not one row at a time.** When several rows share an origin, a gate, or a shape — six one-plan grants all naming the same unclosed predecessor; three `blocking` rows all pointing at a measurement no plan can take — the briefing should say the count and the cheapest discharging action, not recount the sixth. A boundary that is repeatedly bypassed on one-plan exceptions is itself a finding: state how many exceptions exist, what the gate is actually blocking on, and whether the gated act was ever attempted. A gate that blocks a *transition* while the risk lives in an *action* will never be paid, because the action can proceed without it — say so rather than presenting the seventh exception as normal.
 
 ### Where Session Context Comes From
 

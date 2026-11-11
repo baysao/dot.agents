@@ -16,7 +16,7 @@ disk.
 
 Crucially, it establishes **semantic boundaries** within the document to enable
 downstream multi-agent reviews (`/egm-review`) and automated drift auditing
-(`/egm-drift-report`).
+(`Use `egm-drift-report``).
 
 ## The Problem
 

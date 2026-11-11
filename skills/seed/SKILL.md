@@ -16,7 +16,7 @@ Not for building the project (use PAUL init or seed launch after ideation), audi
 No input required — the conversation drives it:
 
 - **Works best with:** zero input or a raw idea in any shape
-- **Also useful:** a project type hint if known (utility, application, campaign, custom)
+- **Also useful:** a project type hint if known — a built-in one or a custom type added under `data/`
 
 If you supply an idea inline it starts ideation from there — otherwise it opens type-first.
 
@@ -48,6 +48,7 @@ Verify success criteria:
 - [ ] PLANNING.md generated from the type template (for ideate)
 - [ ] Quality gate passed before graduate/launch
 - [ ] Graduate lands in apps/ with git repo; launch adds PAUL init
+- [ ] `add-type` writes all four files, cross-checked, and the new type routes with no registry edit
 
 ## Examples
 
@@ -60,6 +61,8 @@ Result: typed ideation → structured PLANNING.md, ready to graduate.
 ## Common Pitfalls
 
 - **Building during ideation.** Consequence: unstructured code before scope lands. Fix: graduate/launch first, build after.
+- **Routing types from a remembered list.** Consequence: a type added by `add-type` exists on disk but is unreachable, and the graduate gate rejects a `Type:` field that is perfectly valid. Fix: enumerate `data/` — the directory listing is the type registry, and `config.md` inside each is the authority.
+- **Writing guide/config/loadout without comparing them.** Consequence: ideation skips a section because the guide never prompts for it, while the quality gate demands it because config requires it. Fix: `add-type` step `verify_consistency` checks section count, names, `Depth` values, and the required/optional split before generating the template.
 
 ## References
 

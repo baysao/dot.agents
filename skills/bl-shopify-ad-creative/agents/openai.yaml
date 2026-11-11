@@ -1,0 +1,4 @@
+interface:
+  display_name: "Brief, script và storyboard"
+  short_description: "Shopify Binh Le: brief, script và storyboard"
+  default_prompt: "Dùng $bl-shopify-ad-creative. Hãy viết một concept quảng cáo với ba hook và storyboard từ thông tin sản phẩm anh cung cấp."

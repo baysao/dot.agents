@@ -20,6 +20,10 @@ Next phase: APPLY (after audit and approval)
 @.paul/phases/{phase}/{plan}-PLAN.md
 </required_reading>
 
+<references>
+@~/.agents/paul-framework/references/security-audit-integration.md
+</references>
+
 <process>
 
 <step name="validate_preconditions" priority="first">
@@ -56,6 +60,32 @@ Next phase: APPLY (after audit and approval)
    - Note task count, checkpoint types, files modified
    - Identify the plan's scope and architectural decisions
 4. Store full plan content for audit analysis
+</step>
+
+<step name="choose_audit_mode">
+**Pick the audit type before auditing.** This workflow performs the architectural
+audit. `security-audit` is a second option at the same gate.
+
+Read `.paul/config.md` for both toggles:
+
+- `enterprise_plan_audit.enabled` — this workflow
+- `security_audit.enabled` — `/paul:security` workflow, scoped to this plan's diff
+
+| Architectural | Security | Behavior |
+|---|---|---|
+| enabled or manual | disabled | Run this workflow. No prompt. |
+| disabled | enabled | Do not run this workflow. Route to `/paul:security` with this plan as scope. |
+| enabled | enabled | Ask once: `[1] Architectural (default)  [2] Security  [3] Both — architectural first, then security` |
+| disabled | disabled | Manual invocation: run this workflow (manual is always allowed). |
+
+When the security option runs, follow
+`@~/.agents/paul-framework/workflows/security-audit.md` with the plan's scope:
+guidance mode for one plan, `quick` profile, diff since the last phase commit.
+Findings land as debt rows per the integration reference — never as edits to
+PLAN.md. The two audits do not share output files: the architectural audit writes
+`{NN}-{PP}-AUDIT.md`, the security audit writes to its own run directory.
+
+If the user passed an explicit mode (`--security` via `/paul:audit`), skip the prompt.
 </step>
 
 <step name="execute_audit" priority="critical">

@@ -182,6 +182,26 @@ Interpret the user's action/response as follows:
 1.  **Re-verify Lines**: If changes were made to `TargetFile`, verify that the
     file remains structurally coherent and valid markdown.
 2.  Mark the report as resolved (add a `Status: resolved` line at the top).
-3.  **Handoff**: Exit cleanly back to the caller (such as `egm-review-loop`)
-    with the count of accepted fixes, contested items, escalated items,
-    declined items, and remaining unaddressed issues.
+
+### Step 6: README Contract Refresh (Post-Resolution)
+
+After fixes are applied (or explicitly skipped), update the project's
+`README.md` contract once more so it reflects the resolved state:
+
+1.  **Locate the contract README**: `$PROJECT_ROOT/README.md` (the git root
+    containing `docs/projects/`) — written by `/egm-bootstrap` as the
+    planning-stage contract. Do not confuse it with `apps/{name}/README.md`,
+    which graduation synthesizes separately.
+2.  **Re-derive from current sources of truth**: the resolved `TargetFile`
+    (e.g., PLANNING.md or design doc), any source code that now exists
+    (code-grounded symbols replace planning-stage placeholders), and the
+    child contracts generated during the run.
+3.  **Apply the Correction & Modification Policy**: preserve the existing
+    title, metadata, and developer notes; update only the sections whose
+    basis changed during resolution.
+4.  **Re-verify EGM compliance** on the refreshed README: sections present,
+    links resolve to existing files, zero speculative claims.
+
+Then **Handoff**: exit cleanly back to the caller (such as `egm-review-loop`)
+with the count of accepted fixes, contested items, escalated items, declined
+items, and remaining unaddressed issues, plus the README refresh status.

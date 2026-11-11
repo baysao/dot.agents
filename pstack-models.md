@@ -11,6 +11,7 @@ how explorer: inherit-parent
 how explainer: inherit-parent
 why investigators: inherit-parent
 why synthesizer: inherit-parent
+design: inherit-parent
 reflect tooling: inherit-parent
 reflect judgment, divergent, synthesizer: inherit-parent
 arena runners: inherit-parent

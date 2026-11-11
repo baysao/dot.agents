@@ -30,6 +30,5 @@ Follow workflow: @~/.agents/paul-framework/workflows/register-manifest.md
 - [ ] .paul/paul.toml created with correct project state and [paul] provenance section
 - [ ] .paul/paul.json deleted (if it existed)
 - [ ] .paul/ledger.toml created (if missing)
-- [ ] BASE v2 detection check performed
 - [ ] User informed of next steps
 </success_criteria>

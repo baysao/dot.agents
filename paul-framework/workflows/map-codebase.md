@@ -59,6 +59,47 @@ If "Skip": Exit workflow
 Continue to create_structure.
 </step>
 
+<step name="index_project">
+**Substitute the Explore agents for discovery when `.paul/config.md` enables xerj.**
+Reference: `@~/.agents/paul-framework/references/xerj-integration.md`
+
+Read the toggle:
+
+```yaml
+xerj:
+  enabled: true|false
+  index_prefix: akka-pricehub   # asked at enable time; the ONLY thing tying a query to this index
+  index_root: "."               # folder passed to autoindex
+  index_cwd: "C:\\dev\\apps"    # directory autoindex runs from
+  binary_path: ""               # needed only when `xerj` is not on PATH
+```
+
+**When `enabled: true`:**
+
+1. Index once per project. The same line is both the first run and the incremental
+   refresh (re-run it when a search's own hint says `Reindex with:`, and whenever code
+   was edited since the last map):
+   ```bash
+   cd {index_cwd} && xerj [path if not on PATH] autoindex --prefix {index_prefix} {index_root}
+   ```
+2. Answer the mapping questions from searches, not whole-file reads. **Every query
+   repeats `--prefix {index_prefix}`** — omitting it searches the shared default `ax`
+   and misses this project:
+   - Code question → `xerj search "<plain words>" --prefix {index_prefix}`
+   - Known symbol → `xerj def "<symbol>" --prefix {index_prefix}`
+   - Structural overview → `xerj autoindex map {index_root}` for the data map
+3. Cite what you rely on as `path:line` from the printed passage — never the whole file.
+4. Write the `.paul/codebase/` documents as normal. **Record file paths only, never
+   line numbers** — they go stale. Search citations and document content follow
+   different rules: `map-codebase` output keeps the check from
+   `xerj_search` stale hints in mind, but freshness belongs to the index, not the doc.
+5. Spawn the Explore agents only for the questions the index could not answer
+   (architecture judgment, conventions not visible in search hits).
+
+**When `enabled: false` or the block is missing:**
+No change — proceed directly to spawn_agents.
+</step>
+
 <step name="create_structure">
 Create .paul/codebase/ directory:
 

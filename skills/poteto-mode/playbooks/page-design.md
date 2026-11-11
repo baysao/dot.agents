@@ -1,0 +1,22 @@
+### Page design
+
+**You own the look. The direction is dealt and chosen, not invented. A page that passes the meter is not a page that is good.**
+
+The skill is `design-taste-frontend` (`SKILL.md` is the run; read it, do not paraphrase it back). This playbook only says how it fits pstack's rigour.
+
+1. **Say which of the two it is.** A page is read and scrolled — landing, marketing, portfolio, one-pager. An app screen is worked in — dashboard, admin, settings, inbox, editor, and it follows `references/app-screens.md` with its own draw and its own house rules. Getting this wrong wastes the whole run, because gradients and icon cards are banned on a page and quiet borders and repeated panels are *normal* on a screen. A product site showing its app is a page; the interface fragments inside it follow the app rules.
+2. **Inventory the subject before anything visual.** Eight to twelve things that belong to this client and no competitor: what its name means, its street and door number, the numbers in the brief, the constraint it lives with, its materials, its printed artefacts. This list is where the idea comes from, and it is also the picture-search queue. Skip it and you build the category default, which is the exact failure the skill exists to prevent.
+3. **Deal the direction, then choose.** `draw.mjs --options 3`, pick the one whose composition can carry something only this client has, state the line of reasoning, then deal the full sheet with `--direction`. Adopt it — do not blend it with the layout you would have written anyway. Redraw only for a stated reason (brand constraint, asset that does not exist, section that cannot hold the content), and record each redraw.
+4. **Write the idea sentence and keep the competitor test.** *"On this page, [something that belongs to the subject] becomes [the device the direction calls for]."* Put the nearest real competitor in the blank; if it still reads true, the idea belongs to the category, not the client. Then name the one live thing the visitor can do, made from the idea.
+5. **Copy deck as plain text before any markup.** Every section that has no claim gets deleted, not designed. Sample details are expected where the brief leaves gaps; proof is never invented.
+6. **Build still, motion off.** Tokens → hero → sections from their blueprints → the imagery floor (four real pictures minimum; SVG drawings do not count) → the live thing → any scroll scenes. Carry the idea into every section: a distinctive hero followed by stock blocks is the commonest failure in the study and it survives a clean gate.
+7. **Gate on the build, not the dev server.** `lint.mjs <source>` and `inspect.mjs <url | built index.html>`, then `scenes.mjs` if the sheet dealt scenes. Exit 1 is a FAIL. This is the check PAUL's `## Visual/UX Check` and a `kind = "uat"` debt row both point at, so a FAIL has somewhere to land. **This replaces `control-ui`.** Do not go looking for that plugin; the inspector is a real browser and measures more than a screenshot pass would.
+8. **Look at the pictures.** Passing the meter is the floor. Open every screenshot the inspector listed — all three widths, every page, not just the fold — and score with `references/critique.md`. Fix the top three, re-inspect, look again. Three rounds at most.
+9. **Then motion.** Eight moving elements is the pass, sixteen the warning. Transform and opacity only; every move has a `prefers-reduced-motion` fallback that keeps the content.
+10. **Verify the surface the user gets.** Click through every link, form and menu; confirm the primary action goes where the brief said. A page with a faked payment form or a `#checkout` that leads nowhere is not shipped.
+
+**A review is not a redesign.** Asked to review or audit an existing page, the run stops after step 8's critique: record the before, list the findings with the inspector's measurements, name the three changes that would move it most, and stop. Do not start restyling on a review request.
+
+**When the skill, Node 22, or a Chrome is missing.** Say it plainly in the reply and name which check did not run. `lint.mjs` alone needs only Node 18. A page reported as complete without the inspector is a claim, not evidence — and that is the one thing pstack does not allow.
+
+**Reply:** the direction dealt (name and seed) and any redraws with reasons; the idea sentence and the live thing; the inspector's final scores and what still falls short; which pictures and clips are real, found, or drawn; sample content the user must swap before launch.

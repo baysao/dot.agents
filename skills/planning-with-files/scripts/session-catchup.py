@@ -369,7 +369,7 @@ def is_codex_project_session(session: Path, project_cmp: str) -> bool:
 
 
 def get_codex_sessions(project_path: str) -> Iterable[Path]:
-    sessions_dir = Path(os.path.expanduser(os.getenv('CODEX_SESSIONS_DIR', '~/.codex/sessions')))
+    sessions_dir = Path(os.path.expanduser(os.getenv('CODEX_SESSIONS_DIR', '~/.agents/sessions')))
     if not sessions_dir.exists():
         return
 
@@ -390,7 +390,7 @@ def get_session_candidates(
     project_path: str, *, emit_notices: bool = True
 ) -> Tuple[str, Iterable[Path]]:
     script_path = Path(__file__).resolve().as_posix().lower()
-    if script_path.endswith('/.codex/skills/planning-with-files/scripts/session-catchup.py'):
+    if script_path.endswith('/.agents/skills/planning-with-files/scripts/session-catchup.py'):
         return 'codex', get_codex_sessions(project_path)
     if script_path.endswith('/.opencode/skills/planning-with-files/scripts/session-catchup.py'):
         # OpenCode dispatch is handled separately via SQLite (v2.38.0+).

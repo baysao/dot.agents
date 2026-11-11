@@ -17,6 +17,18 @@ Universal conventions for all PAUL framework files.
 
 **Brevity with substance.** Good: "JWT auth with refresh rotation using jose library" Bad: "Phase complete"
 
+**Caveman voice — default for all PAUL workflow output.** Chat replies during PLAN /
+APPLY / UNIFY / resume follow the `caveman` skill
+(`~/.agents/skills/caveman/SKILL.md`): answer first, no greeting/hedging/recap, one
+idea per sentence (20 words, active voice), articles droppable — but code, commands,
+paths, numbers and exact error strings stay verbatim, and every not/never/no/only
+survives compression. Load the skill if the session has not; do not restate it inline.
+Auto-clarity exceptions hold: security warnings, irreversible-action confirmations,
+step sequences a fragment could scramble, a repeated question, and anything persisted
+outside chat (files, commits, plans, STATE/DECISIONS prose) are written in full
+sentences. Persisted artifacts are never written in caveman voice — only the chat
+around them.
+
 ## Temporal Language Ban
 
 Never write: "We changed X to Y", "Previously", "No longer", "Instead of"

@@ -110,7 +110,20 @@ A finding that lands only in the SUMMARY's Reflect section has not been recorded
 
 Update `STATE.md`: loop position PLAN ✓ → APPLY ✓ → UNIFY ✓, phase progress, duration, next action. Display the closed-loop report with plan, summary, and next step.
 
-**Batch UNIFY increments by N, not by 1.** When N plans close in one run, `stats.total_plans` and `phase.plans_completed` each advance by N — the `+1` in toml-sync's trigger matrix is single-plan only. Confirm the delta against `git log -p .paul/paul.toml` precedent before writing (prior batches show +6, +14).
+**Batch UNIFY increments by N, not by 1 — but only on a counter whose owning record advanced.**
+When N plans close in one run, `stats.total_plans` advances by N: that field is
+phase-agnostic (lifetime executions), so every plan belongs in it. Confirm the delta
+against `git log -p .paul/paul.toml` precedent before writing (prior batches show +6, +14).
+
+**`phase.plans_completed` advances by N only if `[phase]` describes the phase those plans
+belong to.** It frequently does not. A phase can be built on per-plan grants without the
+predecessor ever transitioning out, so `[phase]` still names the older phase while plans
+from the newer one execute and unify. Bumping the phase-scoped counter then launders
+later-scope activity into a counter that describes an unclosed earlier record, and the
+manifest asserts a phase is further along than the one it names. Check `[phase].number`
+and `[phase].name` against the plan ids being closed; if they differ, leave
+`plans_completed` untouched and state in `.paul/STATE.md` why, so the next session does
+not "fix" the gap by adding the missing count.
 
 **UNIFIED is a bookkeeping claim, not a durability claim.** If the plan's files
 are still uncommitted when the loop closes, say it as an explicit open-risk line
@@ -141,6 +154,13 @@ Before flipping status to UNIFIED and before `sync_paul_toml`:
 2. For every row the run reports `done`, set `status = "done"` in `.paul/DEBT.toml`. The TOML diff is the discharge record — never delete the row, never flip it without a passing check.
 3. For every row this plan abandoned, set `status = "dropped"` and add a `note` saying why. A dropped row is a decision; a deleted row is a disappearance.
 4. Append a row for each deferral the plan produced that is not yet in the store — with a check that can actually fail.
+
+**A check must name the exact subject of the obligation, in both directions.** "Can actually fail" rules out the *vacuous* check (a `command` with no `expect` returns true on exit 0; a `text_present` over a file the change created). It does not rule out the *over-broad* check — one satisfied by rows that are not the thing the title claims. `select count(*) > 0 from market_holiday` was true of 280 US rows and would have discharged a Bursa obligation; the subject was `chain = 'palm_oil'`. A title that names a count or a set ("all 14 chains", "every template") obliges the predicate to assert that count or that set membership, not one example of it. Two rules follow:
+
+- Read the title's quantity back into the predicate. If the title says 14, the check compares 14. If the title says "every", the check compares `filter (...) = count(*)`.
+- **After tightening one row, sweep the store for the same shape.** The defect is a *class*, and the file's other rows were written by the same hand on the same day. When one check was found selecting its table instead of its subject, grep `.paul/DEBT.toml` for other checks whose predicate does not appear in their title, and fix the siblings in the same pass. A repair that stops at the row you happened to notice leaves the copies live two lines away.
+
+Then re-run `debt.py --run-checks` and confirm the tightened rows report **not-discharged**. A row that reads `done` immediately after you tightened it is either genuinely finished or newly vacuous; the second is more likely and is indistinguishable without looking.
 5. Report the counts in the close-out: `DEBT: N overdue · N waiting · N open · N discharged`.
 
 **The pile-up budget is 12.** More than 12 open non-blocking rows means this loop added faster than it paid, and the next PLAN must schedule at least one. Same rationale as the learning index's row ceiling: an unbounded list is a place to put things, not a plan.
@@ -154,6 +174,24 @@ and the repository disagree, the repository wins and the summary records the
 deviation (the ledger is append-only — a wrong earlier entry can only be
 contradicted by a later one, never edited).
 
+**The contract is the AC text, not the plan's prose about it.** It is easy, when the
+numbers do not line up, to write that a discrepancy is "a deviation from the prose, not
+from the contract" and close. That sentence is usually true and always costs nothing,
+which is why it is dangerous: it converts every miss into a category. Distinguish the two
+explicitly, row by row, before using it:
+
+- **Prose vs reality** — the plan said 15 rows and the world has 23. The prose was wrong;
+  fix the prose, and the AC still holds. Cheap, and legitimate.
+- **AC vs reality** — the AC said `closed` and the code returns `pre_open`; the AC said
+  `ok` and the judge returns `suspect`. The AC is the contract. It cannot be discharged
+  by observing that the code disagrees, and "the plan's prose was also vague" does not
+  make the AC's own clause optional.
+
+Any count or total a plan types is a hypothesis. Re-derive it with a command and write
+the command's answer. A number that the plan and its own checklist state differently is
+caught by luck; a number that is internally consistent and wrong is caught only if you
+re-derive it.
+
 **Assert the closed state with a parser, not with the commit message.** A
 commit titled "unify" proves nothing about the state files. After syncing,
 parse them and check the facts: the manifest's `loop.position` (and that
@@ -162,6 +200,29 @@ ledger holds a `unify` entry for this plan. A title that disagrees with the
 parsed state is itself a finding — fix the state, and if the title is
 already in history, say so in the summary.
 
+**Never restate a whole-file total inside appended prose.** State files grow by appending
+one paragraph per pass, so any sentence of the form "the table is now N rows" is false the
+moment the next paragraph lands — and the file then contradicts itself in its own tail,
+with no edit having been made to the older claim. Keep **exactly one** tail claim, and
+derive the number with a script rather than counting by hand:
+
+```powershell
+python -c "import re,io;m=io.open('.paul/DECISIONS.md',encoding='utf-8').read();ids=re.findall(r'^\| (D-\d+) \|',m,re.M);print(len(ids), ids[0], ids[-1], ids==['D-%02d'%i for i in range(1,len(ids)+1)])"
+```
+
+The contiguity check is the part worth having: a count alone cannot see a gap or a
+duplicate id, and a document that appends is exactly where both appear. Apply the same
+treatment to the ledger entry count, the debt row count, and the learning index.
+
+**One fact, many sites — sweep them, and do not trust the newest paragraph.** A single
+plan close touches roughly nine places in `STATE.md` (Current Position, progress bars,
+loop block, loop prose, velocity, by-phase table, last-5 chain, trend, decisions header)
+plus the roadmap's status line, phase table, section status and checkbox. The newest
+paragraph reads as the corrected record precisely because it is newest; it is one claim
+among several. Derive the fact, then check every site that states it. Prefer a targeted
+`rg` over a bare counter search — a pattern like `1 of 5` matches unrelated legitimate
+prose in neighbouring docs, and editing those because they matched is a real hazard.
+
 **Propagate every deviation backwards before closing the loop.** A deviation
 recorded only in the summary will be read as a rule by the next agent, while
 the plan, the acceptance criteria, the repo instructions, and the learning
@@ -169,6 +230,29 @@ files still say the old thing. Before closing, check each deviation against
 every place that states the rule (plan text, AC, `AGENTS.md`, learning files)
 and update the ones that are wrong. Artifacts that contradict each other mean
 the loop is not closed yet.
+
+**When a frozen contract makes an AC literally impossible, amend the AC and pin the
+behaviour — do not retype the expectation.** An AC can demand an outcome the code cannot
+produce without changing a dependency the plan forbids changing (an upstream constant, a
+sealed module, another phase's contract). Three dispositions exist and only one is honest:
+
+- Bending the frozen dependency. Forbidden. The boundary exists because the other side
+  is someone else's contract.
+- Quietly retyping the expectation to what the code already returns. Forbidden, and
+  worse than it looks: the test now agrees with the bug, and nothing records that the
+  requirement was ever higher.
+- **Assert the reachable intent, pin the actual behaviour, and say both out loud.** Write
+  the assertion the code can satisfy and that still tests the AC's purpose; write a
+  second test that asserts what the code currently does **and names the clause it
+  contradicts** in the test body; record one decision row; amend the AC text in place so
+  the plan no longer states the impossible version.
+
+A pinning test must be able to fail once the defect is fixed. If it merely logs the
+divergence with `t.Logf` and never calls `t.Fail`, the suite is green over a known bug and
+any debt row that runs it reports `done` at filing time. Either assert the bug (so the
+row reddens today and the fix turns it green) or gate the row on the pinning marker's
+absence — see the debt-store rules above. **A defect that lives in a module the plan does
+not own gets a pinned record and a debt row, never a patch and never a summary sentence.**
 
 **Edit state files with the editor, then parse them with their parser.** The
 project manifest rotates a long note across `note` → `note_prev` → `note_prev2`

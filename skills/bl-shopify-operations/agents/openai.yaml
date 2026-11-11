@@ -1,0 +1,4 @@
+interface:
+  display_name: "Vận hành đơn và dòng tiền"
+  short_description: "Shopify Binh Le: vận hành đơn và dòng tiền"
+  default_prompt: "Dùng $bl-shopify-operations. Hãy lập hàng chờ xử lý đơn ngoại lệ, soạn nháp trả lời khách và đối soát dòng tiền từ dữ liệu anh gửi."

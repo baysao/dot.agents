@@ -1,0 +1,223 @@
+{
+  "version": 3,
+  "skills": {
+    "design-taste-frontend": {
+      "source": "Leonxlnx/taste-skill",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/Leonxlnx/taste-skill.git",
+      "skillPath": "skills/taste-skill/SKILL.md",
+      "skillFolderHash": "844f3cf223d25a29e75f7965d095a093938282df",
+      "pluginName": "taste-skill",
+      "installedAt": "2026-11-04T02:33:24.416Z",
+      "updatedAt": "2026-11-04T02:33:24.416Z"
+    },
+    "find-skills": {
+      "source": "vercel-labs/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/skills.git",
+      "skillPath": "skills/find-skills/SKILL.md",
+      "skillFolderHash": "76a98a285cb0434f3d39e1a873823556330e398b",
+      "installedAt": "2026-11-04T02:33:31.278Z",
+      "updatedAt": "2026-11-04T02:33:31.278Z"
+    },
+    "agentic-payments": {
+      "source": "stellar/stellar-dev-skill",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/stellar/stellar-dev-skill.git",
+      "skillPath": "skills/agentic-payments/SKILL.md",
+      "skillFolderHash": "15a22e0f9be222b45519f041b1fd2e363edcdff0",
+      "installedAt": "2026-11-04T11:35:12.796Z",
+      "updatedAt": "2026-11-04T11:35:12.796Z"
+    },
+    "assets": {
+      "source": "stellar/stellar-dev-skill",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/stellar/stellar-dev-skill.git",
+      "skillPath": "skills/assets/SKILL.md",
+      "skillFolderHash": "c37b865e2f538e0bb6d3b9a7a5429603a1721020",
+      "installedAt": "2026-11-04T11:35:12.806Z",
+      "updatedAt": "2026-11-04T11:35:12.806Z"
+    },
+    "cross-chain": {
+      "source": "stellar/stellar-dev-skill",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/stellar/stellar-dev-skill.git",
+      "skillPath": "skills/cross-chain/SKILL.md",
+      "skillFolderHash": "1c44bfb579a4751eff54a1c2b9f26c05860b6b83",
+      "installedAt": "2026-11-04T11:35:12.810Z",
+      "updatedAt": "2026-11-04T11:35:12.810Z"
+    },
+    "dapp": {
+      "source": "stellar/stellar-dev-skill",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/stellar/stellar-dev-skill.git",
+      "skillPath": "skills/dapp/SKILL.md",
+      "skillFolderHash": "7117bcf2078c5332e770fac5a1f5570a5ceb8f9d",
+      "installedAt": "2026-11-04T11:35:12.818Z",
+      "updatedAt": "2026-11-04T11:35:12.818Z"
+    },
+    "data": {
+      "source": "stellar/stellar-dev-skill",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/stellar/stellar-dev-skill.git",
+      "skillPath": "skills/data/SKILL.md",
+      "skillFolderHash": "fab45ec4f12e262ccdc728086a3df7aca30a27e8",
+      "installedAt": "2026-11-04T11:35:12.826Z",
+      "updatedAt": "2026-11-04T11:35:12.826Z"
+    },
+    "smart-contracts": {
+      "source": "stellar/stellar-dev-skill",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/stellar/stellar-dev-skill.git",
+      "skillPath": "skills/smart-contracts/SKILL.md",
+      "skillFolderHash": "f31d2e83e9f11bb65d3d175c4c2fb6474b647343",
+      "installedAt": "2026-11-04T11:35:12.832Z",
+      "updatedAt": "2026-11-04T11:35:12.832Z"
+    },
+    "standards": {
+      "source": "stellar/stellar-dev-skill",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/stellar/stellar-dev-skill.git",
+      "skillPath": "skills/standards/SKILL.md",
+      "skillFolderHash": "c8d233286104136c11baafc9f11b84969f7d1b86",
+      "installedAt": "2026-11-04T11:35:12.842Z",
+      "updatedAt": "2026-11-04T11:35:12.842Z"
+    },
+    "zk-proofs": {
+      "source": "stellar/stellar-dev-skill",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/stellar/stellar-dev-skill.git",
+      "skillPath": "skills/zk-proofs/SKILL.md",
+      "skillFolderHash": "938d49623e49ca11b1cfdc4b090001a923276b9f",
+      "installedAt": "2026-11-04T11:35:12.851Z",
+      "updatedAt": "2026-11-04T11:35:12.851Z"
+    },
+    "deploy-to-vercel": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills.git",
+      "skillPath": "skills/deploy-to-vercel/SKILL.md",
+      "skillFolderHash": "772d5a08126c09869c642416c824cfdeeb4104b3",
+      "installedAt": "2026-11-05T18:29:06.723Z",
+      "updatedAt": "2026-11-05T18:29:06.723Z"
+    },
+    "vercel-cli-with-tokens": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills.git",
+      "skillPath": "skills/vercel-cli-with-tokens/SKILL.md",
+      "skillFolderHash": "279c8760375cb6a47a4a8a312b652b0745c6d776",
+      "installedAt": "2026-11-05T18:29:06.727Z",
+      "updatedAt": "2026-11-05T18:29:06.727Z"
+    },
+    "vercel-composition-patterns": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills.git",
+      "skillPath": "skills/composition-patterns/SKILL.md",
+      "skillFolderHash": "bf90d0a4b83ea054653350f9c67f6de235d3a368",
+      "installedAt": "2026-11-05T18:29:06.730Z",
+      "updatedAt": "2026-11-05T18:29:06.730Z"
+    },
+    "vercel-optimize": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills.git",
+      "skillPath": "skills/vercel-optimize/SKILL.md",
+      "skillFolderHash": "0901aa3667db7a6e5cc40b213327290bf6556373",
+      "installedAt": "2026-11-05T18:29:06.732Z",
+      "updatedAt": "2026-11-05T18:29:06.732Z"
+    },
+    "vercel-react-best-practices": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills.git",
+      "skillPath": "skills/react-best-practices/SKILL.md",
+      "skillFolderHash": "343db72180d05814949fef7d46be96b5c6ee86b3",
+      "installedAt": "2026-11-05T18:29:06.734Z",
+      "updatedAt": "2026-11-05T18:29:06.734Z"
+    },
+    "vercel-react-native-skills": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills.git",
+      "skillPath": "skills/react-native-skills/SKILL.md",
+      "skillFolderHash": "8b4c6a51914e2111ab6f4f00cb81778652aa241d",
+      "installedAt": "2026-11-05T18:29:06.736Z",
+      "updatedAt": "2026-11-05T18:29:06.736Z"
+    },
+    "vercel-react-view-transitions": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills.git",
+      "skillPath": "skills/react-view-transitions/SKILL.md",
+      "skillFolderHash": "b490379f71eee822cf207605ce4fceaff6e10330",
+      "installedAt": "2026-11-05T18:29:06.739Z",
+      "updatedAt": "2026-11-05T18:29:06.739Z"
+    },
+    "web-design-guidelines": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills.git",
+      "skillPath": "skills/web-design-guidelines/SKILL.md",
+      "skillFolderHash": "3116f3e62dbd02b44a598b1aa690d2a8938e8f89",
+      "installedAt": "2026-11-05T18:29:06.741Z",
+      "updatedAt": "2026-11-05T18:29:06.741Z"
+    },
+    "writing-guidelines": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills.git",
+      "skillPath": "skills/writing-guidelines/SKILL.md",
+      "skillFolderHash": "17d954cadfb8dec50bf0c707c9e7634be9ae9fe8",
+      "installedAt": "2026-11-05T18:29:06.743Z",
+      "updatedAt": "2026-11-05T18:29:06.743Z"
+    },
+    "api-endpoint": {
+      "source": "globalmpc/backendskills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/globalmpc/backendskills.git",
+      "skillPath": "skills/api-endpoint/SKILL.md",
+      "skillFolderHash": "494e7b4d265be25c34807212bd0a4a5807aaae49",
+      "installedAt": "2026-11-09T23:42:53.457Z",
+      "updatedAt": "2026-11-09T23:42:53.457Z"
+    },
+    "data-integrity": {
+      "source": "globalmpc/backendskills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/globalmpc/backendskills.git",
+      "skillPath": "skills/data-integrity/SKILL.md",
+      "skillFolderHash": "e4f1c88164c0a173666cb0ec8f5fbab8a71724b0",
+      "installedAt": "2026-11-09T23:42:53.462Z",
+      "updatedAt": "2026-11-09T23:42:53.462Z"
+    },
+    "db-migration": {
+      "source": "globalmpc/backendskills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/globalmpc/backendskills.git",
+      "skillPath": "skills/db-migration/SKILL.md",
+      "skillFolderHash": "6e3901d12e87d6847c7cd6e92c63696ffa8a202e",
+      "installedAt": "2026-11-09T23:42:53.465Z",
+      "updatedAt": "2026-11-09T23:42:53.465Z"
+    }
+  },
+  "dismissed": {
+    "findSkillsPrompt": true
+  },
+  "lastSelectedAgents": [
+    "amp",
+    "cline",
+    "codex",
+    "cursor",
+    "droid",
+    "fx",
+    "gemini-cli",
+    "github-copilot",
+    "kilo",
+    "kimi-code-cli",
+    "opencode",
+    "pi",
+    "warp",
+    "zed"
+  ]
+}

@@ -11,7 +11,7 @@ Write pstack's model settings, one model per role:
 
 - **PAUL project** (a `.paul/` directory exists): `.paul/pstack-models.md` — project-level, versioned with the project. Write this file, not the global one, and treat it as *the* settings file for every harness in this project.
 - **Cursor** (no `.paul/`): `~/.cursor/rules/pstack-models.mdc`, an always-applied rule.
-- **Every other harness** (no `.paul/`; Claude Code, Codex, Pi, OpenCode, Kilo Code, Cline, and others): `~/.agents/pstack-models.md`. These harnesses don't load Cursor rules, so pstack skills read this file when they pick a model. In OpenCode you also register the file in `instructions` (step 5) so every session loads it the way Cursor loads its rule; in Cline and Kilo Code a one-line pointer in their always-loaded AGENTS.md does the same.
+- **Every other harness** (no `.paul/`; Claude Code, Codex, Pi, OpenCode, Kilo Code, Cline, ZCode, and others): `~/.agents/pstack-models.md`. These harnesses don't load Cursor rules, so pstack skills read this file when they pick a model. In OpenCode you also register the file in `instructions` (step 5) so every session loads it the way Cursor loads its rule; in Cline and Kilo Code a one-line pointer in their always-loaded AGENTS.md does the same.
 
 "The settings file" below means `.paul/pstack-models.md` when the project has one, else the file for your harness. When reading, check `.paul/pstack-models.md` first, then the harness path, and use the first that exists.
 
@@ -19,7 +19,7 @@ Write pstack's model settings, one model per role:
 
 ### 1. Detect available models
 
-Enumerate the model slugs you can pass to a subagent in this session (Cursor `Task`, Claude Code `Agent`, OpenCode and Kilo Code `task`, Codex and Cline `spawn_agent`). That is the dependable source. If your harness also has a command that lists the user's models, prefer it for completeness (for example `opencode models` or `pi --list-models`). OpenCode lists `provider/model` slugs (`anthropic/claude-opus-4-5`) with no effort token in them; write them exactly as printed. Kilo Code slugs are `provider/model` too (`anthropic/claude-haiku-4-20250514`, `kilo-auto/free`). If a harness cannot select a model per subagent (Cline's `spawn_agent` has no model parameter or per-agent config), say so when you present the mapping in step 3(c). If you cannot detect any, ask the user to paste the slugs they have access to. Never write a real slug you have not confirmed is available. The aliases `inherit-parent` and `auto` are always valid even though they are not detected slugs.
+Enumerate the model slugs you can pass to a subagent in this session (Cursor `Task`, Claude Code `Agent`, ZCode `Agent`, OpenCode and Kilo Code `task`, Codex and Cline `spawn_agent`). ZCode has no model-listing command: take the slugs from an existing pstack settings file or ask the user, and never write one you have not confirmed. That is the dependable source. If your harness also has a command that lists the user's models, prefer it for completeness (for example `opencode models` or `pi --list-models`). OpenCode lists `provider/model` slugs (`anthropic/claude-opus-4-5`) with no effort token in them; write them exactly as printed. Kilo Code slugs are `provider/model` too (`anthropic/claude-haiku-4-20250514`, `kilo-auto/free`). If a harness cannot select a model per subagent (Cline's `spawn_agent` has no model parameter or per-agent config), say so when you present the mapping in step 3(c). If you cannot detect any, ask the user to paste the slugs they have access to. Never write a real slug you have not confirmed is available. The aliases `inherit-parent` and `auto` are always valid even though they are not detected slugs.
 
 ### 2. Load current state
 
@@ -27,7 +27,7 @@ The default role-to-model mapping is the rule shape shown in step 5 below. If th
 
 ### 3. Budget, map, and confirm
 
-**(a) Ask for a budget.** Prefer your structured-question tool (`AskQuestion` in Cursor, `AskUserQuestion` in Claude Code, `question` in OpenCode and Kilo Code, `ask_followup_question` in Cline) over free text. Offer these four options with these exact labels, and name the current budget when the rule records one.
+**(a) Ask for a budget.** Prefer your structured-question tool (`AskQuestion` in Cursor, `AskUserQuestion` in Claude Code and ZCode, `question` in OpenCode and Kilo Code, `ask_followup_question` in Cline) over free text. Offer these four options with these exact labels, and name the current budget when the rule records one.
 
 - `unlimited — keep max`
 - `large — xhigh reasoning`
@@ -64,6 +64,7 @@ how explorer: grok-4.6-fast-xhigh
 how explainer: claude-fable-5-1-thinking-max
 why investigators: grok-4.6-fast-xhigh
 why synthesizer: claude-fable-5-1-thinking-max
+design: claude-fable-5-1-thinking-max
 reflect tooling: gpt-5.6-sol-max
 reflect judgment, divergent, synthesizer: claude-fable-5-1-thinking-max
 arena runners: claude-fable-5-1-thinking-max, gpt-5.6-sol-max, grok-4.6-fast-xhigh, claude-opus-5-thinking-xhigh
@@ -74,6 +75,8 @@ interrogate reviewers: claude-fable-5-1-thinking-max, gpt-5.6-sol-max, grok-4.6-
 ```
 
 **Extras by harness.** Extra writes beyond the settings file:
+
+The `design` role is the model for the Page design playbook's judges and for a subagent that critiques a render against `references/critique.md`. It is judgment, not mechanics, so it defaults to the same model as `judgment and prose`; leave it on `inherit-parent` where the parent already is that model. It is deliberately absent from the panel roles: a design critique is one reader scoring one set of screenshots, and a panel of them converges on the same taste it was meant to check.
 
 1. **Register the settings file where the harness always loads instructions.** Register the file you wrote — `.paul/pstack-models.md` in a PAUL project (project-relative path), else the global file. OpenCode: add it to the `instructions` array — `\".paul/pstack-models.md\"` in the project's `opencode.json` for a PAUL project, the absolute global path in `~/.config/opencode/opencode.json` otherwise — creating `{\"instructions\": [...]}` when absent, never duplicating the entry. Cline and Kilo Code: append this line once to the appropriate always-loaded AGENTS.md — the project `AGENTS.md` in a PAUL project, else `~/.agents/AGENTS.md` for Cline (Kilo: project only, with the user's go-ahead): `pstack models: read the settings file (.paul/pstack-models.md or ~/.agents/pstack-models.md) and use its role lines when picking models.` Cursor in a PAUL project: write the project rule `.cursor/rules/pstack-models.mdc` with `alwaysApply: true` and a single pointer line, `Read .paul/pstack-models.md and use its role lines when picking models.`, so the settings load every session without duplicating them. In every case pstack skills still read the settings file directly when no pointer exists.
 2. **Write model pins (OpenCode and Kilo Code).** Their `task` tools have no `model` parameter: a spawned subagent runs on the model in its own config, so per-spawn model choice needs a pinned subagent. For every distinct real slug in the mapping, write `~/.config/opencode/agents/pstack-<id>.md` (OpenCode) or `~/.config/kilo/agents/pstack-<id>.md` (Kilo Code), where `<id>` is the slug lowercased with every run of non-alphanumerics replaced by `-` (`anthropic/claude-opus-4-5` → `pstack-anthropic-claude-opus-4-5`):
@@ -87,12 +90,12 @@ interrogate reviewers: claude-fable-5-1-thinking-max, gpt-5.6-sol-max, grok-4.6-
    Follow the task prompt you are given. It carries this role's full instructions.
    ```
 
-   Add the budget's effort as an extra frontmatter option (for example `reasoningEffort: xhigh`) only when the provider accepts one. Skip pins for `inherit-parent` and `auto` — those roles spawn the built-in `general` subagent with no pin. Overwrite pins on re-run; stale `pstack-*.md` files from earlier runs are never referenced and can be deleted.
+   Add the budget's effort as an extra frontmatter option (for example `reasoningEffort: xhigh`) only when the provider accepts one. Skip pins for `inherit-parent` and `auto` — those roles spawn the built-in `general` subagent with no pin. Overwrite pins on re-run; stale `pstack-*.md` files from earlier runs are never referenced and can be deleted. In ZCode, write the same pin as an agent definition: `.zcode/agents/pstack-<id>.md` in the project (or `~/.zcode/agents/pstack-<id>.md` for user-level), frontmatter `description` plus `model: <slug>` — ZCode agent types read their model from the definition, and the body stays "Follow the task prompt you are given."
 3. **Cline gets no pins.** Cline supports neither a model parameter on `spawn_agent` nor per-agent model config, so skip pin writes there and restate in step 3(c) that panels will run on the session model.
 
 ### 6. Confirm
 
-Tell the user which file was written: `.paul/pstack-models.md` in a PAUL project (commit it so the team and future sessions share it), or the Cursor rule / `~/.agents/pstack-models.md` elsewhere. The registration (OpenCode `instructions`, AGENTS.md pointer, or the Cursor pointer rule in PAUL projects) loads it every session; pstack skills read the settings file directly when nothing registers it. The `pstack-*` pins under `~/.config/opencode/agents/` or `~/.config/kilo/agents/` let `task` spawn each configured model; Cline has no pins and panels there run on the session model. Re-running this skill updates it.
+Tell the user which file was written: `.paul/pstack-models.md` in a PAUL project (commit it so the team and future sessions share it), or the Cursor rule / `~/.agents/pstack-models.md` elsewhere. The registration (OpenCode `instructions`, AGENTS.md pointer, or the Cursor pointer rule in PAUL projects) loads it every session; pstack skills read the settings file directly when nothing registers it. The `pstack-*` pins under `~/.config/opencode/agents/`, `~/.config/kilo/agents/`, or `.zcode/agents/` let `task` and `Agent` spawn each configured model; Cline has no pins and panels there run on the session model. Re-running this skill updates it.
 
 ### 7. Offer a verification skill (optional)
 

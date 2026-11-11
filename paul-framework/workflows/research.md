@@ -81,6 +81,20 @@ Determine research type:
 - `--codebase` forces Explore agent
 - `--web` forces general-purpose agent
 
+**Index-first check (when xerj is enabled):** If `.paul/config.md` has
+`xerj: { enabled: true }` and this is codebase research, try the index *before*
+spawning an agent (reference:
+`@~/.agents/paul-framework/references/xerj-integration.md`):
+- `xerj search "<topic>" --prefix {index_prefix}` for where the code talks about the topic
+- `xerj def "<symbol>" --prefix {index_prefix}` when the topic is a named symbol
+- If the passages answer the topic with `path:line` citations, skip the spawn — the
+  answer saved is the same RESEARCH.md output with citations swapped in
+- If the index returns noise or the topic needs judgment across files, spawn the
+  Explore agent as normal and let it use the index too
+
+This substitutes cost, not rigor: an index answer is admissible only when it carries
+`path:line` citations the review step can verify.
+
 Display:
 ```
 Research type: {Codebase | Web}

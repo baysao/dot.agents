@@ -35,7 +35,7 @@ Use your configured architect runners (defaults `claude-fable-5-1-thinking-max`,
 **Harness — read the model registry before declaring arena impossible.** "No pinned runner" is not "no reviewers":
 
 1. Read the registry first: `~/.agents/pstack-models.md` (or `.paul/pstack-models.md` for a project that overrides it). It maps each role to a model.
-2. `inherit-parent` / `auto` ⇒ arena **is** runnable on the parent model. Spawn the candidates with the harness's subagent tool: OpenCode/Kilo → `subagent_type: general` (or `subagent_type: pstack-<id>` when a pin file exists under `~/.config/opencode/agents/`); Claude Code → `Agent` with `subagent_type: general-purpose`; Cursor → `Task` with the configured model.
+2. `inherit-parent` / `auto` ⇒ arena **is** runnable on the parent model. Spawn the candidates with the harness's subagent tool: OpenCode/Kilo → `subagent_type: general` (or `subagent_type: pstack-<id>` when a pin file exists under `~/.config/opencode/agents/`); Claude Code → `Agent` with `subagent_type: general-purpose`; ZCode → `Agent` with `subagent_type: general-purpose`, or `subagent_type: pstack-<id>` when a pin definition exists under `.zcode/agents/`; Cursor → `Task` with the configured model.
 3. Only skip Phase B when the harness has **no subagent tool at all**. Say that explicitly — "no pinned model" is a false reason, and a skip logged the same way three sessions running becomes precedent instead of a gate.
 4. If you do skip, record it as a *capability* gap, not a preference, so the next session re-checks instead of copying the note.
 

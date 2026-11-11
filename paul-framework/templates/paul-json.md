@@ -2,7 +2,7 @@
 >
 > **Replacement:** `paul.toml` — see `src/templates/paul-toml.md`
 >
-> paul.json is replaced by paul.toml for BASE-v2 graph integration. Existing paul.json files
+> paul.json is replaced by paul.toml. Existing paul.json files
 > will be auto-migrated to paul.toml by any PAUL workflow that touches them. This template is
 > preserved for reference during the migration period and will be removed in a future version.
 >
@@ -14,7 +14,7 @@
 
 Template for `.paul/paul.json` - machine-readable satellite manifest for external system discovery.
 
-**Purpose:** Provides a standardized signal file that workspace management systems (BASE) can scan for, detect, and register PAUL-managed projects.
+**Purpose:** Provides a standardized signal file that consumer tooling can scan for, detect, and register PAUL-managed projects.
 
 ---
 
@@ -55,7 +55,7 @@ Template for `.paul/paul.json` - machine-readable satellite manifest for externa
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `id` | string | Stable satellite identity (format: `sat_` + 8 hex chars from UUID4). Generated once at creation — never changes. Survives moves, renames, folder restructures. Used by BASE satellite detection as primary key. |
+| `id` | string | Stable satellite identity (format: `sat_` + 8 hex chars from UUID4). Generated once at creation - never changes. Survives moves, renames, folder restructures. |
 | `name` | string | Project name (from init or directory name) |
 | `version` | string | Current milestone version (e.g., "0.1.0") |
 | `milestone.name` | string | Current milestone name (e.g., "v0.1 Initial Release") |
@@ -68,7 +68,7 @@ Template for `.paul/paul.json` - machine-readable satellite manifest for externa
 | `loop.position` | enum | `IDLE`, `PLAN`, `APPLY`, `UNIFY` |
 | `timestamps.created_at` | string | ISO 8601 timestamp of paul.json creation |
 | `timestamps.updated_at` | string | ISO 8601 timestamp of last update |
-| `satellite.groom` | boolean | Whether BASE groom should health-check this project (default: true) |
+| `satellite.groom` | boolean | Reserved for consumer-side health checks (default: true) |
 
 ---
 
@@ -157,9 +157,9 @@ Template for `.paul/paul.json` - machine-readable satellite manifest for externa
 
 - **Machine-readable only.** paul.json is for external systems, not humans. Humans read STATE.md.
 - **Always tooling-generated.** Created by init, synced by workflows. Never hand-edited.
-- **Backward compatible.** Workflows check for paul.json existence before syncing. Pre-v1.1 projects without paul.json are silently skipped. Legacy paul.json files without `id` are supported — BASE satellite detection falls back to name-based matching.
-- **Stable identity.** The `id` field (format: `sat_<8hex>`) is generated once and never changes. BASE uses it as the primary key for satellite registration, enabling safe folder moves and renames.
-- **Satellite config.** The `satellite` object is for consumer-side settings. BASE reads `satellite.groom` to decide whether to include this project in health checks.
+- **Backward compatible.** Workflows check for paul.json existence before syncing. Pre-v1.1 projects without paul.json are silently skipped. Legacy paul.json files without `id` fall back to name-based matching.
+- **Stable identity.** The `id` field (format: `sat_<8hex>`) is generated once and never changes, so folder moves and renames stay attributable.
+- **Satellite config.** The `satellite` object is for consumer-side settings. A consumer reads `satellite.groom` to decide whether to include this project in health checks.
 
 ---
 
