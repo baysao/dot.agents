@@ -1,8 +1,8 @@
-# ~/.agents — PAUL × EGM × AEGIS
+# ~/.agents — SEED × PAUL × EGM × AEGIS
 
-This directory is the root of the local agent-skill installation. It contains the **PAUL** phase-loop skills, the **EGM** (Elephant-Goldfish Model) design skills, the **AEGIS** adversarial audit framework, and shared configuration.
+This directory is the root of the local agent-skill installation. It contains the **SEED** project incubator (`/seed`), the **PAUL** phase-loop skills, the **EGM** (Elephant-Goldfish Model) design skills, the **AEGIS** adversarial audit framework, and shared configuration.
 
-**BASE is no longer part of PAUL** (removed 2026-11-03). The `base` CLI and the `base-help` skill remain installed; nothing in the PAUL path calls them.
+**BASE is no longer part of PAUL or SEED** (removed from PAUL 2026-11-03, from all SEED/EGM flows 2026-11-11). The `base` CLI and the `base-help` skill remain installed; nothing in the PAUL or SEED paths calls them.
 
 ### Upstream repositories
 
@@ -10,9 +10,10 @@ This directory is the root of the local agent-skill installation. It contains th
 |---------|------------|
 | **AEGIS** | https://github.com/ChristopherKahler/aegis |
 | **PAUL** | https://github.com/ChristopherKahler/paul |
-| **BASE** | https://github.com/ChristopherKahler/base |
+| **BASE** | https://github.com/ChristopherKahler/base (installed, unused) |
 | **pstack** | https://github.com/backnotprop/pstack |
 | **EGM** (Elephant-Goldfish Model) | https://github.com/google/elephant-goldfish-model |
+| **SEED** | none — authored locally in `commands/seed/` |
 
 ```
 ~/.agents/
@@ -20,12 +21,20 @@ This directory is the root of the local agent-skill installation. It contains th
 ├── AGENTS.md              # shell/coding conventions (Karpathy + ponytail)
 ├── PAUL-BASE-CARL-INTEGRATION.md  # historical record — base removed from PAUL 2026-11-03
 ├── pstack-models.md       # pstack model routing configuration
-├── skills/                # all installed skills (paul-*, egm-*, aegis-*, etc.)
+├── .skill-lock.json       # lockfile for skills installed from remote sources
+├── .gitignore             # excludes mcp.json (live API tokens), caches, nested repos
+├── mcp.json               # MCP server config — GITIGNORED, contains secrets
+├── skills/                # all installed skills (paul-*, egm-*, aegis-*, seed, etc.)
 ├── paul-framework/        # PAUL workflows, templates, references, rules
 ├── aegis/                 # AEGIS adversarial audit framework
-├── commands/              # legacy command shims
+├── egm/                   # EGM source repo (agents, resources, distributions/, tests)
+├── commands/              # slash-command personas + shims (seed/, paul/, aegis, gh/wf)
+├── design-md/             # design-system profiles (per-brand DESIGN.md files)
+├── skillsmith-specs/      # Skillsmith authoring specs
 ├── rules/                 # global rule store
-└── update.ps1             # skill update script
+├── aris_repo/             # nested own-git repo — NOT tracked (see .gitignore)
+├── stellar-dev-skill/     # nested own-git repo — NOT tracked
+└── ux-ui-agent-skills/    # nested own-git repo — NOT tracked
 ```
 
 ---
@@ -94,6 +103,10 @@ State that used to route to the graph lives in `.paul/` and nowhere else:
 Nothing links to it operationally. The `base` CLI and the `base-help` skill are left
 installed and untouched — they are simply no longer part of PAUL.
 
+The SEED/EGM side was cleared the same way on 2026-11-11: `detect_base` steps, BASE
+graph registration, and persona mentions were removed from `commands/seed/` and the
+egm skills. Do not run `base project add` or BASE detection in any SEED/PAUL/EGM flow.
+
 ---
 
 ## 3. paul-egm — EGM → PAUL Design Handoff
@@ -106,11 +119,12 @@ installed and untouched — they are simply no longer part of PAUL.
 
 | Skill | Output artifact | Purpose |
 |-------|----------------|---------|
-| `egm-bootstrap` | `README.md` files | Bootstraps directory-tree context |
+| `egm-bootstrap` | `$PROJECT_ROOT/README.md` contract (planning-stage grounding) | Bootstraps directory-tree context; grounded on a PLANNING.md when SEED hands off |
 | `egm-brainstorm` | `concepts_brief.md` | Multi-lens ideation → RFC summary |
-| `egm-draft` | `docs/designs/<FEATURE>.md` | Section-by-section design doc |
+| `egm-draft` | `<DESIGN_DIR>/<FEATURE>.md` | Section-by-section design doc |
 | `egm-review` | `comprehension_report.md`, `critic_report.md`, `implementation_readiness_report.md` | 5-stage Goldfish design review |
-| `egm-resolve` | edited design doc | Resolve review findings (CONTEST/ESCALATE/PROPOSE FIX/DECLINE) |
+| `egm-review-loop` | iterated review reports | Re-run review lenses until findings settle |
+| `egm-resolve` | edited design doc + README refresh (Step 6) | Resolve review findings (CONTEST/ESCALATE/PROPOSE FIX/DECLINE) |
 | `egm-drift-report` | `docs/drift/{date}_DRIFT_REPORT.md` | Detect design/code drift |
 
 ### Handoff flow
@@ -165,7 +179,69 @@ upstream EGM docs assume the plugin packaging, not `~/.agents/skills/`.
 
 ---
 
-## 4. aegis — Adversarial Audit Framework
+## 4. seed — Project Incubator (`/seed`)
+
+**Location:** `~/.agents/commands/seed/` (persona `seed.md` + `tasks/` + `data/{type}/` + `templates/` + `checklists/`)
+
+SEED is the front door of the pipeline: guided, type-aware ideation that produces a
+`PLANNING.md`, then hands off to EGM for stress-testing and PAUL for the managed build.
+Project types are directories under `commands/seed/data/` (application, workflow, client,
+utility, campaign — extensible via `/seed add-type`).
+
+### Commands
+
+| Command | Routes To | Purpose |
+|---------|-----------|---------|
+| `/seed` | `tasks/ideate.md` | Type-first guided ideation → `PLANNING.md` |
+| `/seed graduate` | `tasks/graduate.md` | Graduate in place at the root project |
+| `/seed launch` | `tasks/launch.md` | Graduate + headless `/paul:init` + default integrations |
+| `/seed status` | `tasks/status.md` | Pipeline overview |
+| `/seed add-type` | `tasks/add-type.md` | Add a custom type to `data/` |
+
+### Pipeline (as actually run, 2026-11-11)
+
+```
+/seed ideate → docs/projects/{name}/PLANNING.md   (approved by user)
+    ↓ EGM handoff (offered, skippable)
+/egm-bootstrap → $PROJECT_ROOT/README.md          (planning-stage contract)
+/egm-brainstorm → concepts_brief.md               (Goldfish stress test)
+/egm-draft → docs/projects/{name}/{name}.md       (design doc, single source)
+/egm-review + /egm-resolve                        (Stages 5-9 + README refresh)
+    ↓
+/seed graduate or /seed launch
+```
+
+### Graduation targets the root project (2026-11-11)
+
+`/seed graduate` no longer creates `apps/{name}/`. The root project (`$PROJECT_ROOT`)
+**is** the build location — the earlier nested app scaffold kept vanishing and is
+abolished everywhere. Graduation:
+
+1. Validates `docs/projects/{name}/PLANNING.md` exists and carries no `**Graduated:**` note yet
+2. Runs the quality gate against `data/{type}/config.md` required sections
+3. Re-synthesizes `$PROJECT_ROOT/README.md` into the full graduation brief (superseding
+   the /egm-bootstrap planning-stage contract; Correction Policy keeps title/status)
+4. Appends the graduation note (Location = root project) to PLANNING.md and commits
+   both files to the root repo
+
+The design doc stays single-source at `docs/projects/{name}/{name}.md` — `/paul:init`
+reads it there; it is never copied into an app directory.
+
+### Launch defaults
+
+After headless `/paul:init` (input: the design doc), `/seed launch` automatically applies
+`paul-flows pstack` preset (running `setup-pstack` first if undetected) and the
+`paul-config` Security Audit toggle with profile `standard`. SonarQube, Enterprise Plan
+Audit, and XERJ stay opt-in.
+
+### BASE status
+
+All BASE detection, graph registration, and persona mentions were removed from the SEED
+flow on 2026-11-11 (see §2).
+
+---
+
+## 5. aegis — Adversarial Audit Framework
 
 **Location:** `~/.agents/aegis/`
 
@@ -232,7 +308,7 @@ AEGIS feeds into the PAUL loop at the verify/unify boundary:
 
 ---
 
-## 5. Full PAUL Skill Reference
+## 6. Full PAUL Skill Reference
 
 All 30 `paul-*` skills live in `~/.agents/skills/paul-*`:
 
@@ -273,9 +349,13 @@ PAUL phase loop: **plan → apply → unify → (fix if issues)**
 
 ---
 
-## 6. Quick Start
+## 7. Quick Start
 
 ```bash
+# 0. Shape a raw idea into PLANNING.md, then graduate at the repo root
+/seed                      # guided ideation → docs/projects/{name}/PLANNING.md
+/seed launch {name}        # graduate (root README) + /paul:init + pstack/security defaults
+
 # 1. Create your project manifest
 paul-register <project-name>
 
@@ -305,12 +385,34 @@ paul-plan-fix <plan-id>
 
 ---
 
-## 7. Path Convention
+## 8. Path Convention
 
 All tool/framework paths in this installation use `~/.agents/` as the root (migrated from `~/.claude/` on 2026-10-30):
 
 - `~/.agents/skills/` — skill definitions
 - `~/.agents/paul-framework/` — PAUL workflows/templates/references
 - `~/.agents/aegis/` — AEGIS framework
+- `~/.agents/egm/` — EGM source (agents, resources, `distributions/claude/` packaging)
+- `~/.agents/commands/seed/` — SEED persona, tasks, per-type data/templates
+- `~/.agents/design-md/` — per-brand design-system DESIGN.md profiles
 - `~/.agents/pstack-models.md` — pstack model routing
 - `~/.agents/PAUL-BASE-CARL-INTEGRATION.md` — historical record of the removed BASE integration
+
+Inside a *project repo*, SEED/EGM artifacts live under `$PROJECT_ROOT/docs/projects/{name}/`
+(migrated from `projects/{name}/` on 2026-11-11); the contract/brief README lives at the repo root.
+
+---
+
+## 9. Version Control
+
+`~/.agents/` is a git repository (origin: `github.com/baysao/dot.agents`). Committed as
+one lump `update` per working session — the history is a log of install states, not
+curated engineering history.
+
+`.gitignore` keeps out:
+
+- `mcp.json` — **contains live API tokens; never force-add it**
+- `__pycache__/`, `.DS_Store`, `*.bak`
+- `aris_repo/`, `stellar-dev-skill/`, `ux-ui-agent-skills/` — nested repos with their own
+  git history (embedding them would record lossy gitlinks; submodule them deliberately if
+  ever needed)
