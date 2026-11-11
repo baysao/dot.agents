@@ -211,6 +211,28 @@ utility, campaign — extensible via `/seed add-type`).
 /seed graduate or /seed launch
 ```
 
+### PLANNING.md templates are PRD-grade (2026-11-11)
+
+The `templates/planning-{type}.md` skeletons follow a professional PRD structure
+(modeled on the `prd-development` skill): one-liner pitch, evidence-backed problem
+statement (who / what / cost + evidence, unvalidated claims tagged 🔶 Assumption),
+target personas, **Success Metrics** (one primary metric + guardrails — what must NOT
+regress), **Out of Scope** with revisit triggers, **Dependencies & Risks** with
+mitigations, and per-phase acceptance criteria. Type-sized, not one-size:
+
+| Type | PRD additions |
+|------|---------------|
+| Application | full treatment + per-phase acceptance criteria |
+| Client | audience personas + conversion metrics |
+| Workflow | problem evidence + adoption/guardrail metrics |
+| Campaign | primary-metric designation + guardrails + risks |
+| Utility | none — tight rigor kept; one evidence line only |
+
+New sections are **Optional** in `data/{type}/config.md` (required-section lists and
+rigor counts unchanged, so PLANNING.mds generated before 2026-11-11 still pass the
+gate). The coach guides elicit evidence/metrics/personas during ideation; the quality
+gate checks "success metrics defined or N/A" and "out of scope stated or N/A".
+
 ### Graduation targets the root project (2026-11-11)
 
 `/seed graduate` no longer creates `apps/{name}/`. The root project (`$PROJECT_ROOT`)
